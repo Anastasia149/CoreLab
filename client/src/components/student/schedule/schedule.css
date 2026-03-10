@@ -1,0 +1,269 @@
+.schedule-home {
+  display: grid;
+  grid-template-columns: 1fr 370px;
+  gap: 24px;
+}
+
+.schedule-sidebar {
+  display: block; /* Changed from grid */
+}
+
+.schedule-category-list {
+  margin-top: 24px; /* Added margin */
+}
+
+.schedule-body-grid {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  grid-template-rows: auto 1fr;
+  column-gap: 24px; /* Increased gap */
+  row-gap: 16px;
+  margin-top: 16px;
+}
+
+.time-header-label {
+  color: #9ca3af;
+  font-size: 14px;
+  text-align: right;
+  padding-top: 24px; /* Adjusted for vertical alignment */
+}
+
+.week-view {
+  grid-column: 2 / 3;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.week-day {
+  text-align: center;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: grid;
+  gap: 8px;
+}
+
+.week-day-name {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.week-day-date {
+  font-weight: 600;
+  font-size: 16px;
+  color: #9ca3af; /* Default to grey */
+}
+
+.week-day.active {
+  background-color: transparent; /* No background */
+}
+
+.week-day.active .week-day-name,
+.week-day.active .week-day-date {
+  color: #8173DA; /* Purple for active day name and date */
+}
+
+.week-day:hover {
+  background-color: #F0EEFD;
+}
+
+.week-day:hover .week-day-date,
+.week-day:hover .week-day-name {
+  color: #8173DA;
+}
+
+.time-scale {
+  grid-row: 2 / 3;
+  display: grid;
+}
+
+.time-slot {
+  color: #9ca3af;
+  font-size: 14px;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 49px;
+}
+
+.schedule-events {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  padding-left: 16px;
+  display: grid;
+}
+
+.schedule-event-row {
+  position: relative;
+  height: 49px;
+}
+
+.schedule-event-row::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  border-top: 1px solid #e5e7eb;
+}
+
+.schedule-view {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.schedule-header {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.schedule-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  margin-right: 16px;
+  line-height: 1;
+}
+
+.schedule-date {
+  color: #8173DA;
+}
+
+.schedule-header-separator {
+  width: 1px;
+  height: 24px;
+  background-color: #e5e7eb;
+  margin: 0 16px;
+}
+
+.schedule-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
+.schedule-action-btn {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.schedule-category-list {
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px 24px;
+}
+
+.schedule-category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.schedule-category-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.schedule-category-add-btn {
+  background: #8173DA;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.schedule-category-items {
+  display: grid;
+  gap: 12px;
+}
+
+.schedule-category-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.schedule-category-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+}
+
+.schedule-category-name {
+  flex-grow: 1;
+}
+
+.schedule-category-count {
+  background: #f3f4f6;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+.schedule-cal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.schedule-cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.schedule-cal-title {
+  font-weight: 600;
+}
+
+.schedule-cal-arrow {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.schedule-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.schedule-cal-day {
+  text-align: center;
+  color: #9ca3af;
+}
+
+.schedule-cal-date {
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.schedule-cal-date.today {
+  background: #F0EEFD;
+  color: #7F73D3;
+}
+
+.schedule-cal-date.other-month {
+  color: #d1d5db;
+}

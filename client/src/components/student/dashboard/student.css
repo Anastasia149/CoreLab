@@ -1,0 +1,274 @@
+ .student-layout {
+   display: grid;
+   grid-template-columns: 240px 1fr;
+   min-height: 100vh;
+   background: #f7f7fb;
+   color: #111827;
+   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+ }
+ .student-sidebar {
+   background: #ffffff;
+   border-right: 1px solid #eef0f5;
+   padding: 20px 16px;
+ }
+ .student-brand {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   padding: 4px 8px 16px;
+   background: transparent;
+   border: none;
+   cursor: pointer;
+ }
+ .student-brand-icon { width: 26px; height: 26px; color: #7b5cff; }
+.student-brand-text { font-weight: 800; font-size: 20px; }
+ .student-nav-section-title {
+   margin: 12px 0 6px;
+   font-size: 15px;
+   text-transform: none;
+   letter-spacing: normal;
+   color: #A0A0A0;
+ }
+ .student-nav { display: grid; gap: 6px; margin-top: 6px; margin-left: 8px; }
+ .student-nav-item {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   padding: 10px 12px;
+   border-radius: 18px;
+   border: none;
+   background: transparent;
+   cursor: pointer;
+   color: #A0A0A0;
+   text-align: left;
+   transition: color .15s ease;
+ }
+ .student-nav-item:hover,
+ .student-nav-item:focus { color: #8173DA; }
+ .student-nav-item.active { background: #F1EEFE; color: #8173DA; }
+ .student-nav-item svg { width: 24px; height: 24px; }
+.student-nav-item span { font-size: 16px; }
+ .student-content { padding: 20px 24px; }
+ .student-header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   background: #ffffff;
+   border: 1px solid #eef0f5;
+   border-radius: 16px;
+   padding: 16px 18px;
+   margin-bottom: 16px;
+ }
+ .student-hello { font-weight: 800; }
+ .student-hello-sub { color: #6b7280; font-size: 14px; }
+.student-header-actions { display: flex; align-items: center; gap: 24px; }
+.student-link-btn { display: none; }
+.student-icon-btn {
+  padding: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #111;
+}
+.student-icon-btn svg { width: 28px; height: 28px; }
+.student-icon-btn:hover { color: #4b5563; }
+.student-avatar { 
+  cursor: pointer; 
+  width: 46px; 
+  height: 46px; 
+  border: 1px solid #111; 
+  border-radius: 50%; 
+  display: grid; 
+  place-items: center; 
+}
+.student-avatar svg { width: 28px; height: 28px; color: #111; }
+ .student-logout-btn {
+   border: none;
+   padding: 8px 12px;
+   border-radius: 999px;
+   background: linear-gradient(145deg, #7b5cff, #5d3bff);
+   color: #fff;
+   cursor: pointer;
+   box-shadow: 0 8px 18px rgba(88, 80, 236, 0.4);
+ }
+ .student-grid {
+   display: grid;
+   grid-template-columns: 1.4fr 1fr;
+   grid-template-rows: auto auto 1fr;
+   gap: 16px;
+ }
+
+ .student-hero-card {
+   grid-area: 1 / 1 / 2 / 2;
+   background: linear-gradient(145deg, #7b5cff, #5d3bff);
+   color: #fff;
+   border-radius: 20px;
+   padding: 18px;
+   display: flex; align-items: center; justify-content: space-between;
+   min-height: 160px;
+ }
+
+ .student-courses {
+   grid-area: 2 / 1 / 3 / 2;
+ }
+
+ .student-tasks {
+   grid-area: 3 / 1 / 4 / 2;
+ }
+
+ .student-calendar {
+   grid-area: 1 / 2 / 2 / 3;
+ }
+
+ .student-schedule-box {
+   grid-area: 2 / 2 / 4 / 3;
+ }
+ .student-hero-title { font-size: 24px; font-weight: 800; }
+ .student-hero-sub { opacity: .95; }
+ .student-hero-art svg { width: 80px; height: 80px; color: #fff; opacity: .9; }
+ .student-calendar, .student-courses {
+
+}
+ .student-section-title { font-weight: 700; margin-bottom: 10px; }
+
+ .student-cal {
+  display: grid;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #eef0f5;
+  border-radius: 16px;
+  padding: 16px;
+}
+ .student-cal-header {
+   display: flex; align-items: center; justify-content: space-between;
+   gap: 8px;
+ }
+ .student-cal-title { display: flex; align-items: baseline; gap: 10px; font-weight: 800; }
+ .student-cal-year { color: #6b7280; font-size: 16px; }
+ .student-cal-month { font-size: 18px; }
+ .student-cal-arrow { border: none; background: transparent; cursor: pointer; color: #111; }
+ .student-cal-arrow svg { width: 22px; height: 22px; }
+ .student-cal-grid {
+   display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px;
+ }
+ .student-cal-day {
+   text-align: center; color: #A0A0A0; font-size: 13px;
+ }
+ .student-cal-date {
+   height: 36px; display: grid; place-items: center;
+   border: none; border-radius: 10px; background: transparent;
+   color: #111;
+ }
+ .student-cal-date.today {
+  background: #F1EEFE; color: #8173DA;
+  font-weight: 700;
+}
+
+.student-cal-date.other-month {
+  color: #d1d5db;
+}
+
+.student-cal-date.other-month {
+  color: #d1d5db;
+}
+ .student-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+ .student-card { background: #f9fafb; border: 1px solid #eef0f5; border-radius: 12px; padding: 12px; }
+ .student-card-title { font-weight: 700; }
+ .student-card-sub { color: #6b7280; font-size: 13px; }
+ .student-empty {
+   padding: 40px;
+   min-height: 140px;
+   display: grid;
+   place-items: center;
+   border-radius: 12px;
+   color: #6b7280;
+   text-align: center;
+   font-size: 18px;
+   font-weight: 600;
+ }
+ .student-task-content {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+ }
+
+ .student-task-icon-wrapper {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 36px;
+   height: 36px;
+   background-color: #F1F0F8;
+   border-radius: 50%;
+ }
+
+ .student-task-icon-wrapper svg {
+   color: #6F5EF5;
+   width: 20px;
+   height: 20px;
+ }
+
+ .student-task:has(input:checked) .student-task-icon-wrapper {
+   background-color: #fff;
+ }
+
+ .student-task:has(input:checked) .student-task-icon-wrapper svg {
+   color: #8173DA;
+ }
+ .student-schedule-box {
+   background: #fff; border: 1px solid #eef0f5; border-radius: 16px; padding: 16px;
+ }
+ .student-schedule .student-section-title { margin-bottom: 20px; margin-top: 10px; margin-left: 10px; }
+ .schedule-grid { display: grid; gap: 12px; padding: 0 10px; }
+ .schedule-row {
+   display: grid; grid-template-columns: 60px 1fr; gap: 16px;
+   align-items: center;
+ }
+ .schedule-add {
+   opacity: 1;
+   background: transparent;
+   border-radius: 0;
+   width: auto;
+   height: auto;
+   border: none;
+   color: #9ca3af;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+ }
+ .schedule-add svg { width: 22px; height: 22px; }
+ .schedule-time { font-weight: 400; color: #9ca3af; font-size: 14px; text-align: left; }
+ .schedule-slot {
+   height: 48px; 
+   border: none; 
+   border-radius: 10px; 
+   background: #f7f8fa;
+   display: grid;
+   place-items: center;
+ }
+ .student-tasks-list { display: grid; gap: 8px; }
+ .student-task {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 8px;
+   padding: 12px;
+   border: 1px solid #e5e7eb;
+   border-radius: 12px;
+   background: #fff;
+   cursor: pointer;
+   transition: border-color .2s ease, background-color .2s ease;
+ }
+
+ .student-task:has(input:checked) {
+   border-color: #8173DA;
+   background-color: #f1eefe;
+   color: #8173DA;
+ }
+ 
+ @media (max-width: 980px) {
+   .student-layout { grid-template-columns: 1fr; }
+   .student-sidebar { position: sticky; top: 0; display: none; }
+   .student-grid { grid-template-columns: 1fr; }
+ }

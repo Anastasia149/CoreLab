@@ -1,0 +1,53 @@
+import React, { useContext, useEffect } from 'react';
+import LoginForm from './components/LoginForm';
+import RegistrationForm from './components/RegistrationForm';
+import HomePage from './components/HomePage';
+import StudentHome from './components/student/dashboard/StudentHome';
+import { Context } from './index';
+import { observer } from "mobx-react-lite";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+
+import TeacherHome from './components/teacher/dashboard/TeacherHome';
+import TeacherCourses from './components/teacher/courses/TeacherCourses';
+import CreateCourse from './components/teacher/courses/CreateCourse';
+import CourseDetail from './components/teacher/courses/CourseDetail';
+import CreateLesson from './components/teacher/courses/CreateLesson';
+import LessonDetail from './components/teacher/lessons/LessonDetail';
+import EditLesson from './components/teacher/lessons/EditLesson';
+import EditCourse from './components/teacher/courses/EditCourse';
+
+function App() {
+  const {store} = useContext(Context);
+
+  useEffect(()=>{
+    store.checkAuth();
+  }, [])
+
+  if(store.isLoading){
+    return <div>Загрузка...</div>
+  }
+
+  const isStudent = store.isAuth && store.user?.role === 'student';
+  const isTeacher = store.isAuth && store.user?.role === 'teacher';
+
+  return (
+    <BrowserRouter>
+      <Routes>
+          <Route path="/" element={store.isAuth ? <Navigate to={isStudent ? "/student" : "/teacher"} replace /> : <HomePage />} />
+          <Route path="/student" element={isStudent ? <StudentHome /> : <Navigate to="/" replace />} />
+          <Route path="/teacher" element={isTeacher ? <TeacherHome /> : <Navigate to="/" replace />} />
+          <Route path="/teacher/courses" element={isTeacher ? <TeacherCourses /> : <Navigate to="/" replace />} />
+          <Route path="/teacher/create-course" element={isTeacher ? <CreateCourse /> : <Navigate to="/" replace />} />
+          <Route path="/teacher/course/:id" element={isTeacher ? <CourseDetail /> : <Navigate to="/" replace />} />
+          <Route path="/teacher/course/:id/edit" element={isTeacher ? <EditCourse /> : <Navigate to="/" replace />} />
+          <Route path="/teacher/course/:courseId/create-lesson" element={isTeacher ? <CreateLesson /> : <Navigate to="/" replace />} />
+          <Route path="/teacher/lesson/:lessonId" element={isTeacher ? <LessonDetail /> : <Navigate to="/" replace />} />
+          <Route path="/teacher/lesson/:lessonId/edit" element={isTeacher ? <EditLesson /> : <Navigate to="/" replace />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/register" element={<RegistrationForm />} />
+        </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default observer(App);

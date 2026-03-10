@@ -1,0 +1,36 @@
+const Router = require('express');
+const userController = require('../controllers/user-controller');
+const router = new Router();
+const {body} = require('express-validator');
+const authMiddleware = require('../middlewares/auth-middleware');
+
+const courseController = require('../controllers/course-controller');
+
+const fileController = require('../controllers/file-controller');
+const lessonController = require('../controllers/lesson-controller');
+
+router.post('/registration', 
+    body('name').isLength({min: 1, max: 64}),
+    body('email').isEmail(),
+    body('password').isLength({min: 3, max: 32}),
+    userController.registration
+);
+router.post('/login', userController.login);
+router.post('/logout', userController.logout);
+router.get('/refresh', userController.refresh);
+router.get('/activate/:link', userController.activation);
+router.get('/users', authMiddleware, userController.getUsers);
+router.post('/courses', authMiddleware, courseController.createCourse);
+router.put('/courses/:id', authMiddleware, courseController.updateCourse);
+router.get('/teacher/courses', authMiddleware, courseController.getTeacherCourses);
+router.get('/teacher/course/:id', authMiddleware, courseController.getCourseDetails);
+router.post('/courses/:courseId/modules', authMiddleware, courseController.createModule);
+router.post('/upload', authMiddleware, fileController.uploadFile);
+router.post('/lessons', authMiddleware, lessonController.createLesson);
+router.get('/lessons/:lessonId', authMiddleware, lessonController.getLesson);
+router.post('/lessons/:lessonId/materials', authMiddleware, lessonController.uploadMaterial);
+router.put('/lessons/:lessonId', authMiddleware, lessonController.updateLesson);
+router.delete('/lessons/materials/:materialId', authMiddleware, lessonController.deleteMaterial);
+router.delete('/lessons/:lessonId', authMiddleware, lessonController.deleteLesson);
+
+module.exports = router;
