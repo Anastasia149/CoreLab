@@ -189,6 +189,7 @@ export default class Store {
             console.log(response.data.message);
         } catch (e) {
             console.log("FULL ERROR:", e);
+            throw e;
         }
     }
 

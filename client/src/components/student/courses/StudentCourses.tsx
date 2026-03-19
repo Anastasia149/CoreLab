@@ -55,7 +55,7 @@ const StudentCourses: React.FC = () => {
       ) : (
         <div className="teacher-courses-grid">
           {store.courses.map((course: ICourse) => (
-            <Link to={`/student/course/${course.id}`} key={course.id} className="student-course-card-link">
+            <Link to={`/student/courses/${course.id}`} key={course.id} className="student-course-card-link">
               <div className="student-course-card">
                 <img src={course.image_url} alt={course.title} className="student-course-card-img" />
                 <div className="student-course-card-info">

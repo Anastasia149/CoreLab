@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Context } from '../index';
 import { observer } from "mobx-react-lite";
 import { Icon } from "@iconify/react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import './RegistrationForm.css';
 import { useFormFields } from '../hooks/useFormFields';
 
@@ -17,6 +17,7 @@ const RegistrationForm: React.FC = () => {
     const {store} = useContext(Context);
     const navigate = useNavigate();
     const [submitted, setSubmitted] = React.useState(false);
+    const [error, setError] = React.useState<string | null>(null);
 
     const passwordsMatch = fields.password.length > 0 && fields.confirmPassword.length > 0 && fields.password === fields.confirmPassword;
     const canSubmit = fields.name.trim().length > 0 && fields.email.trim().length > 0 && passwordsMatch;
@@ -25,8 +26,17 @@ const RegistrationForm: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if(!canSubmit) return;
-        await store.registration(fields.name, fields.email, fields.password, fields.role);
-        setSubmitted(true);
+        setError(null);
+        try {
+            await store.registration(fields.name, fields.email, fields.password, fields.role);
+            setSubmitted(true);
+        } catch (e: any) {
+            if (e.response?.data?.message) {
+                setError(e.response.data.message);
+            } else {
+                setError('Произошла неизвестная ошибка');
+            }
+        }
     };
     return (
         <div className="auth-page register-page">
@@ -114,6 +124,12 @@ const RegistrationForm: React.FC = () => {
 
                             {showMismatch && (
                                 <div className="auth-error">Пароли не совпадают</div>
+                            )}
+
+                            {error && (
+                                <div className="auth-error">
+                                    {error} <Link to="/login" className="auth-link-button">Войти?</Link>
+                                </div>
                             )}
 
                             <button type="submit" className="auth-submit-button" disabled={!canSubmit}>

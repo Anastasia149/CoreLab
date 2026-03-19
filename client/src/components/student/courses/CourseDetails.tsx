@@ -38,7 +38,8 @@ const CourseDetails: React.FC = () => {
   const mentor = {
       name: 'Нина Ким',
       role: 'Веб/мобильный разработчик',
-      avatar: 'https://via.placeholder.com/50',
+      avatar: null, // или 'https://via.placeholder.com/50'
+      description: 'Ваш эксперт-наставник в области веб- и мобильной разработки. Обладая богатым опытом, Анастасия помогает начинающим разработчикам пройти сложный путь создания динамичных и отзывчивых приложений.',
       rating: 4.9,
       reviewsCount: 120
   };
@@ -65,35 +66,53 @@ const CourseDetails: React.FC = () => {
         <div className="course-overview-card">
             <h4>Обзор</h4>
             <div className="overview-grid">
-                <div className="overview-item">
+                <div className="stat-card">
+                    <Icon icon="mdi:account-group-outline" />
+                    <div className="stat-number">0</div>
+                    <div className="stat-label">студентов</div>
+                </div>
+                <div className="stat-card">
                     <Icon icon="mdi:book-open-page-variant-outline" />
-                    <span>{course.lessons_count} модулей</span>
+                    <div className="stat-number">{course.lessons_count}</div>
+                    <div className="stat-label">модулей</div>
                 </div>
-                <div className="overview-item">
+                <div className="stat-card">
                     <Icon icon="mdi:play-circle-outline" />
-                    <span>{course.lessons_count} видео</span>
+                    <div className="stat-number">{course.lessons_count}</div>
+                    <div className="stat-label">видео</div>
                 </div>
-                <div className="overview-item">
+                <div className="stat-card">
                     <Icon icon="mdi:star-outline" />
-                    <span>50 отзывов</span>
+                    <div className="stat-number">0</div>
+                    <div className="stat-label">отзывов</div>
                 </div>
             </div>
             <div className="price-section">
-                <h4>Цена</h4>
-                <p>{course.price}$</p>
+                <span>Цена</span>
+                <span className="price-amount">{course.price}$</span>
             </div>
-            <button className="add-to-cart-button">Добавить в корзину</button>
+            <div className="course-actions">
+                <button className="cart-icon-button"><Icon icon="mdi:cart-outline" /></button>
+                <button className="add-to-cart-button">Добавить в корзину</button>
+            </div>
         </div>
 
         <div className="mentor-card">
             <h4>О менторе</h4>
             <div className="mentor-info">
-                <img src={mentor.avatar} alt={course.author_name} />
+                <div className="mentor-avatar">
+                    {mentor.avatar ? (
+                        <img src={mentor.avatar} alt={course.author_name} />
+                    ) : (
+                        <Icon icon="solar:user-linear" />
+                    )}
+                </div>
                 <div>
                     <h5>{course.author_name}</h5>
-                    <p>{mentor.role}</p>
+                    <p className="mentor-role">{mentor.role}</p>
                 </div>
             </div>
+            <p className="mentor-description">{mentor.description}</p>
             <div className="mentor-rating">
                 <Icon icon="mdi:star" />
                 <span>{mentor.rating}/5 ({mentor.reviewsCount} отзывов)</span>
