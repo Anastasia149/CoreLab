@@ -55,8 +55,17 @@ class UserController{
     async activation(req, res, next){
         try{
             const activationLink = req.params.link;
-            await userService.activate(activationLink);
-            return res.redirect(process.env.CLIENT_URL);
+            const userData = await userService.activate(activationLink);
+
+            res.cookie('refreshToken', userData.refreshToken, {
+                maxAge: 30 * 24 * 60 * 60 * 1000,
+                httpOnly: true,
+                sameSite: 'lax',
+                secure: false
+            });
+
+            // можно передать accessToken через query (или лучше хранить на клиенте)
+            return res.redirect(`${process.env.CLIENT_URL}?token=${userData.accessToken}`);
         } catch(e){
             next(e);
         }

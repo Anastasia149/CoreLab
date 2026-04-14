@@ -35,6 +35,13 @@ class UserService{
         throw ApiError.BadRequest('Неккоректная ссылка активации');
       }
       await UserModel.activateUser(activationLink);
+
+      const userDto = new UserDto(user);
+      const tokens = tokenService.generateTokens({...userDto});
+
+      await tokenService.saveToken(userDto.id, tokens.refreshToken);
+
+      return { ...tokens, user: userDto };
     }
 
     async login(email, password){
