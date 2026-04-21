@@ -17,7 +17,7 @@ class CourseService {
     }
 
     async getAllPublishedCourses() {
-        const courses = await pool.query("SELECT c.*, u.name as author_name FROM courses c JOIN users u ON c.author_id = u.id WHERE c.status = 'published'");
+        const courses = await pool.query("SELECT c.*, u.name as author_name FROM courses c JOIN users u ON c.author_id = u.id WHERE c.status = 'published' ORDER BY c.students_count DESC");
         return courses.rows;
     }
 

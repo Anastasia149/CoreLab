@@ -6,6 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import './RegistrationForm.css';
 import { useFormFields } from '../hooks/useFormFields';
 
+import illustration from './home/pictures/Education-rafiki.svg';
+
 const RegistrationForm: React.FC = () => {
     const { fields, handleChange } = useFormFields({
         name: '',
@@ -44,7 +46,7 @@ const RegistrationForm: React.FC = () => {
                 <div className="auth-panel auth-panel-left">
                     <div className="auth-logo-block">
                         <Icon icon="icomoon-free:book" className="auth-logo-icon" />
-                        <div className="auth-logo-text">Courses</div>
+                        <div className="auth-logo-text">Knowlify</div>
                     </div>
 
                     <div className="auth-left-content">
@@ -159,9 +161,7 @@ const RegistrationForm: React.FC = () => {
 
                 <div className="auth-panel auth-panel-right">
                     <div className="auth-hero">
-                        <div className="auth-hero-card auth-hero-card-main" />
-                        <div className="auth-hero-card auth-hero-card-top" />
-                        <div className="auth-hero-card auth-hero-card-bottom" />
+                        <img src={illustration} alt="Education" className="auth-hero-illustration" />
                     </div>
                 </div>
             </div>

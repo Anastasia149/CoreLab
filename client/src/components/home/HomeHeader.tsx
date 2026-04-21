@@ -11,13 +11,10 @@ const HomeHeader: React.FC = () => {
     <header className="home-header">
       <div className="home-header-left" onClick={() => navigate('/')}>
         <Icon icon="icomoon-free:book" className="home-logo-icon" />
-        <div className="home-logo-text">Courses</div>
+        <div className="home-logo-text">Knowlify</div>
       </div>
       <nav className="home-nav">
-        <button className="home-nav-link">Каталог курсов</button>
-        <button className="home-nav-link">Преподаватели</button>
-        <button className="home-nav-link">Журнал</button>
-        <button className="home-nav-link">Школа</button>
+       
       </nav>
       <div className="home-header-right">
         <button className="home-link" onClick={onLogin}>

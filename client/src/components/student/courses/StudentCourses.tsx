@@ -70,7 +70,7 @@ const StudentCourses: React.FC = () => {
                   <div className="student-course-author">
                     <div className="author-icon"></div>
                     <span>{course.author_name}</span>
-                    <span className="student-course-price">{course.price} $</span>
+                    <span className="student-course-price">{course.price} BYN</span>
                   </div>
                 </div>
               </div>

@@ -41,7 +41,7 @@ const TeacherCourses: React.FC = () => {
                     <div className="course-card-description">{course.description}</div>
                     <div className="course-card-details">
                       <div className={`course-card-status ${course.status}`}>{course.status === 'draft' ? 'Черновик' : 'Опубликован'}</div>
-                      <div className="course-card-price">{course.price > 0 ? `${course.price} $` : 'Бесплатно'}</div>
+                      <div className="course-card-price">{course.price > 0 ? `${course.price} BYN` : 'Бесплатно'}</div>
                     </div>
                   </div>
                 </div>

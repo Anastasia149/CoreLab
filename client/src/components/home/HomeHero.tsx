@@ -16,7 +16,7 @@ const HomeHero: React.FC<Props> = ({ onStart, onCatalog }) => {
           <span className="home-badge">Карьерный менеджер</span>
         </div>
         <h1 className="home-title">
-          Запусти свою карьеру в IT — обучение с нуля до первой работы!
+          Начни обучать и обучаться вместе с Knowlify!
         </h1>
         <p className="home-subtitle">
           Научим востребованной профессии и поможем с трудоустройством.

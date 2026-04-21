@@ -3,26 +3,33 @@ import { Icon } from '@iconify/react';
 import '../teacher.css';
 import { useNavigate } from 'react-router-dom';
 import { Context } from '../../../../index';
+import { observer } from 'mobx-react-lite';
 
 type Props = {
   name?: string;
   tab?: string;
 };
 
-const TeacherHeader: React.FC<Props> = ({ name, tab }) => {
+const TeacherHeader = observer(({ name, tab }: Props) => {
   const navigate = useNavigate();
-  useContext(Context);
+  const { store } = useContext(Context);
+
+  const userDisplayName = store.user?.name;
 
   const openSettings = () => navigate('/teacher?tab=settings');
   return (
     <div className="teacher-header">
       <div className="teacher-header-title">
-        {name ? (
-          <div className="teacher-hello">{name}</div>
+        {(!tab || tab === 'dashboard') && userDisplayName ? (
+          <div className="teacher-hello">Добро пожаловать, {userDisplayName}!</div>
         ) : tab === 'schedule' ? (
           <div className="teacher-hello">Расписание</div>
         ) : tab === 'courses' ? (
           <div className="teacher-hello">Мои курсы</div>
+        ) : name && name !== userDisplayName ? (
+          <div className="teacher-hello">{name}</div>
+        ) : userDisplayName ? (
+          <div className="teacher-hello">Добро пожаловать, {userDisplayName}!</div>
         ) : (
           <>
             <div className="teacher-hello">Добро пожаловать!</div>
@@ -43,6 +50,6 @@ const TeacherHeader: React.FC<Props> = ({ name, tab }) => {
       </div>
     </div>
   );
-};
+});
 
 export default TeacherHeader;
