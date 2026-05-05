@@ -53,6 +53,8 @@ const CourseDetail: React.FC = () => {
   const hasOrphanLessons = (course?.lessons?.length ?? 0) > 0;
   const isCourseEmpty = !hasVisibleModules && !hasOrphanLessons;
 
+  const [isOrphanLessonsOpen, setIsOrphanLessonsOpen] = useState(true);
+
   const handleDelete = async () => {
     if (window.confirm('Вы уверены, что хотите удалить этот курс? Все уроки и материалы будут удалены безвозвратно.')) {
       if (id) {
@@ -119,7 +121,7 @@ const CourseDetail: React.FC = () => {
                           <Icon icon="mdi:note-edit-outline" />
                           <span>Задание</span>
                         </button>
-                        <button onClick={() => navigate(`/teacher/course/${id}/create-lesson?type=test`)}>
+                        <button onClick={() => navigate(`/teacher/course/${id}/create-test`)}>
                           <Icon icon="mdi:help-circle-outline" />
                           <span>Тест</span>
                         </button>
@@ -165,18 +167,26 @@ const CourseDetail: React.FC = () => {
 
                     {hasOrphanLessons && (
                       <div className="lessons-without-module">
-                        <h3>Уроки без модуля</h3>
-                        <div className="module-content">
-                          {course?.lessons?.map((lesson) => (
-                            <div key={lesson.id} className="lesson-item">
-                              <div className="lesson-item-main">
-                                {lesson.image_url && <img src={lesson.image_url} alt={lesson.title} className="lesson-item-image" />}
-                                <div className="lesson-title">{lesson.title}</div>
+                        <button
+                          className={`module-header ${isOrphanLessonsOpen ? 'active' : ''}`}
+                          onClick={() => setIsOrphanLessonsOpen(!isOrphanLessonsOpen)}
+                        >
+                          <h3>Уроки без модуля</h3>
+                          <Icon icon={isOrphanLessonsOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'} />
+                        </button>
+                        {isOrphanLessonsOpen && (
+                          <div className="module-content">
+                            {course?.lessons?.map((lesson) => (
+                              <div key={lesson.id} className="lesson-item">
+                                <div className="lesson-item-main">
+                                  {lesson.image_url && <img src={lesson.image_url} alt={lesson.title} className="lesson-item-image" />}
+                                  <div className="lesson-title">{lesson.title}</div>
+                                </div>
+                                <button className="lesson-goto-btn" onClick={() => navigate(`/teacher/lesson/${lesson.id}`)}>Перейти</button>
                               </div>
-                              <button className="lesson-goto-btn" onClick={() => navigate(`/teacher/lesson/${lesson.id}`)}>Перейти</button>
-                            </div>
-                          ))}
-                        </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                   </>

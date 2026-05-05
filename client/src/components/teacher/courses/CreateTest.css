@@ -1,0 +1,255 @@
+.create-test-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.test-base-info {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 20px;
+}
+
+.question-card {
+  position: relative;
+}
+
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.question-number {
+  font-weight: 700;
+  color: #4f46e5;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.remove-btn:hover {
+  color: #ef4444;
+  background: #fee2e2;
+}
+
+.question-settings {
+  display: flex;
+  gap: 24px;
+  margin: 16px 0;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.setting-item label {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.setting-item.checkbox {
+  cursor: pointer;
+}
+
+.setting-item.checkbox input {
+  width: 18px;
+  height: 18px;
+}
+
+.options-list {
+  display: grid;
+  gap: 12px;
+}
+
+.options-list > label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.option-item input[type="text"] {
+  flex: 1;
+}
+
+.remove-option {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.add-option-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px dashed #d1d5db;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  font-size: 13px;
+  width: fit-content;
+  margin-top: 8px;
+}
+
+.add-option-btn:hover {
+  border-color: #4f46e5;
+  color: #4f46e5;
+  background: #f5f3ff;
+}
+
+.test-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.primary-btn {
+  padding: 12px 32px;
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+}
+
+.secondary-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+}
+
+.secondary-btn:hover {
+  background: #f9fafb;
+}
+
+.question-card .form-group textarea,
+.question-settings select,
+.option-item input[type="text"] {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.question-card .form-group textarea:focus,
+.question-settings select:focus,
+.option-item input[type="text"]:focus {
+  border-color: #8173DA;
+  box-shadow: 0 0 0 1px #8173DA33;
+}
+
+.setting-item.checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #e5e7eb; /* Add border for consistency */
+    border-radius: 4px; /* Slightly rounded corners */
+    appearance: none; /* Remove default browser styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.setting-item.checkbox input[type="checkbox"]:checked {
+    background-color: #4f46e5; /* Primary color when checked */
+    border-color: #4f46e5;
+}
+
+.setting-item.checkbox input[type="checkbox"]:checked::after {
+    content: '';
+    display: block;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.option-item input[type="radio"],
+.option-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0; /* Prevent shrinking */
+  margin: 0; /* Reset margin */
+}
+
+.option-item .remove-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fef2f2;
+  color: #ef4444;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.option-item .remove-option:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .test-base-info {
+    grid-template-columns: 1fr;
+  }
+  
+  .question-settings {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

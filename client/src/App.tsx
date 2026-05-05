@@ -23,6 +23,7 @@ import StudentLayout from './components/student/dashboard/StudentLayout';
 import StudentCourses from './components/student/courses/StudentCourses';
 import CourseDetails from './components/student/courses/CourseDetails';
 import StudentLessonDetail from './components/student/courses/StudentLessonDetail';
+import CreateTest from './components/teacher/courses/CreateTest';
 
 function App() {
   const {store} = useContext(Context);
@@ -57,6 +58,7 @@ function App() {
           <Route path="/teacher/course/:id" element={isTeacher ? <CourseDetail /> : <Navigate to="/" replace />} />
           <Route path="/teacher/course/:id/edit" element={isTeacher ? <EditCourse /> : <Navigate to="/" replace />} />
           <Route path="/teacher/course/:courseId/create-lesson" element={isTeacher ? <CreateLesson /> : <Navigate to="/" replace />} />
+          <Route path="/teacher/course/:courseId/create-test" element={isTeacher ? <CreateTest /> : <Navigate to="/" replace />} />
           <Route path="/teacher/lesson/:lessonId" element={isTeacher ? <LessonDetail /> : <Navigate to="/" replace />} />
           <Route path="/teacher/lesson/:lessonId/edit" element={isTeacher ? <EditLesson /> : <Navigate to="/" replace />} />
           <Route path="/login" element={<LoginForm />} />

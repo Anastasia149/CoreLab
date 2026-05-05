@@ -249,12 +249,48 @@
 
 .lessons-without-module {
   margin-top: 24px;
+  background-color: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
 }
 
-.lessons-without-module h3 {
+.lessons-without-module .module-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
   font-size: 18px;
   font-weight: 600;
-  margin-bottom: 16px;
+}
+
+.lessons-without-module .module-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.lessons-without-module .module-header.active {
+  color: #8173DA;
+}
+
+.lessons-without-module .module-header svg {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease;
+}
+
+.lessons-without-module .module-header.active svg {
+  transform: rotate(180deg);
+}
+
+.lessons-without-module .module-content {
+  padding: 0 16px 16px;
+  margin-top: 10px; /* Small distance between title and lessons */
 }
 
 .teacher-courses-empty {
