@@ -31,6 +31,10 @@
   margin-top: 24px;
 }
 
+.course-detail-header {
+  margin-bottom: 20px;
+}
+
 .course-modules-accordion {
   display: grid;
   gap: 12px;
@@ -149,6 +153,12 @@
   font-size: 14px;
   font-weight: 500;
   transition: background-color 0.2s ease;
+  margin-right: 12px;
+}
+
+.lesson-action-btn:last-child,
+.add-student-btn:last-child {
+  margin-right: 0;
 }
 
 .lesson-action-btn.edit {

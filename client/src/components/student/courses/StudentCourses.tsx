@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../../../index';
 import { ICourse } from '../../../models/ICourse';
@@ -6,12 +6,47 @@ import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import './StudentCourses.css';
 
+const categories = [
+  'Все',
+  'IT и ПО',
+  'Дизайн',
+  'Маркетинг',
+  'Наука',
+  'Право',
+  'Тесты',
+  'Интенсивы'
+];
+
 const StudentCourses: React.FC = () => {
   const { store } = useContext(Context);
+  const [activeCategory, setActiveCategory] = useState('Все');
+  const [priceSort, setPriceSort] = useState<'all' | 'free' | 'paid'>('all');
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   useEffect(() => {
     store.getAllCourses();
   }, [store]);
+
+  const toggleSettings = () => setIsSettingsOpen(!isSettingsOpen);
+
+  const filteredAndSortedCourses = useMemo(() => {
+    let result = [...store.courses];
+
+    // Фильтрация по категории (имитация, так как в модели ICourse может не быть категории)
+    if (activeCategory !== 'Все') {
+      // Здесь должна быть реальная фильтрация по категории, если она есть в модели
+      // result = result.filter(course => course.category === activeCategory);
+    }
+
+    // Сортировка/фильтрация по цене
+    if (priceSort === 'free') {
+      result = result.filter(course => !course.price || course.price === 0);
+    } else if (priceSort === 'paid') {
+      result = result.filter(course => course.price && course.price > 0);
+    }
+
+    return result;
+  }, [store.courses, activeCategory, priceSort]);
 
   return (
     <div className="student-courses-page">
@@ -37,27 +72,73 @@ const StudentCourses: React.FC = () => {
         </div>
       </div>
 
-      {/* Панель фильтров */}
-      <div className="courses-filter-panel">
-        <button className="filter-button active">Анализ трендов</button>
-        <button className="filter-button">IT и ПО</button>
-        <button className="filter-button">Дизайн</button>
-        <button className="filter-button">Маркетинг</button>
-        <button className="filter-button">Наука</button>
-        <button className="filter-button">Право</button>
+      {/* Панель управления поиском */}
+      <div className="courses-controls">
+        {/* Панель фильтров категорий */}
+        <div className="courses-filter-row">
+          <div className="courses-filter-panel">
+            {categories.map(cat => (
+              <button 
+                key={cat} 
+                className={`filter-button ${activeCategory === cat ? 'active' : ''}`}
+                onClick={() => setActiveCategory(cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          <div className="courses-settings-wrapper">
+            <button 
+              className={`courses-settings-btn ${isSettingsOpen ? 'active' : ''}`}
+              onClick={toggleSettings}
+              aria-label="Настройки фильтрации"
+            >
+              <Icon icon="solar:settings-linear" />
+            </button>
+
+            {isSettingsOpen && (
+              <div className="courses-settings-popup">
+                <div className="settings-popup-section">
+                  <h4>Цена</h4>
+                  <div className="popup-sort-options">
+                    <button 
+                      className={`popup-sort-option ${priceSort === 'all' ? 'active' : ''}`}
+                      onClick={() => { setPriceSort('all'); setIsSettingsOpen(false); }}
+                    >
+                      Все курсы
+                    </button>
+                    <button 
+                      className={`popup-sort-option ${priceSort === 'free' ? 'active' : ''}`}
+                      onClick={() => { setPriceSort('free'); setIsSettingsOpen(false); }}
+                    >
+                      Бесплатные
+                    </button>
+                    <button 
+                      className={`popup-sort-option ${priceSort === 'paid' ? 'active' : ''}`}
+                      onClick={() => { setPriceSort('paid'); setIsSettingsOpen(false); }}
+                    >
+                      Платные
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Сетка курсов */}
-      {store.courses.length === 0 ? (
+      {filteredAndSortedCourses.length === 0 ? (
         <div className="teacher-courses-empty">
-          <h2>Пока нет доступных курсов.</h2>
+          <h2>По вашему запросу ничего не найдено.</h2>
         </div>
       ) : (
         <div className="teacher-courses-grid">
-          {store.courses.map((course: ICourse) => (
+          {filteredAndSortedCourses.map((course: ICourse) => (
             <Link to={`/student/courses/${course.id}`} key={course.id} className="student-course-card-link">
               <div className="student-course-card">
-                <img src={course.image_url} alt={course.title} className="student-course-card-img" />
+                <img src={course.image_url || 'https://via.placeholder.com/300x160'} alt={course.title} className="student-course-card-img" />
                 <div className="student-course-card-info">
                   <h3>{course.title}</h3>
                   <div className="student-course-rating">
@@ -69,8 +150,10 @@ const StudentCourses: React.FC = () => {
                   </div>
                   <div className="student-course-author">
                     <div className="author-icon"></div>
-                    <span>{course.author_name}</span>
-                    <span className="student-course-price">{course.price} BYN</span>
+                    <span>{course.author_name || 'Инструктор'}</span>
+                    <span className="student-course-price">
+                      {course.price && course.price > 0 ? `${course.price} BYN` : 'Бесплатно'}
+                    </span>
                   </div>
                 </div>
               </div>
