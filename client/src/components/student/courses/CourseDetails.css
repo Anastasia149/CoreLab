@@ -149,6 +149,49 @@
   background-color: #4338ca;
 }
 
+.favorite-icon-button {
+    padding: 10px;
+    background-color: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.favorite-icon-button svg {
+    font-size: 24px;
+    color: #9ca3af;
+}
+
+.favorite-icon-button:hover {
+    background-color: #fee2e2;
+}
+
+.favorite-icon-button.active {
+    background-color: #fef2f2;
+    border-color: #ef4444;
+}
+
+.favorite-icon-button.active svg {
+    color: #ef4444;
+}
+
+.go-to-course-button {
+    flex-grow: 1;
+    padding: 12px;
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.go-to-course-button:hover {
+    background-color: #4338ca;
+}
+
 /* Curriculum Styles */
 .student-curriculum {
   display: grid;

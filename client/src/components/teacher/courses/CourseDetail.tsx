@@ -203,7 +203,6 @@ const CourseDetail: React.FC = () => {
                 </div>
                 <div className="settings-section">
                   <h4>Управление учениками</h4>
-                  <button className="add-student-btn">Добавить ученика</button>
                   <p>Здесь будет список учеников.</p>
                 </div>
               </div>

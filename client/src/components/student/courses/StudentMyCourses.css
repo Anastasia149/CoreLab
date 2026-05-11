@@ -1,0 +1,124 @@
+.student-my-courses-page {
+  padding: 24px;
+}
+
+.student-my-courses-page h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.my-courses-content {
+  max-width: 1200px;
+}
+
+.student-courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.student-course-card {
+  background-color: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s;
+}
+
+.student-course-card:hover {
+  transform: translateY(-4px);
+}
+
+.student-course-card-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.student-course-card-info {
+  padding: 16px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.student-course-card-info h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+}
+
+.student-course-progress {
+  margin-top: auto;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #4f46e5;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.student-course-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.my-courses-empty {
+  text-align: center;
+  padding: 64px 24px;
+  background-color: white;
+  border-radius: 16px;
+  border: 1px dashed #d1d5db;
+}
+
+.empty-icon {
+  font-size: 64px;
+  color: #9ca3af;
+  margin-bottom: 16px;
+}
+
+.my-courses-empty h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.my-courses-empty p {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-bottom: 24px;
+}
+
+.go-to-search-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #4f46e5;
+  color: white;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.go-to-search-btn:hover {
+  background-color: #4338ca;
+}

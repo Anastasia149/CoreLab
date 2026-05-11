@@ -22,12 +22,23 @@ const StudentCourses: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('Все');
   const [priceSort, setPriceSort] = useState<'all' | 'free' | 'paid'>('all');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [favoriteCourseIds, setFavoriteCourseIds] = useState<number[]>([]);
 
   useEffect(() => {
     store.getAllCourses();
   }, [store]);
 
   const toggleSettings = () => setIsSettingsOpen(!isSettingsOpen);
+
+  const toggleFavorite = (e: React.MouseEvent, courseId: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setFavoriteCourseIds(prev => 
+      prev.includes(courseId) 
+        ? prev.filter(id => id !== courseId) 
+        : [...prev, courseId]
+    );
+  };
 
   const filteredAndSortedCourses = useMemo(() => {
     let result = [...store.courses];
@@ -38,11 +49,17 @@ const StudentCourses: React.FC = () => {
       // result = result.filter(course => course.category === activeCategory);
     }
 
-    // Сортировка/фильтрация по цене
+    // Сортировка/фильтрация по цене - с проверкой типа
     if (priceSort === 'free') {
-      result = result.filter(course => !course.price || course.price === 0);
+      result = result.filter(course => {
+        const price = Number(course.price);
+        return isNaN(price) || price <= 0;
+      });
     } else if (priceSort === 'paid') {
-      result = result.filter(course => course.price && course.price > 0);
+      result = result.filter(course => {
+        const price = Number(course.price);
+        return !isNaN(price) && price > 0;
+      });
     }
 
     return result;
@@ -138,7 +155,15 @@ const StudentCourses: React.FC = () => {
           {filteredAndSortedCourses.map((course: ICourse) => (
             <Link to={`/student/courses/${course.id}`} key={course.id} className="student-course-card-link">
               <div className="student-course-card">
-                <img src={course.image_url || 'https://via.placeholder.com/300x160'} alt={course.title} className="student-course-card-img" />
+                <div className="student-course-card-header">
+                  <img src={course.image_url || 'https://via.placeholder.com/300x160'} alt={course.title} className="student-course-card-img" />
+                  <button 
+                    className={`card-favorite-button ${favoriteCourseIds.includes(course.id) ? 'active' : ''}`}
+                    onClick={(e) => toggleFavorite(e, course.id)}
+                  >
+                    <Icon icon={favoriteCourseIds.includes(course.id) ? 'mdi:heart' : 'mdi:heart-outline'} />
+                  </button>
+                </div>
                 <div className="student-course-card-info">
                   <h3>{course.title}</h3>
                   <div className="student-course-rating">

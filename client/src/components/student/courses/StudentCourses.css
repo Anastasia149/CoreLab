@@ -181,12 +181,51 @@
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.student-course-card-header {
+  position: relative;
 }
 
 .student-course-card-img {
   width: 100%;
   height: 160px;
   object-fit: cover;
+}
+
+.card-favorite-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-favorite-button svg {
+  font-size: 20px;
+  color: #9ca3af;
+}
+
+.card-favorite-button:hover {
+  background-color: #fee2e2;
+}
+
+.card-favorite-button.active {
+  background-color: #fef2f2;
+}
+
+.card-favorite-button.active svg {
+  color: #ef4444;
 }
 
 .student-course-card-info {

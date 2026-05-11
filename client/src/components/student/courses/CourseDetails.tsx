@@ -15,6 +15,7 @@ const CourseDetails: React.FC = () => {
   const [course, setCourse] = useState<ICourseDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('description');
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -53,51 +54,10 @@ const CourseDetails: React.FC = () => {
           <img src={course.image_url || 'https://via.placeholder.com/800x400'} alt={course.title} className="course-details-image" />
           <div className="course-details-tabs">
               <button className={`tab-button ${activeTab === 'description' ? 'active' : ''}`} onClick={() => setActiveTab('description')}>Описание</button>
-              <button className={`tab-button ${activeTab === 'curriculum' ? 'active' : ''}`} onClick={() => setActiveTab('curriculum')}>Программа</button>
               <button className={`tab-button ${activeTab === 'reviews' ? 'active' : ''}`} onClick={() => setActiveTab('reviews')}>Отзывы</button>
           </div>
           <div className="course-details-tab-content">
               {activeTab === 'description' && <p>{course.description}</p>}
-              {activeTab === 'curriculum' && (
-                <div className="student-curriculum">
-                  {course.modules?.map(module => (
-                    <div key={module.id} className="curriculum-module">
-                      <h4>{module.title}</h4>
-                      <div className="curriculum-lessons">
-                        {module.lessons.map(lesson => (
-                          <div key={lesson.id} className="curriculum-lesson" onClick={() => navigate(`/student/lesson/${lesson.id}`)}>
-                            <div className="lesson-left">
-                              <Icon icon={lesson.type === 'assignment' ? 'mdi:note-edit-outline' : (lesson.type === 'test' ? 'mdi:help-circle-outline' : 'mdi:play-circle-outline')} />
-                              <span>{lesson.title}</span>
-                            </div>
-                            <div className="lesson-right">
-                              <span className="lesson-type-badge">{lesson.type === 'lecture' ? 'Лекция' : (lesson.type === 'assignment' ? 'Задание' : 'Тест')}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                  {course.lessons?.length > 0 && (
-                    <div className="curriculum-module">
-                      <h4>Дополнительные уроки</h4>
-                      <div className="curriculum-lessons">
-                        {course.lessons.map(lesson => (
-                          <div key={lesson.id} className="curriculum-lesson" onClick={() => navigate(`/student/lesson/${lesson.id}`)}>
-                            <div className="lesson-left">
-                              <Icon icon={lesson.type === 'assignment' ? 'mdi:note-edit-outline' : (lesson.type === 'test' ? 'mdi:help-circle-outline' : 'mdi:play-circle-outline')} />
-                              <span>{lesson.title}</span>
-                            </div>
-                            <div className="lesson-right">
-                              <span className="lesson-type-badge">{lesson.type === 'lecture' ? 'Лекция' : (lesson.type === 'assignment' ? 'Задание' : 'Тест')}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
           </div>
         </div>
       </div>
@@ -129,11 +89,25 @@ const CourseDetails: React.FC = () => {
             </div>
             <div className="price-section">
                 <span>Цена</span>
-                <span className="price-amount">{course.price}$</span>
+                <span className="price-amount">
+                  {course.price && course.price > 0 ? `${course.price} BYN` : 'Бесплатно'}
+                </span>
             </div>
             <div className="course-actions">
-                <button className="cart-icon-button"><Icon icon="mdi:cart-outline" /></button>
-                <button className="add-to-cart-button">Добавить в корзину</button>
+                <button 
+                  className={`favorite-icon-button ${isFavorite ? 'active' : ''}`}
+                  onClick={() => setIsFavorite(!isFavorite)}
+                >
+                  <Icon icon={isFavorite ? 'mdi:heart' : 'mdi:heart-outline'} />
+                </button>
+                {course.price && course.price > 0 ? (
+                  <>
+                    <button className="cart-icon-button"><Icon icon="mdi:cart-outline" /></button>
+                    <button className="add-to-cart-button">Добавить в корзину</button>
+                  </>
+                ) : (
+                  <button className="go-to-course-button" onClick={() => navigate(`/student`)}>Перейти</button>
+                )}
             </div>
         </div>
 

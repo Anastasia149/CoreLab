@@ -21,6 +21,7 @@ import StudentSettings from './components/student/settings/StudentSettings';
 import ScheduleHome from './components/student/schedule/ScheduleHome';
 import StudentLayout from './components/student/dashboard/StudentLayout';
 import StudentCourses from './components/student/courses/StudentCourses';
+import StudentMyCourses from './components/student/courses/StudentMyCourses';
 import CourseDetails from './components/student/courses/CourseDetails';
 import StudentLessonDetail from './components/student/courses/StudentLessonDetail';
 import CreateTest from './components/teacher/courses/CreateTest';
@@ -45,6 +46,7 @@ function App() {
           <Route path="/" element={store.isAuth ? <Navigate to={isStudent ? "/student" : "/teacher"} replace /> : <HomePage />} />
           <Route path="/student" element={isStudent ? <StudentLayout /> : <Navigate to="/" replace />}>
             <Route index element={<StudentHome />} />
+            <Route path="my-courses" element={<StudentMyCourses />} />
             <Route path="courses" element={<StudentCourses />} />
             <Route path="schedule" element={<ScheduleHome />} />
             <Route path="settings" element={<StudentSettings />} />
