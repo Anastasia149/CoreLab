@@ -10,6 +10,7 @@ import $api from '../../../http';
 import { Icon } from '@iconify/react';
 import '../dashboard/TeacherLayout.css';
 import '../courses/CreateLesson.css';
+import '../courses/CreateTest.css';
 
 interface Option {
   id: string;
@@ -23,6 +24,7 @@ interface Question {
   type: 'single' | 'multiple';
   options: Option[];
   isRequired: boolean;
+  imageUrl: string | null;
 }
 
 const EditLesson: React.FC = () => {
@@ -56,7 +58,8 @@ const EditLesson: React.FC = () => {
           { id: '1', text: '', isCorrect: false },
           { id: '2', text: '', isCorrect: false }
         ],
-        isRequired: true
+        isRequired: true,
+        imageUrl: null
       }
     ]
   );
@@ -85,7 +88,11 @@ const EditLesson: React.FC = () => {
             setTestTitle(data.title);
             try {
               const parsedQuestions = JSON.parse(data.content) as Question[];
-              setTestQuestions(parsedQuestions);
+              const questionsWithImageUrls = parsedQuestions.map(q => ({
+                ...q,
+                imageUrl: q.imageUrl || null
+              }));
+              setTestQuestions(questionsWithImageUrls);
             } catch (error) {
               console.error("Failed to parse test content:", error);
               setTestQuestions([]); // Fallback to empty questions if parsing fails
@@ -202,7 +209,8 @@ const EditLesson: React.FC = () => {
           { id: '1', text: '', isCorrect: false },
           { id: '2', text: '', isCorrect: false }
         ],
-        isRequired: true
+        isRequired: true,
+        imageUrl: null
       }
     ]);
   };
@@ -258,6 +266,27 @@ const EditLesson: React.FC = () => {
         return q;
       })
     );
+  };
+
+  const handleQuestionImageChange = async (questionId: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.type.split('/')[0] !== 'image') {
+      alert('Пожалуйста, выберите файл изображения.');
+      e.target.value = '';
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await $api.post<{ url: string }>('/upload', formData);
+      updateQuestion(questionId, { imageUrl: response.data.url });
+    } catch (error) {
+      console.error('Failed to upload question image:', error);
+      alert('Ошибка при загрузке изображения.');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -358,6 +387,38 @@ const EditLesson: React.FC = () => {
                         required
                       />
                     </div>
+
+                    <div className="form-group full-width">
+                      <label>Изображение к вопросу</label>
+                      <div className="file-upload-wrapper">
+                        <input
+                          type="file"
+                          id={`question-image-${q.id}`}
+                          className="file-upload-input"
+                          onChange={(e) => handleQuestionImageChange(q.id, e)}
+                          accept="image/*"
+                        />
+                        <label htmlFor={`question-image-${q.id}`} className="file-upload-button">
+                          Выберите изображение
+                        </label>
+                        <span className="file-upload-name">
+                          {q.imageUrl ? 'Изображение загружено' : 'Файл не выбран'}
+                        </span>
+                      </div>
+                      {q.imageUrl && (
+                        <div className="question-image-preview">
+                          <img src={q.imageUrl} alt="Изображение к вопросу" />
+                          <button 
+                            type="button" 
+                            className="remove-btn"
+                            onClick={() => updateQuestion(q.id, { imageUrl: null })}
+                          >
+                            <Icon icon="mdi:close" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
                     <div className="question-settings">
                       <div className="setting-item">
                         <label>Тип вопроса:</label>

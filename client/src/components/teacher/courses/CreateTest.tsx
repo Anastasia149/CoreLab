@@ -6,6 +6,7 @@ import TeacherSidebar from '../dashboard/components/TeacherSidebar';
 import TeacherHeader from '../dashboard/components/TeacherHeader';
 import { Icon } from '@iconify/react';
 import { Module } from '../../../models/ICourseDetail';
+import $api from '../../../http';
 import './CreateTest.css';
 
 interface Option {
@@ -20,6 +21,7 @@ interface Question {
   type: 'single' | 'multiple';
   options: Option[];
   isRequired: boolean;
+  imageUrl: string | null;
 }
 
 const CreateTest: React.FC = () => {
@@ -39,7 +41,8 @@ const CreateTest: React.FC = () => {
         { id: '1', text: '', isCorrect: false },
         { id: '2', text: '', isCorrect: false }
       ],
-      isRequired: true
+      isRequired: true,
+      imageUrl: null
     }
   ]);
 
@@ -62,7 +65,8 @@ const CreateTest: React.FC = () => {
           { id: '1', text: '', isCorrect: false },
           { id: '2', text: '', isCorrect: false }
         ],
-        isRequired: true
+        isRequired: true,
+        imageUrl: null
       }
     ]);
   };
@@ -119,6 +123,27 @@ const CreateTest: React.FC = () => {
         return q;
       })
     );
+  };
+
+  const handleQuestionImageChange = async (questionId: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.type.split('/')[0] !== 'image') {
+      alert('Пожалуйста, выберите файл изображения.');
+      e.target.value = '';
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await $api.post<{ url: string }>('/upload', formData);
+      updateQuestion(questionId, { imageUrl: response.data.url });
+    } catch (error) {
+      console.error('Failed to upload question image:', error);
+      alert('Ошибка при загрузке изображения.');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -201,6 +226,37 @@ const CreateTest: React.FC = () => {
                       onChange={(e) => updateQuestion(q.id, { text: e.target.value })}
                       required
                     />
+                  </div>
+
+                  <div className="form-group full-width">
+                    <label>Изображение к вопросу</label>
+                    <div className="file-upload-wrapper">
+                      <input
+                        type="file"
+                        id={`question-image-${q.id}`}
+                        className="file-upload-input"
+                        onChange={(e) => handleQuestionImageChange(q.id, e)}
+                        accept="image/*"
+                      />
+                      <label htmlFor={`question-image-${q.id}`} className="file-upload-button">
+                        Выберите изображение
+                      </label>
+                      <span className="file-upload-name">
+                        {q.imageUrl ? 'Изображение загружено' : 'Файл не выбран'}
+                      </span>
+                    </div>
+                    {q.imageUrl && (
+                      <div className="question-image-preview">
+                        <img src={q.imageUrl} alt="Изображение к вопросу" />
+                        <button 
+                          type="button" 
+                          className="remove-btn"
+                          onClick={() => updateQuestion(q.id, { imageUrl: null })}
+                        >
+                          <Icon icon="mdi:close" />
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   <div className="question-settings">
