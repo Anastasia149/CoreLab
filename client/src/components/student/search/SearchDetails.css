@@ -73,48 +73,8 @@
     flex-direction: column;
 }
 
-.overview-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin: 16px 0;
-}
-
-.stat-card {
-    background-color: #f3f4f6; /* gray-100, a placeholder for the light purple */
-    border-radius: 12px;
-    padding: 16px;
-    text-align: center;
-}
-
-.stat-card svg {
-    font-size: 24px;
-    color: #8a2be2;
-    margin-bottom: 8px;
-}
-
-.stat-number {
-    font-size: 24px;
-    font-weight: 700;
-}
-
-.stat-label {
-    font-size: 14px;
-    color: #6b7280; /* gray-500 */
-}
-
-.price-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 16px 0;
-    font-size: 18px;
-}
-
-.price-amount {
-    font-size: 24px;
-    font-weight: 700;
-    color: #8a2be2;
+.course-overview-card--actions {
+    padding-top: 20px;
 }
 
 .course-actions {

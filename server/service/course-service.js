@@ -37,6 +37,11 @@ class CourseService {
                 c.status,
                 c.price,
                 c.image_url,
+                u.name AS author_name,
+                COALESCE(c.students_count, 0)::int AS students_count,
+                (
+                    SELECT COUNT(*)::int FROM lessons lcnt WHERE lcnt.course_id = c.id
+                ) AS lessons_count,
                 COALESCE(
                     json_agg(
                         DISTINCT jsonb_build_object(
@@ -88,9 +93,20 @@ class CourseService {
                     WHERE l.course_id = c.id AND l.module_id IS NULL
                 ) as lessons
             FROM courses c
+            JOIN users u ON u.id = c.author_id
             LEFT JOIN modules m ON m.course_id = c.id
             WHERE c.id = $1
-            GROUP BY c.id;
+            GROUP BY
+                c.id,
+                c.title,
+                c.description,
+                c.status,
+                c.price,
+                c.image_url,
+                c.author_id,
+                c.students_count,
+                u.id,
+                u.name;
         `;
         const { rows } = await pool.query(query, [courseId]);
         return rows[0];

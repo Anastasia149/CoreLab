@@ -26,11 +26,14 @@ export interface ISearchDetails {
   id: number;
   title: string;
   description: string;
-  author_name: string;
+  author_name?: string | null;
   modules: Module[];
   lessons: Lesson[];
   status: 'draft' | 'published';
-  price: number;
+  price: number | null;
   image_url: string | null;
+  /** Всего уроков по курсу (с сервера или считается на клиенте) */
   lessons_count?: number;
+  /** Записано студентов (с сервера) */
+  students_count?: number;
 }

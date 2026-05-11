@@ -6,7 +6,6 @@ import { Icon } from '@iconify/react';
 import './SearchDetails.css';
 import { ISearchDetails } from '../../../models/ICourseDetail';
 import Loader from '../../common/Loader';
-
 const SearchDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { store } = useContext(Context);
@@ -111,36 +110,7 @@ const SearchDetails: React.FC = () => {
       </div>
 
       <div className="course-details-right-col">
-        <div className="course-overview-card">
-            <h4>Обзор</h4>
-            <div className="overview-grid">
-                <div className="stat-card">
-                    <Icon icon="mdi:account-group-outline" />
-                    <div className="stat-number">0</div>
-                    <div className="stat-label">студентов</div>
-                </div>
-                <div className="stat-card">
-                    <Icon icon="mdi:book-open-page-variant-outline" />
-                    <div className="stat-number">{course.lessons_count}</div>
-                    <div className="stat-label">модулей</div>
-                </div>
-                <div className="stat-card">
-                    <Icon icon="mdi:play-circle-outline" />
-                    <div className="stat-number">{course.lessons_count}</div>
-                    <div className="stat-label">видео</div>
-                </div>
-                <div className="stat-card">
-                    <Icon icon="mdi:star-outline" />
-                    <div className="stat-number">0</div>
-                    <div className="stat-label">отзывов</div>
-                </div>
-            </div>
-            <div className="price-section">
-                <span>Цена</span>
-                <span className="price-amount">
-                  {isPaidCourse ? `${course.price} BYN` : 'Бесплатно'}
-                </span>
-            </div>
+        <div className="course-overview-card course-overview-card--actions">
             <div className="course-actions">
                 <button 
                   className={`favorite-icon-button ${isFavorite ? 'active' : ''}`}
@@ -170,7 +140,7 @@ const SearchDetails: React.FC = () => {
             <div className="mentor-info">
                 <div className="mentor-avatar">
                     {mentor.avatar ? (
-                        <img src={mentor.avatar} alt={course.author_name} />
+                        <img src={mentor.avatar} alt={course.author_name ?? 'Автор'} />
                     ) : (
                         <Icon icon="solar:user-linear" />
                     )}

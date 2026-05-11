@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../../../index';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import '../../teacher/courses/TeacherCourses.css';
 import './StudentMyCourses.css';
+import CourseMetaIcons from '../../common/CourseMetaIcons';
 
 const StudentMyCourses: React.FC = () => {
   const { store } = useContext(Context);
-  const navigate = useNavigate();
 
   return (
     <div className="student-my-courses-page">
@@ -27,16 +27,28 @@ const StudentMyCourses: React.FC = () => {
                   key={course.id}
                   className="student-course-card-link"
                 >
-                  <div className="course-card" onClick={() => navigate(`/student/my-courses/${course.id}`)}>
+                  <div className="course-card">
                     <img src={course.image_url || 'https://via.placeholder.com/300x180'} alt={course.title} className="course-card-image" />
                     <div className="course-card-body">
                       <div className="course-card-title">{course.title}</div>
                       <div className="course-card-description">{course.description}</div>
+                      <div className="my-courses-card-meta">
+                        <CourseMetaIcons
+                          variant="compact"
+                          authorName={course.author_name}
+                          lessonsCount={Number(course.lessons_count) || 0}
+                          studentsCount={Number(course.students_count) || 0}
+                        />
+                      </div>
                       <div className="student-course-progress">
                         <div className="progress-bar">
                           <div className="progress-fill" style={{ width: `${progressPercent}%` }}></div>
                         </div>
-                        <span className="progress-text">{`${completedLessons}/${totalLessons} занятий`}</span>
+                        <span className="progress-text">
+                          {totalLessons > 0
+                            ? `${progressPercent}% пройдено`
+                            : '0% пройдено'}
+                        </span>
                       </div>
                     </div>
                   </div>

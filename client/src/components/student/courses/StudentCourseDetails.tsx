@@ -6,7 +6,6 @@ import { Icon } from '@iconify/react';
 import './StudentCourseDetails.css';
 import { ISearchDetails } from '../../../models/ICourseDetail';
 import Loader from '../../common/Loader';
-
 const StudentCourseDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { store } = useContext(Context);
@@ -47,8 +46,7 @@ const StudentCourseDetails: React.FC = () => {
 
   return (
     <div className="student-course-details-page">
-      <div className="student-course-details-left">
-
+      <div className="student-course-details-main">
         <div className="student-course-panel">
           <h1>{course.title}</h1>
           <p className="student-course-description">{course.description}</p>
@@ -107,28 +105,6 @@ const StudentCourseDetails: React.FC = () => {
             {!hasModules && !hasStandaloneLessons && (
               <div className="course-details-empty">В этом курсе пока нет уроков или модулей</div>
             )}
-          </div>
-        </div>
-      </div>
-
-      <div className="student-course-details-right">
-        <div className="student-course-summary">
-          <h4>Обзор курса</h4>
-          <div className="overview-row">
-            <span>Автор</span>
-            <strong>{course.author_name || 'Не указан'}</strong>
-          </div>
-          <div className="overview-row">
-            <span>Всего уроков</span>
-            <strong>{course.lessons_count || 0}</strong>
-          </div>
-          <div className="overview-row">
-            <span>Статус</span>
-            <strong>{course.status === 'draft' ? 'Черновик' : 'Опубликован'}</strong>
-          </div>
-          <div className="overview-row">
-            <span>Цена</span>
-            <strong>{course.price && Number(course.price) > 0 ? `${course.price} BYN` : 'Бесплатно'}</strong>
           </div>
         </div>
       </div>

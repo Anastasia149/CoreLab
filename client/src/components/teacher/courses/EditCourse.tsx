@@ -30,7 +30,7 @@ const EditCourse: React.FC = () => {
             title: data.title,
             description: data.description,
             status: data.status,
-            price: data.price,
+            price: data.price ?? 0,
             image: null,
           });
           setImagePreview(data.image_url || null);

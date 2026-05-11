@@ -51,8 +51,21 @@
   margin: 0 0 12px 0;
 }
 
-.student-course-progress {
-  margin-top: auto;
+.my-courses-card-meta {
+  margin: 0 0 16px;
+}
+
+/* Ряд метаданных ближе к описанию курса (иконки по центру своих ячеек — как в CourseMetaIcons) */
+.student-my-courses-page .course-card-body .course-card-description {
+  margin-bottom: 1px;
+}
+
+.student-my-courses-page .my-courses-card-meta .course-meta-icons--compact {
+  margin-top: 0;
+}
+
+.student-my-courses-page .course-card-body .student-course-progress {
+  margin-top: 0;
 }
 
 .progress-bar {
