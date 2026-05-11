@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../../../index';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import '../../teacher/courses/TeacherCourses.css';
 import './StudentMyCourses.css';
 
 const StudentMyCourses: React.FC = () => {
   const { store } = useContext(Context);
+  const navigate = useNavigate();
 
   return (
     <div className="student-my-courses-page">
@@ -22,12 +23,11 @@ const StudentMyCourses: React.FC = () => {
 
               return (
                 <Link
-                  to={`/student/courses/${course.id}`}
+                  to={`/student/my-courses/${course.id}`}
                   key={course.id}
                   className="student-course-card-link"
-                  onClick={(e) => e.preventDefault()}
                 >
-                  <div className="course-card">
+                  <div className="course-card" onClick={() => navigate(`/student/my-courses/${course.id}`)}>
                     <img src={course.image_url || 'https://via.placeholder.com/300x180'} alt={course.title} className="course-card-image" />
                     <div className="course-card-body">
                       <div className="course-card-title">{course.title}</div>

@@ -24,6 +24,7 @@ import StudentCoursesSearch from './components/student/courses/StudentCoursesSea
 import StudentMyCourses from './components/student/courses/StudentMyCourses';
 
 import SearchDetails from './components/student/courses/SearchDetails';
+import StudentCourseDetails from './components/student/courses/StudentCourseDetails';
 import StudentLessonDetail from './components/student/courses/StudentLessonDetail';
 import CreateTest from './components/teacher/courses/CreateTest';
 
@@ -52,6 +53,7 @@ function App() {
             <Route path="search" element={<StudentCoursesSearch />} />
             <Route path="schedule" element={<ScheduleHome />} />
             <Route path="settings" element={<StudentSettings />} />
+            <Route path="my-courses/:id" element={<StudentCourseDetails />} />
             <Route path="courses/:id" element={<SearchDetails />} />
             <Route path="search/:id" element={<SearchDetails />} />
             <Route path="lesson/:lessonId" element={<StudentLessonDetail />} />

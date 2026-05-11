@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../../teacher/courses/TeacherCourses.css';
 import '../../student/courses/StudentMyCourses.css';
 import './StudentHome.css';
@@ -47,19 +47,21 @@ const StudentHome: React.FC = () => {
                 const progressPercent = totalLessons ? Math.round((completedLessons / totalLessons) * 100) : 0;
 
                 return (
-                  <div className="course-card" key={course.id}>
-                    <img src={course.image_url || 'https://via.placeholder.com/300x180'} alt={course.title} className="course-card-image" />
-                    <div className="course-card-body">
-                      <div className="course-card-title">{course.title}</div>
-                      <div className="course-card-description">{course.description}</div>
-                      <div className="student-course-progress">
-                        <div className="progress-bar">
-                          <div className="progress-fill" style={{ width: `${progressPercent}%` }}></div>
+                  <Link to={`/student/my-courses/${course.id}`} key={course.id} className="student-course-card-link">
+                    <div className="course-card">
+                      <img src={course.image_url || 'https://via.placeholder.com/300x180'} alt={course.title} className="course-card-image" />
+                      <div className="course-card-body">
+                        <div className="course-card-title">{course.title}</div>
+                        <div className="course-card-description">{course.description}</div>
+                        <div className="student-course-progress">
+                          <div className="progress-bar">
+                            <div className="progress-fill" style={{ width: `${progressPercent}%` }}></div>
+                          </div>
+                          <span className="progress-text">{`${completedLessons}/${totalLessons} занятий`}</span>
                         </div>
-                        <span className="progress-text">{`${completedLessons}/${totalLessons} занятий`}</span>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 );
               })}
             </div>
