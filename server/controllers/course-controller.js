@@ -82,6 +82,19 @@ class CourseController {
             next(e);
         }
     }
+
+    async enrollStudentInCourse(req, res, next) {
+        try {
+            const { courseId } = req.params;
+            const studentId = req.user.id;
+            const studentName = req.user.name; // Assuming student's name is available in req.user
+            const enrollmentData = await courseService.enrollStudentInCourse(courseId, studentId, studentName);
+            return res.json(enrollmentData);
+        } catch (e) {
+            next(e);
+        }
+    }
+
 }
 
 module.exports = new CourseController();

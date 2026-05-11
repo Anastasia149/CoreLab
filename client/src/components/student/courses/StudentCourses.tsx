@@ -5,6 +5,7 @@ import { ICourse } from '../../../models/ICourse';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import './StudentCourses.css';
+import { useNavigate } from 'react-router-dom';
 
 const categories = [
   'Все',
@@ -23,10 +24,27 @@ const StudentCourses: React.FC = () => {
   const [priceSort, setPriceSort] = useState<'all' | 'free' | 'paid'>('all');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [favoriteCourseIds, setFavoriteCourseIds] = useState<number[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     store.getAllCourses();
   }, [store]);
+
+  const isEnrolled = (courseId: number): boolean => {
+    return store.user.courses?.some(course => course.id === courseId) || false;
+  };
+
+  const handleEnroll = async (e: React.MouseEvent, courseId: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      await store.enrollCourse(courseId);
+      navigate(`/student/courses/${courseId}`);
+    } catch (error) {
+      console.error("Ошибка при записи на курс:", error);
+      // Handle error, e.g., show a toast notification
+    }
+  };
 
   const toggleSettings = () => setIsSettingsOpen(!isSettingsOpen);
 
@@ -152,38 +170,50 @@ const StudentCourses: React.FC = () => {
         </div>
       ) : (
         <div className="teacher-courses-grid">
-          {filteredAndSortedCourses.map((course: ICourse) => (
-            <Link to={`/student/courses/${course.id}`} key={course.id} className="student-course-card-link">
-              <div className="student-course-card">
-                <div className="student-course-card-header">
-                  <img src={course.image_url || 'https://via.placeholder.com/300x160'} alt={course.title} className="student-course-card-img" />
-                  <button 
-                    className={`card-favorite-button ${favoriteCourseIds.includes(course.id) ? 'active' : ''}`}
-                    onClick={(e) => toggleFavorite(e, course.id)}
-                  >
-                    <Icon icon={favoriteCourseIds.includes(course.id) ? 'mdi:heart' : 'mdi:heart-outline'} />
-                  </button>
-                </div>
-                <div className="student-course-card-info">
-                  <h3>{course.title}</h3>
-                  <div className="student-course-rating">
-                    <Icon icon="mdi:star" />
-                    <Icon icon="mdi:star" />
-                    <Icon icon="mdi:star" />
-                    <Icon icon="mdi:star" />
-                    <Icon icon="mdi:star-outline" />
+          {filteredAndSortedCourses.map((course: ICourse) => {
+            const isFreeAndNotEnrolled = store.isAuth && (course.price === 0 || course.price === null) && !isEnrolled(course.id);
+
+            return (
+              <Link to={`/student/courses/${course.id}`} key={course.id} className="student-course-card-link">
+                <div className="student-course-card">
+                  <div className="student-course-card-header">
+                    <img src={course.image_url || 'https://via.placeholder.com/300x160'} alt={course.title} className="student-course-card-img" />
+                    <button 
+                      className={`card-favorite-button ${favoriteCourseIds.includes(course.id) ? 'active' : ''}`}
+                      onClick={(e) => toggleFavorite(e, course.id)}
+                    >
+                      <Icon icon={favoriteCourseIds.includes(course.id) ? 'mdi:heart' : 'mdi:heart-outline'} />
+                    </button>
                   </div>
-                  <div className="student-course-author">
-                    <div className="author-icon"></div>
-                    <span>{course.author_name || 'Инструктор'}</span>
-                    <span className="student-course-price">
-                      {course.price && course.price > 0 ? `${course.price} BYN` : 'Бесплатно'}
-                    </span>
+                  <div className="student-course-card-info">
+                    <h3>{course.title}</h3>
+                    <div className="student-course-rating">
+                      <Icon icon="mdi:star" />
+                      <Icon icon="mdi:star" />
+                      <Icon icon="mdi:star" />
+                      <Icon icon="mdi:star" />
+                      <Icon icon="mdi:star-outline" />
+                    </div>
+                    <div className="student-course-author">
+                      <div className="author-icon"></div>
+                      <span>{course.author_name || 'Инструктор'}</span>
+                      <span className="student-course-price">
+                        {course.price && course.price > 0 ? `${course.price} BYN` : 'Бесплатно'}
+                      </span>
+                    </div>
+                    {isFreeAndNotEnrolled && (
+                      <button 
+                        className="student-course-enroll-btn"
+                        onClick={(e) => handleEnroll(e, course.id)}
+                      >
+                        Записаться
+                      </button>
+                    )}
                   </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>

@@ -1,4 +1,6 @@
 const pool = require('../db');
+const mailService = require('./mail-service');
+const UserModel = require('../models/user-model');
 
 class CourseService {
     async createCourse(title, description, author_id, status, image_url, price) {
@@ -112,6 +114,40 @@ class CourseService {
 
     async deleteCourse(id) {
         await pool.query(`DELETE FROM courses WHERE id = $1`, [id]);
+    }
+
+    async enrollStudentInCourse(courseId, studentId, studentName) {
+        // Check if student is already enrolled
+        const existingEnrollment = await pool.query(
+            `SELECT * FROM student_courses WHERE student_id = $1 AND course_id = $2`,
+            [studentId, courseId]
+        );
+
+        if (existingEnrollment.rows.length > 0) {
+            throw new Error('Student is already enrolled in this course.');
+        }
+
+        // Enroll student
+        await pool.query(
+            `INSERT INTO student_courses (student_id, course_id) VALUES ($1, $2)`,
+            [studentId, courseId]
+        );
+
+        // Increment students_count in courses table
+        await pool.query(
+            `UPDATE courses SET students_count = COALESCE(students_count, 0) + 1 WHERE id = $1`,
+            [courseId]
+        );
+
+        // Get course details and author for notification
+        const course = await this.getCourseById(courseId);
+        const teacher = await UserModel.findById(course.author_id);
+
+        if (teacher && teacher.email) {
+            await mailService.sendEnrollmentNotificationMail(teacher.email, studentName, course.title);
+        }
+
+        return { message: 'Enrollment successful', course, studentId };
     }
 }
 

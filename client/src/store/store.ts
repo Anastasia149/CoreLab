@@ -56,6 +56,17 @@ export default class Store {
         }
     }
 
+    async enrollCourse(courseId: number): Promise<void> {
+        try {
+            await $api.post(`/courses/${courseId}/enroll`);
+            // Optionally, refresh user's courses or show a success message
+            this.checkAuth(); // Refresh user data to show new course in "My Courses"
+        } catch (e) {
+            console.log("FULL ERROR:", e);
+            throw e;
+        }
+    }
+
     async createLesson(courseId: string, moduleId: string | null, title: string, content: string, imageUrl: string | null, type: string): Promise<Lesson | undefined> {
         try {
             const response = await $api.post<Lesson>(`/lessons`, { courseId, moduleId, title, content, imageUrl, type });

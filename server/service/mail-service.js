@@ -29,6 +29,23 @@ class MailService{
                 `
         })
     }
+
+    async sendEnrollmentNotificationMail(to, studentName, courseTitle) {
+        await this.transporter.sendMail({
+            from: process.env.SMTP_USER,
+            to,
+            subject: `Новый студент записался на ваш курс: ${courseTitle}`,
+            text: ' ',
+            html:
+                `
+                    <div>
+                        <h1>Уведомление о новом студенте</h1>
+                        <p>Студент ${studentName} записался на ваш курс "${courseTitle}".</p>
+                        <p>Поздравляем!</p>
+                    </div>
+                `
+        })
+    }
 }
 
 module.exports = new MailService();
