@@ -8,6 +8,8 @@ export interface CourseMetaIconsProps {
   studentsCount: number;
   /** `compact` — одна строка для карточки в «Мои курсы» */
   variant?: 'default' | 'compact';
+  /** Не показывать блок «Уроков» (например, на странице одного урока) */
+  omitLessons?: boolean;
 }
 
 const CourseMetaIcons: React.FC<CourseMetaIconsProps> = ({
@@ -15,6 +17,7 @@ const CourseMetaIcons: React.FC<CourseMetaIconsProps> = ({
   lessonsCount,
   studentsCount,
   variant = 'default',
+  omitLessons = false,
 }) => {
   const rootClass =
     variant === 'compact'
@@ -28,11 +31,13 @@ const CourseMetaIcons: React.FC<CourseMetaIconsProps> = ({
         <span className="course-meta-item-label">Автор</span>
         <span className="course-meta-item-value">{authorName?.trim() || '—'}</span>
       </div>
+      {!omitLessons && (
       <div className="course-meta-item" title="Всего уроков">
         <Icon icon="mdi:play-circle-outline" className="course-meta-item-icon" aria-hidden />
         <span className="course-meta-item-label">Уроков</span>
         <span className="course-meta-item-value">{lessonsCount}</span>
       </div>
+      )}
       <div className="course-meta-item" title="Студентов на курсе">
         <Icon icon="mdi:account-group-outline" className="course-meta-item-icon" aria-hidden />
         <span className="course-meta-item-label">Студентов</span>

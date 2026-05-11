@@ -14,6 +14,9 @@ export interface Lesson {
   materials: Material[];
   course_id: number;
   module_id: number | null;
+  /** С курса, при GET /lessons/:id */
+  author_name?: string | null;
+  students_count?: number;
 }
 
 export interface Module {

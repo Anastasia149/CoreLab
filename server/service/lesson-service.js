@@ -53,6 +53,8 @@ class LessonService {
         const query = `
             SELECT 
                 l.*,
+                MAX(u.name) AS author_name,
+                MAX(COALESCE(c.students_count, 0))::int AS students_count,
                 COALESCE(
                     json_agg(
                         json_build_object(
@@ -64,6 +66,8 @@ class LessonService {
                     ) FILTER (WHERE ma.id IS NOT NULL), '[]'::json
                 ) as materials
             FROM lessons l
+            JOIN courses c ON c.id = l.course_id
+            JOIN users u ON u.id = c.author_id
             LEFT JOIN lesson_materials ma ON ma.lesson_id = l.id
             WHERE l.id = $1
             GROUP BY l.id;

@@ -1,7 +1,9 @@
 .student-lesson-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  box-sizing: border-box;
+  padding: 0 0 24px;
 }
 
 .back-btn {
@@ -42,6 +44,10 @@
   font-weight: 800;
   color: #111827;
   margin: 0;
+}
+
+.lesson-header-meta {
+  margin-top: 14px;
 }
 
 .lesson-content-grid {

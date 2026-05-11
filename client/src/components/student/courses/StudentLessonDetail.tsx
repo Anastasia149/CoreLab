@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../../../index';
-import { Lesson, Material } from '../../../models/ICourseDetail';
+import { Lesson } from '../../../models/ICourseDetail';
 import { Icon } from '@iconify/react';
 import $api from '../../../http';
 import './StudentLessonDetail.css';
+import CourseMetaIcons from '../../common/CourseMetaIcons';
 
 const StudentLessonDetail: React.FC = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
   const { store } = useContext(Context);
-  const navigate = useNavigate();
 
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [submission, setSubmission] = useState<any>(null);
@@ -70,6 +70,15 @@ const StudentLessonDetail: React.FC = () => {
       <div className="lesson-header">
         <div className="lesson-badge">{lesson.type === 'lecture' ? 'Лекция' : 'Задание'}</div>
         <h1>{lesson.title}</h1>
+        <div className="lesson-header-meta">
+          <CourseMetaIcons
+            variant="compact"
+            omitLessons
+            authorName={lesson.author_name}
+            lessonsCount={0}
+            studentsCount={Number(lesson.students_count) || 0}
+          />
+        </div>
       </div>
 
       <div className="lesson-content-grid">

@@ -1,13 +1,16 @@
 .student-course-details-page {
-  padding: 24px;
-  max-width: 960px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  box-sizing: border-box;
+  padding: 0 0 24px;
 }
 
 .student-course-details-main {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  width: 100%;
 }
 
 .back-btn {
@@ -29,23 +32,67 @@
   padding: 24px;
   display: flex;
   flex-direction: column;
+  gap: 28px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.student-course-hero {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
   gap: 24px;
+  width: 100%;
+}
+
+.student-course-cover-wrap {
+  flex: 0 0 280px;
+  max-width: 40%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  aspect-ratio: 4 / 3;
+}
+
+.student-course-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.student-course-hero-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.student-course-hero-meta {
+  margin-top: auto;
+  padding-top: 16px;
 }
 
 .student-course-panel h1 {
   margin: 0;
   font-size: 2rem;
+  line-height: 1.2;
 }
 
 .student-course-description {
+  margin: 0;
   color: #4b5563;
-  line-height: 1.75;
+  line-height: 1.65;
+  font-size: 15px;
 }
 
 .student-course-curriculum {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
 }
 
 .curriculum-module {
@@ -55,9 +102,55 @@
   padding: 20px;
 }
 
-.curriculum-module h4 {
+.curriculum-module-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
   margin: 0 0 16px 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  border-radius: 8px;
+}
+
+.curriculum-module-header:hover {
+  color: #4f46e5;
+}
+
+.curriculum-module-header:focus-visible {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
+}
+
+.curriculum-module--closed .curriculum-module-header {
+  margin-bottom: 0;
+}
+
+.curriculum-module-chevron {
+  flex-shrink: 0;
+  font-size: 1.35rem;
+  color: #6b7280;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.curriculum-module-header:hover .curriculum-module-chevron {
+  color: #4f46e5;
+}
+
+.curriculum-module--closed .curriculum-module-chevron {
+  transform: rotate(-90deg);
+}
+
+.curriculum-module-heading {
+  margin: 0;
   font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 .curriculum-lessons {
@@ -120,6 +213,19 @@
 
 @media (max-width: 980px) {
   .student-course-details-page {
-    padding: 16px;
+    padding-bottom: 16px;
+  }
+
+  .student-course-hero {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .student-course-cover-wrap {
+    flex: none;
+    max-width: none;
+    width: 100%;
+    max-height: 220px;
+    aspect-ratio: 16 / 9;
   }
 }

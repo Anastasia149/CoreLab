@@ -1,74 +1,104 @@
 .course-meta-icons {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px 20px;
+  gap: 16px 18px;
   align-items: stretch;
   margin-bottom: 8px;
 }
 
+/* Квадратные плитки, не вытянутые по ширине */
 .course-meta-item {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  min-width: 88px;
-  padding: 12px 14px;
+  gap: 8px;
+  box-sizing: border-box;
+  width: 148px;
+  min-width: 148px;
+  max-width: 148px;
+  min-height: 148px;
+  padding: 18px 10px;
   background: #f9fafb;
   border: 1px solid #e5e7eb;
-  border-radius: 14px;
+  border-radius: 16px;
   text-align: center;
 }
 
 .course-meta-item-icon {
-  font-size: 26px;
+  font-size: 38px;
   color: #4f46e5;
+  flex-shrink: 0;
 }
 
 .course-meta-item-label {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: #9ca3af;
+  line-height: 1.2;
 }
 
 .course-meta-item-value {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   color: #111827;
-  max-width: 160px;
+  width: 100%;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.25;
+  word-break: break-word;
 }
 
 @media (max-width: 520px) {
+  .course-meta-item {
+    width: 128px;
+    min-width: 128px;
+    max-width: 128px;
+    min-height: 128px;
+    padding: 14px 8px;
+  }
+
+  .course-meta-item-icon {
+    font-size: 32px;
+  }
+
   .course-meta-item-value {
-    max-width: 120px;
+    font-size: 15px;
   }
 }
 
-/* Карточка «Мои курсы»: одна строка, компактно */
+/* Компактный ряд: квадратные мини-плитки, не растягиваются на всю ширину */
 .course-meta-icons--compact {
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 8px 12px;
+  gap: 12px 16px;
   margin-bottom: 0;
   margin-top: 4px;
+  justify-content: flex-start;
 }
 
 .course-meta-icons--compact .course-meta-item {
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  min-width: 0;
-  padding: 6px 10px;
-  gap: 6px;
-  flex: 1 1 auto;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 118px;
+  min-width: 118px;
+  max-width: 118px;
+  min-height: 118px;
+  padding: 14px 8px;
+  gap: 8px;
+  border-radius: 14px;
 }
 
 .course-meta-icons--compact .course-meta-item-icon {
-  font-size: 18px;
+  font-size: 32px;
   flex-shrink: 0;
 }
 
@@ -77,16 +107,22 @@
 }
 
 .course-meta-icons--compact .course-meta-item-value {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
-  max-width: none;
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
   white-space: normal;
-  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.2;
+  word-break: break-word;
 }
 
 .course-meta-icons--compact .course-meta-item:first-child .course-meta-item-value {
-  max-width: 140px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  max-width: 100%;
+  white-space: normal;
 }
