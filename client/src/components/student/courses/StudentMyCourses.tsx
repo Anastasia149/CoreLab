@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { Context } from '../../../index';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
+import '../../teacher/courses/TeacherCourses.css';
 import './StudentMyCourses.css';
 
 const StudentMyCourses: React.FC = () => {
@@ -14,22 +15,34 @@ const StudentMyCourses: React.FC = () => {
       <div className="my-courses-content">
         {Array.isArray((store.user as any)?.courses) && (store.user as any).courses.length > 0 ? (
           <div className="student-courses-grid">
-            {(store.user as any).courses.map((course: any) => (
-            <Link to={`/student/courses/${course.id}`} key={course.id} className="student-course-card-link">
-              <div className="student-course-card">
-                <img src={course.image_url || 'https://via.placeholder.com/300x160'} alt={course.title} className="student-course-card-img" />
-                <div className="student-course-card-info">
-                  <h3>{course.title}</h3>
-                  <div className="student-course-progress">
-                    <div className="progress-bar">
-                      <div className="progress-fill" style={{ width: '50%' }}></div>
+            {(store.user as any).courses.map((course: any) => {
+              const totalLessons = course.lessons_count || 0;
+              const completedLessons = course.completed_lessons || 0;
+              const progressPercent = totalLessons ? Math.round((completedLessons / totalLessons) * 100) : 0;
+
+              return (
+                <Link
+                  to={`/student/courses/${course.id}`}
+                  key={course.id}
+                  className="student-course-card-link"
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <div className="course-card">
+                    <img src={course.image_url || 'https://via.placeholder.com/300x180'} alt={course.title} className="course-card-image" />
+                    <div className="course-card-body">
+                      <div className="course-card-title">{course.title}</div>
+                      <div className="course-card-description">{course.description}</div>
+                      <div className="student-course-progress">
+                        <div className="progress-bar">
+                          <div className="progress-fill" style={{ width: `${progressPercent}%` }}></div>
+                        </div>
+                        <span className="progress-text">{`${completedLessons}/${totalLessons} занятий`}</span>
+                      </div>
                     </div>
-                    <span className="progress-text">3/10 занятий</span>
                   </div>
-                </div>
-              </div>
-            </Link>
-          ))}
+                </Link>
+              );
+            })}
           </div>
         ) : (
           <div className="my-courses-empty">

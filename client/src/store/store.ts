@@ -5,7 +5,7 @@ import $api from "../http";
 import { AuthResponse } from '../models/response/AuthResponse';
 
 import { ICourse } from "../models/ICourse";
-import { CourseDetails, Module, Material, Lesson } from "../models/ICourseDetail";
+import { ISearchDetails, Module, Material, Lesson } from "../models/ICourseDetail";
 
 export default class Store {
     user = {} as IUser;
@@ -60,7 +60,7 @@ export default class Store {
         try {
             await $api.post(`/courses/${courseId}/enroll`);
             // Optionally, refresh user's courses or show a success message
-            this.checkAuth(); // Refresh user data to show new course in "My Courses"
+            await this.checkAuth(); // Refresh user data to show new course in "My Courses"
         } catch (e) {
             console.log("FULL ERROR:", e);
             throw e;
@@ -166,9 +166,9 @@ export default class Store {
         }
     }
 
-    async getCourseDetails(id: number): Promise<CourseDetails | undefined> {
+    async getCourseDetails(id: number): Promise<ISearchDetails | undefined> {
         try {
-            const response = await $api.get<CourseDetails>(`/teacher/course/${id}`);
+            const response = await $api.get<ISearchDetails>(`/teacher/course/${id}`);
             return response.data;
         } catch (e) {
             console.log("FULL ERROR:", e);

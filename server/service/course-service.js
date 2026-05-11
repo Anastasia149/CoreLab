@@ -149,6 +149,21 @@ class CourseService {
 
         return { message: 'Enrollment successful', course, studentId };
     }
+
+    async getStudentEnrollments(studentId) {
+        const query = `
+            SELECT 
+                c.*, 
+                u.name as author_name,
+                (SELECT COUNT(l.id) FROM lessons l WHERE l.course_id = c.id) as lessons_count
+            FROM student_courses sc
+            JOIN courses c ON sc.course_id = c.id
+            JOIN users u ON c.author_id = u.id
+            WHERE sc.student_id = $1;
+        `;
+        const { rows } = await pool.query(query, [studentId]);
+        return rows;
+    }
 }
 
 module.exports = new CourseService();

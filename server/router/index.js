@@ -29,6 +29,7 @@ router.delete('/courses/:id', authMiddleware, courseController.deleteCourse);
 router.get('/teacher/courses', authMiddleware, courseController.getTeacherCourses);
 router.get('/teacher/course/:id', authMiddleware, courseController.getCourseDetails);
 router.post('/courses/:courseId/enroll', authMiddleware, courseController.enrollStudentInCourse);
+router.get('/courses/my', authMiddleware, courseController.getStudentEnrollments);
 router.post('/courses/:courseId/modules', authMiddleware, courseController.createModule);
 router.post('/upload', authMiddleware, fileController.uploadFile);
 router.post('/lessons', authMiddleware, lessonController.createLesson);

@@ -22,7 +22,7 @@ export interface Module {
   lessons: Lesson[];
 }
 
-export interface CourseDetails {
+export interface ISearchDetails {
   id: number;
   title: string;
   description: string;

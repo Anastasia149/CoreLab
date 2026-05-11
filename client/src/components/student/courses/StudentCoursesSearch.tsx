@@ -4,7 +4,7 @@ import { Context } from '../../../index';
 import { ICourse } from '../../../models/ICourse';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import './StudentCourses.css';
+import './StudentCoursesSearch.css';
 import { useNavigate } from 'react-router-dom';
 
 const categories = [
@@ -18,7 +18,7 @@ const categories = [
   'Интенсивы'
 ];
 
-const StudentCourses: React.FC = () => {
+const StudentCoursesSearch: React.FC = () => {
   const { store } = useContext(Context);
   const [activeCategory, setActiveCategory] = useState('Все');
   const [priceSort, setPriceSort] = useState<'all' | 'free' | 'paid'>('all');
@@ -171,10 +171,10 @@ const StudentCourses: React.FC = () => {
       ) : (
         <div className="teacher-courses-grid">
           {filteredAndSortedCourses.map((course: ICourse) => {
-            const isFreeAndNotEnrolled = store.isAuth && (course.price === 0 || course.price === null) && !isEnrolled(course.id);
+            const isFreeAndNotEnrolled = store.isAuth && (Number(course.price) === 0 || course.price === null) && !isEnrolled(course.id);
 
             return (
-              <Link to={`/student/courses/${course.id}`} key={course.id} className="student-course-card-link">
+              <Link to={`/student/search/${course.id}`} key={course.id} className="student-course-card-link">
                 <div className="student-course-card">
                   <div className="student-course-card-header">
                     <img src={course.image_url || 'https://via.placeholder.com/300x160'} alt={course.title} className="student-course-card-img" />
@@ -201,14 +201,7 @@ const StudentCourses: React.FC = () => {
                         {course.price && course.price > 0 ? `${course.price} BYN` : 'Бесплатно'}
                       </span>
                     </div>
-                    {isFreeAndNotEnrolled && (
-                      <button 
-                        className="student-course-enroll-btn"
-                        onClick={(e) => handleEnroll(e, course.id)}
-                      >
-                        Записаться
-                      </button>
-                    )}
+
                   </div>
                 </div>
               </Link>
@@ -220,4 +213,4 @@ const StudentCourses: React.FC = () => {
   );
 };
 
-export default observer(StudentCourses);
+export default observer(StudentCoursesSearch);

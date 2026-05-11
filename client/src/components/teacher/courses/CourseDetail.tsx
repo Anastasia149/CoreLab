@@ -8,14 +8,14 @@ import { Icon } from '@iconify/react';
 import '../dashboard/TeacherLayout.css';
 import './CourseDetail.css';
 
-import { CourseDetails } from '../../../models/ICourseDetail';
+import { ISearchDetails, Module, Lesson } from '../../../models/ICourseDetail';
 import Loader from '../../common/Loader';
 
 const CourseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { store } = useContext(Context);
-  const [course, setCourse] = useState<CourseDetails | null>(null);
+  const [course, setCourse] = useState<ISearchDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeModule, setActiveModule] = useState<number[]>([]);
   const [activeTab, setActiveTab] = useState('lessons');
@@ -49,7 +49,7 @@ const CourseDetail: React.FC = () => {
     );
   };
 
-  const hasVisibleModules = course?.modules?.some(m => m.lessons.length > 0) ?? false;
+  const hasVisibleModules = course?.modules?.some((m: Module) => m.lessons.length > 0) ?? false;
   const hasOrphanLessons = (course?.lessons?.length ?? 0) > 0;
   const isCourseEmpty = !hasVisibleModules && !hasOrphanLessons;
 
@@ -138,7 +138,7 @@ const CourseDetail: React.FC = () => {
                   <>
                     {hasVisibleModules && (
                       <div className="course-modules-accordion">
-                        {course?.modules?.filter(module => module.lessons.length > 0).map((module) => (
+                        {course?.modules?.filter((module: Module) => module.lessons.length > 0).map((module: Module) => (
                           <div key={module.id} className="module-item">
                             <button
                               className={`module-header ${activeModule?.includes(module.id) ? 'active' : ''}`}
@@ -149,7 +149,7 @@ const CourseDetail: React.FC = () => {
                             </button>
                             {activeModule?.includes(module.id) && (
                               <div className="module-content">
-                                {module.lessons.map((lesson) => (
+                                {module.lessons.map((lesson: Lesson) => (
                                   <div key={lesson.id} className="lesson-item">
                                     <div className="lesson-item-main">
                                       {lesson.image_url && <img src={lesson.image_url} alt={lesson.title} className="lesson-item-image" />}
@@ -176,7 +176,7 @@ const CourseDetail: React.FC = () => {
                         </button>
                         {isOrphanLessonsOpen && (
                           <div className="module-content">
-                            {course?.lessons?.map((lesson) => (
+                            {course?.lessons?.map((lesson: Lesson) => (
                               <div key={lesson.id} className="lesson-item">
                                 <div className="lesson-item-main">
                                   {lesson.image_url && <img src={lesson.image_url} alt={lesson.title} className="lesson-item-image" />}

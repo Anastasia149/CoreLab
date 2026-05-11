@@ -1,4 +1,7 @@
 import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../../teacher/courses/TeacherCourses.css';
+import '../../student/courses/StudentMyCourses.css';
 import './StudentHome.css';
 import { Icon } from '@iconify/react';
 import { Context } from '../../../index';
@@ -8,6 +11,7 @@ import illustration from '../../home/pictures/Online learning-bro.svg';
 
 const StudentHome: React.FC = () => {
   const { store } = useContext(Context);
+  const navigate = useNavigate();
 
   return (
     <div className="student-grid">
@@ -26,21 +30,41 @@ const StudentHome: React.FC = () => {
       </section>
 
       <div className="student-courses-group">
-        <div className="student-section-title">Мои курсы</div>
+        <div className="student-section-title">
+          Мои курсы
+          {Array.isArray((store.user as any)?.courses) && (store.user as any).courses.length > 2 && (
+            <button className="teacher-show-all" onClick={() => navigate('/student/my-courses')}>
+              Показать все
+            </button>
+          )}
+        </div>
         <div className="student-courses">
           {Array.isArray((store.user as any)?.courses) && (store.user as any).courses.length > 0 ? (
-            <div className="student-cards">
-              <div className="student-card">
-                <div className="student-card-title">Frontend базовый</div>
-                <div className="student-card-sub">3/10 занятий</div>
-              </div>
-              <div className="student-card">
-                <div className="student-card-title">Python основы</div>
-                <div className="student-card-sub">2/8 занятий</div>
-              </div>
+            <div className="teacher-courses-grid-home">
+              {(store.user as any).courses.slice(0, 2).map((course: any) => {
+                const totalLessons = course.lessons_count || 0;
+                const completedLessons = course.completed_lessons || 0;
+                const progressPercent = totalLessons ? Math.round((completedLessons / totalLessons) * 100) : 0;
+
+                return (
+                  <div className="course-card" key={course.id}>
+                    <img src={course.image_url || 'https://via.placeholder.com/300x180'} alt={course.title} className="course-card-image" />
+                    <div className="course-card-body">
+                      <div className="course-card-title">{course.title}</div>
+                      <div className="course-card-description">{course.description}</div>
+                      <div className="student-course-progress">
+                        <div className="progress-bar">
+                          <div className="progress-fill" style={{ width: `${progressPercent}%` }}></div>
+                        </div>
+                        <span className="progress-text">{`${completedLessons}/${totalLessons} занятий`}</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           ) : (
-            <div className="student-empty">
+            <div className="teacher-empty">
               У вас пока нет курсов! Вы можете найти их в разделе «поиск»!
             </div>
           )}

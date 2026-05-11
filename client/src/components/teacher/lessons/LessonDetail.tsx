@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../../../index';
-import { CourseDetails, Lesson, Material } from '../../../models/ICourseDetail';
+import { ISearchDetails, Lesson, Material } from '../../../models/ICourseDetail';
 import TeacherSidebar from '../dashboard/components/TeacherSidebar';
 import TeacherHeader from '../dashboard/components/TeacherHeader';
 import { Icon } from '@iconify/react';

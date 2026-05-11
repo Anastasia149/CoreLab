@@ -95,6 +95,15 @@ class CourseController {
         }
     }
 
+    async getStudentEnrollments(req, res, next) {
+        try {
+            const studentId = req.user.id;
+            const courses = await courseService.getStudentEnrollments(studentId);
+            return res.json(courses);
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 module.exports = new CourseController();

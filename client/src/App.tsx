@@ -20,9 +20,10 @@ import NotFound from './components/common/NotFound';
 import StudentSettings from './components/student/settings/StudentSettings';
 import ScheduleHome from './components/student/schedule/ScheduleHome';
 import StudentLayout from './components/student/dashboard/StudentLayout';
-import StudentCourses from './components/student/courses/StudentCourses';
+import StudentCoursesSearch from './components/student/courses/StudentCoursesSearch';
 import StudentMyCourses from './components/student/courses/StudentMyCourses';
-import CourseDetails from './components/student/courses/CourseDetails';
+
+import SearchDetails from './components/student/courses/SearchDetails';
 import StudentLessonDetail from './components/student/courses/StudentLessonDetail';
 import CreateTest from './components/teacher/courses/CreateTest';
 
@@ -47,11 +48,12 @@ function App() {
           <Route path="/student" element={isStudent ? <StudentLayout /> : <Navigate to="/" replace />}>
             <Route index element={<StudentHome />} />
             <Route path="my-courses" element={<StudentMyCourses />} />
-            <Route path="courses" element={<StudentCourses />} />
-            <Route path="search" element={<StudentCourses />} />
+            <Route path="courses" element={<StudentCoursesSearch />} />
+            <Route path="search" element={<StudentCoursesSearch />} />
             <Route path="schedule" element={<ScheduleHome />} />
             <Route path="settings" element={<StudentSettings />} />
-            <Route path="courses/:id" element={<CourseDetails />} />
+            <Route path="courses/:id" element={<SearchDetails />} />
+            <Route path="search/:id" element={<SearchDetails />} />
             <Route path="lesson/:lessonId" element={<StudentLessonDetail />} />
           </Route>
 

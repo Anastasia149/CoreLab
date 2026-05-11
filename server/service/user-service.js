@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const uuid = require('uuid');
 const mailService = require('./mail-service');
 const tokenService = require('./token-service');
+const courseService = require('./course-service');
 const UserDto = require('../dtos/user-dto');
 const ApiError = require('../exceptions/api-error');
 
@@ -26,7 +27,8 @@ class UserService{
       const tokens = tokenService.generateTokens({...userDto});
       await tokenService.saveToken(userDto.id, tokens.refreshToken);
 
-      return { ...tokens, user: userDto};
+      const userWithCourses = await this.buildUserData(user);
+      return { ...tokens, user: userWithCourses };
     }
 
     async activate(activationLink){
@@ -36,12 +38,12 @@ class UserService{
       }
       await UserModel.activateUser(activationLink);
 
-      const userDto = new UserDto(user);
-      const tokens = tokenService.generateTokens({...userDto});
+      const userWithCourses = await this.buildUserData(user);
+      const tokens = tokenService.generateTokens({...userWithCourses});
 
-      await tokenService.saveToken(userDto.id, tokens.refreshToken);
+      await tokenService.saveToken(userWithCourses.id, tokens.refreshToken);
 
-      return { ...tokens, user: userDto };
+      return { ...tokens, user: userWithCourses };
     }
 
     async login(email, password){
@@ -53,11 +55,20 @@ class UserService{
       if(!isPassEquales){
         throw ApiError.BadRequest('Неверный пароль');
       }
-      const userDto = new UserDto(user);
-      const tokens = tokenService.generateTokens({...userDto});
+      const userWithCourses = await this.buildUserData(user);
+      const tokens = tokenService.generateTokens({...userWithCourses});
 
-      await tokenService.saveToken(userDto.id, tokens.refreshToken);
-      return { ...tokens, user: userDto};
+      await tokenService.saveToken(userWithCourses.id, tokens.refreshToken);
+      return { ...tokens, user: userWithCourses};
+    }
+
+    async buildUserData(user){
+      const userDto = new UserDto(user);
+      const courses = userDto.role === 'student'
+        ? await courseService.getStudentEnrollments(userDto.id)
+        : [];
+
+      return { ...userDto, courses };
     }
 
     async logout(refreshToken){
@@ -75,11 +86,11 @@ class UserService{
         throw ApiError.UnauthorizedError();
       }
       const user = await UserModel.findById(userData.id);
-      const userDto = new UserDto(user);
-      const tokens = tokenService.generateTokens({...userDto});
+      const userWithCourses = await this.buildUserData(user);
+      const tokens = tokenService.generateTokens({...userWithCourses});
       
-      await tokenService.saveToken(userDto.id, tokens.refreshToken);
-      return { ...tokens, user: userDto};
+      await tokenService.saveToken(userWithCourses.id, tokens.refreshToken);
+      return { ...tokens, user: userWithCourses};
     }
 
     async getAllUsers(){
