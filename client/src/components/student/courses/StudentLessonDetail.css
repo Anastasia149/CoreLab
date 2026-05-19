@@ -180,7 +180,126 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 14px;
+  width: 100%;
+}
+
+.submission-sent-materials {
+  width: 100%;
+  max-width: 280px;
+}
+
+.submission-sent-heading {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 10px;
+}
+
+.submission-sent-summary {
+  font-size: 14px;
+  color: #374151;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.submission-add-row {
+  display: flex;
+  flex-direction: column;
   gap: 10px;
+  margin-bottom: 14px;
+}
+
+.submission-add-row .submit-input {
+  margin-bottom: 0;
+}
+
+.submission-add-row--file .file-label {
+  margin-bottom: 0;
+}
+
+.submission-add-btn {
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4f46e5;
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.submission-add-btn:hover:not(:disabled) {
+  background: #e0e7ff;
+  border-color: #a5b4fc;
+}
+
+.submission-add-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.submission-draft-list {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 280px;
+}
+
+.submission-draft-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #374151;
+}
+
+.submission-draft-item > svg {
+  flex-shrink: 0;
+  font-size: 18px;
+  color: #6b7280;
+  margin-top: 1px;
+}
+
+.submission-draft-label {
+  flex: 1;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+.submission-draft-remove {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.submission-draft-remove:hover {
+  color: #b91c1c;
+  background: #fef2f2;
+}
+
+.submission-hint {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0 0 14px;
+  line-height: 1.45;
 }
 
 .submission-done .submission-status {

@@ -3,9 +3,15 @@ const submissionService = require('../service/submission-service');
 class SubmissionController {
     async submitAssignment(req, res, next) {
         try {
-            const { lessonId, type, content } = req.body;
+            const { lessonId, type, content, items } = req.body;
             const studentId = req.user.id;
-            const submission = await submissionService.submitAssignment(lessonId, studentId, type, content);
+            const submission = await submissionService.submitAssignment(
+                lessonId,
+                studentId,
+                type,
+                content,
+                items
+            );
             return res.json(submission);
         } catch (e) {
             next(e);

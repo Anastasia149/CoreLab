@@ -1,4 +1,0 @@
--- Необязательные текстовые поля (по умолчанию NULL)
-ALTER TABLE users ADD COLUMN IF NOT EXISTS about_me TEXT DEFAULT NULL;
-ALTER TABLE users ADD COLUMN IF NOT EXISTS certificates TEXT DEFAULT NULL;
-ALTER TABLE users ADD COLUMN IF NOT EXISTS career TEXT DEFAULT NULL;

@@ -1,10 +1,37 @@
 const pool = require('../db');
 
 class SubmissionService {
-    async submitAssignment(lessonId, studentId, type, content) {
+    async submitAssignment(lessonId, studentId, type, content, items) {
+        let storedType = type;
+        let storedContent = content || '';
+
+        if (Array.isArray(items) && items.length > 0) {
+            const normalized = items
+                .map((item) => ({
+                    type: item.type,
+                    content: String(item.content || '').trim(),
+                    label: item.label ? String(item.label).trim() : undefined,
+                }))
+                .filter(
+                    (item) =>
+                        item.content &&
+                        (item.type === 'link' || item.type === 'file')
+                );
+
+            if (normalized.length === 0) {
+                const error = new Error('Нет корректных вложений для отправки');
+                error.status = 400;
+                throw error;
+            }
+
+            storedContent = JSON.stringify({ items: normalized });
+            const types = new Set(normalized.map((item) => item.type));
+            storedType = types.size === 1 ? [...types][0] : 'mixed';
+        }
+
         const newSubmission = await pool.query(
             `INSERT INTO submissions (lesson_id, student_id, type, content) VALUES ($1, $2, $3, $4) RETURNING *`,
-            [lessonId, studentId, type, content]
+            [lessonId, studentId, storedType, storedContent]
         );
         return newSubmission.rows[0];
     }

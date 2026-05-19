@@ -112,9 +112,14 @@ export default class Store {
         }
     }
 
-    async submitAssignment(lessonId: number, type: 'link' | 'file' | 'completed', content: string) {
+    async submitAssignment(
+        lessonId: number,
+        type: 'link' | 'file' | 'completed' | 'mixed',
+        content: string,
+        items?: Array<{ type: 'link' | 'file'; content: string; label?: string }>
+    ) {
         try {
-            const response = await $api.post('/submissions', { lessonId, type, content });
+            const response = await $api.post('/submissions', { lessonId, type, content, items });
             return response.data;
         } catch (e) {
             console.log("FULL ERROR:", e);

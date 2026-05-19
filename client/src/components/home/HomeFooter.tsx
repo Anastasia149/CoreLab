@@ -8,7 +8,7 @@ const HomeFooter: React.FC = () => {
       <div className="home-footer-top">
         <div className="home-footer-brand">
           <Icon icon="icomoon-free:book" className="home-footer-logo" />
-          <div className="home-footer-name">Knowlify</div>
+          <div className="home-footer-name">CoreLab</div>
         </div>
         <div className="home-footer-columns">
           <div className="home-footer-col">

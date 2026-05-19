@@ -25,7 +25,7 @@ const StudentSidebar: React.FC = () => {
     <aside className="student-sidebar">
       <NavLink to="/" className="student-brand">
         <Icon icon="icomoon-free:book" className="student-brand-icon" />
-        <div className="student-brand-text">Courses</div>
+        <div className="student-brand-text">CoreLab</div>
       </NavLink>
       <div className="student-nav-section-title">Основное</div>
       <nav className="student-nav">

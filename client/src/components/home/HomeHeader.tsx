@@ -12,7 +12,7 @@ const HomeHeader: React.FC = () => {
     <header className="home-header">
       <div className="home-header-left" onClick={() => navigate('/')}>
         <Icon icon="icomoon-free:book" className="home-logo-icon" />
-        <div className="home-logo-text">Knowlify</div>
+        <div className="home-logo-text">CoreLab</div>
       </div>
       <nav className="home-nav">
        

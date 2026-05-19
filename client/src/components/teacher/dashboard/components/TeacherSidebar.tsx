@@ -31,7 +31,7 @@ const TeacherSidebar: React.FC = () => {
     <aside className="teacher-sidebar">
       <div className="teacher-brand" onClick={() => navigate('/')}>
         <Icon icon="icomoon-free:book" className="teacher-brand-icon" />
-        <div className="teacher-brand-text">Knowlify</div>
+        <div className="teacher-brand-text">CoreLab</div>
       </div>
       <div className="teacher-nav-section-title">Основное</div>
       <nav className="teacher-nav">

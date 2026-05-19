@@ -46,7 +46,7 @@ const LoginForm: React.FC = () => {
         <div className="auth-panel auth-panel-left">
           <div className="auth-logo-block">
             <Icon icon="icomoon-free:book" className="auth-logo-icon" />
-            <div className="auth-logo-text">Knowlify</div>
+            <div className="auth-logo-text">CoreLab</div>
           </div>
 
           <div className="auth-left-content">

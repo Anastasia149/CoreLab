@@ -1,5 +1,9 @@
 import React from 'react';
-import { Icon } from '@iconify/react';
+import {
+  parseSubmissionItems,
+  isSubmissionCompletedOnly,
+} from '../../../utils/submissionContent';
+import { SubmissionMaterialList } from '../../common/SubmissionMaterialList';
 
 export type LessonSubmissionRow = {
   id: number;
@@ -10,69 +14,34 @@ export type LessonSubmissionRow = {
   created_at: string;
 };
 
-function isLikelyImageUrl(url: string): boolean {
-  return /\.(jpe?g|png|gif|webp)(\?|#|$)/i.test(url);
-}
-
 export function TeacherSubmissionMaterial({ s }: { s: LessonSubmissionRow }) {
-  const content = (s.content || '').trim();
+  const items = parseSubmissionItems(s);
 
-  if (s.type === 'completed') {
+  if (isSubmissionCompletedOnly(s)) {
     return (
-      <div className="submission-material-block">
+      <SubmissionMaterialBlock>
         <p className="submission-material-text">
           Ученик отметил задание как выполненное (без ссылки и файла).
         </p>
-      </div>
+      </SubmissionMaterialBlock>
     );
   }
 
-  if (s.type === 'link' && content) {
+  if (items.length > 0) {
     return (
-      <div className="submission-material-block">
-        <p className="submission-material-label">Отправленная ссылка</p>
-        <a
-          className="submission-material-link"
-          href={content}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {content}
-        </a>
-      </div>
-    );
-  }
-
-  if (s.type === 'file' && content) {
-    return (
-      <div className="submission-material-block">
-        <p className="submission-material-label">Отправленный файл</p>
-        <a
-          className="submission-material-file"
-          href={content}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Icon icon="mdi:tray-arrow-down" />
-          Открыть или скачать файл
-        </a>
-        {isLikelyImageUrl(content) && (
-          <a
-            href={content}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="submission-material-image-wrap"
-          >
-            <img src={content} alt="Превью работы" className="submission-material-image" />
-          </a>
-        )}
-      </div>
+      <SubmissionMaterialBlock>
+        <SubmissionMaterialList items={items} />
+      </SubmissionMaterialBlock>
     );
   }
 
   return (
-    <div className="submission-material-block">
+    <SubmissionMaterialBlock>
       <p className="submission-material-text muted">Нет данных для отображения.</p>
-    </div>
+    </SubmissionMaterialBlock>
   );
+}
+
+function SubmissionMaterialBlock({ children }: { children: React.ReactNode }) {
+  return <div className="submission-material-block">{children}</div>;
 }
