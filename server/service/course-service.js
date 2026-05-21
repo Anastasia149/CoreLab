@@ -34,7 +34,24 @@ class CourseService {
 
     async getAllPublishedCourses() {
         const courses = await pool.query(
-            "SELECT c.*, u.name AS author_name, u.avatar AS author_avatar FROM courses c JOIN users u ON c.author_id = u.id WHERE c.status = 'published' ORDER BY c.students_count DESC"
+            `SELECT
+                c.*,
+                u.name AS author_name,
+                u.avatar AS author_avatar,
+                COALESCE(rev.reviews_count, 0)::int AS reviews_count,
+                COALESCE(rev.average_rating, 5)::float AS average_rating
+             FROM courses c
+             JOIN users u ON c.author_id = u.id
+             LEFT JOIN (
+                SELECT
+                    course_id,
+                    COUNT(*)::int AS reviews_count,
+                    ROUND(AVG(rating)::numeric, 1)::float AS average_rating
+                FROM course_reviews
+                GROUP BY course_id
+             ) rev ON rev.course_id = c.id
+             WHERE c.status = 'published'
+             ORDER BY c.students_count DESC`
         );
         return courses.rows;
     }

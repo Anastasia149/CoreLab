@@ -8,6 +8,7 @@ import './StudentCoursesSearch.css';
 import { useNavigate } from 'react-router-dom';
 import { formatCoursePriceDisplay } from '../../../utils/coursePrice';
 import { loadFavoriteCourseIds, saveFavoriteCourseIds } from '../../../utils/courseFavorites';
+import { CourseSearchStars } from '../../../utils/courseRatingStars';
 
 type CourseListFilter = 'all' | 'free' | 'paid' | 'favorites';
 
@@ -227,16 +228,10 @@ const StudentCoursesSearch: React.FC = () => {
                             {course.author_name || 'Инструктор'}
                           </span>
                         </div>
-                        <div
+                        <CourseSearchStars
+                          course={course}
                           className="student-search-card-stars"
-                          aria-label="Оценка курса 4 из 5"
-                        >
-                          <Icon icon="mdi:star" />
-                          <Icon icon="mdi:star" />
-                          <Icon icon="mdi:star" />
-                          <Icon icon="mdi:star" />
-                          <Icon icon="mdi:star-outline" />
-                        </div>
+                        />
                       </div>
                       <span className="student-course-price">
                         {formatCoursePriceDisplay(course.price)}
