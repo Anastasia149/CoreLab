@@ -1,0 +1,81 @@
+.teacher-student-profile-page {
+  max-width: 640px;
+}
+
+.teacher-student-profile-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.teacher-student-profile-back:hover {
+  color: var(--btn-primary-hover);
+}
+
+.teacher-student-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 28px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+}
+
+.teacher-student-profile-avatar {
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface-muted);
+  border: 1px solid var(--border-color);
+}
+
+.teacher-student-profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.teacher-student-profile-avatar svg {
+  width: 56px;
+  height: 56px;
+  color: var(--accent-soft);
+}
+
+.teacher-student-profile-info h1 {
+  margin: 0 0 12px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.teacher-student-profile-email {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+.teacher-student-profile-email svg {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.teacher-student-profile-missing {
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}

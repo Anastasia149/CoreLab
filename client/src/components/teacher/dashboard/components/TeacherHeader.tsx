@@ -24,6 +24,7 @@ const TeacherHeader = observer(({ name }: Props) => {
     const path = location.pathname;
 
     if (path.startsWith('/teacher/courses')) return 'Мои курсы';
+    if (path.includes('/student/')) return name || 'Профиль ученика';
     if (path.startsWith('/teacher/course/')) return name || 'Детали курса';
     if (path.startsWith('/teacher/create-course')) return 'Создание курса';
     if (path.startsWith('/teacher/lesson/')) return name || 'Урок';

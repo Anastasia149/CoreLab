@@ -16,6 +16,7 @@ import CreateLesson from './components/teacher/courses/CreateLesson';
 import LessonDetail from './components/teacher/lessons/LessonDetail';
 import EditLesson from './components/teacher/lessons/EditLesson';
 import EditCourse from './components/teacher/courses/EditCourse';
+import TeacherStudentProfile from './components/teacher/courses/TeacherStudentProfile';
 import Loader from './components/common/Loader';
 import NotFound from './components/common/NotFound';
 import StudentSettings from './components/student/settings/StudentSettings';
@@ -72,6 +73,10 @@ function App() {
           <Route path="/teacher/courses" element={isTeacher ? <TeacherCourses /> : <Navigate to="/" replace />} />
           <Route path="/teacher/create-course" element={isTeacher ? <CreateCourse /> : <Navigate to="/" replace />} />
           <Route path="/teacher/course/:id" element={isTeacher ? <CourseDetail /> : <Navigate to="/" replace />} />
+          <Route
+            path="/teacher/course/:id/student/:studentId"
+            element={isTeacher ? <TeacherStudentProfile /> : <Navigate to="/" replace />}
+          />
           <Route path="/teacher/course/:id/edit" element={isTeacher ? <EditCourse /> : <Navigate to="/" replace />} />
           <Route path="/teacher/course/:courseId/create-lesson" element={isTeacher ? <CreateLesson /> : <Navigate to="/" replace />} />
           <Route path="/teacher/course/:courseId/create-test" element={isTeacher ? <CreateTest /> : <Navigate to="/" replace />} />

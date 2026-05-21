@@ -10,7 +10,7 @@
 }
 
 .teacher-add-btn {
-  padding: 10px 20px;
+  padding: 10px 16px;
   background-color: var(--accent);
   color: var(--on-accent);
   border: none;
@@ -18,8 +18,7 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  min-width: 180px;
-  text-align: center;
+  width: fit-content;
   transition: background-color 0.2s ease;
 }
 

@@ -104,6 +104,44 @@ class CourseController {
             next(e);
         }
     }
+
+    async getCourseStudents(req, res, next) {
+        try {
+            const { courseId } = req.params;
+            const students = await courseService.getCourseStudents(courseId, req.user.id);
+            return res.json(students);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async getCourseStudentProfile(req, res, next) {
+        try {
+            const { courseId, studentId } = req.params;
+            const student = await courseService.getCourseStudentProfile(
+                courseId,
+                studentId,
+                req.user.id
+            );
+            return res.json(student);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async removeStudentFromCourse(req, res, next) {
+        try {
+            const { courseId, studentId } = req.params;
+            const result = await courseService.removeStudentFromCourse(
+                courseId,
+                studentId,
+                req.user.id
+            );
+            return res.json(result);
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 module.exports = new CourseController();

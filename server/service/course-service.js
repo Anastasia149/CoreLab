@@ -174,6 +174,89 @@ class CourseService {
         await pool.query(`DELETE FROM courses WHERE id = $1`, [id]);
     }
 
+    async assertTeacherOwnsCourse(courseId, teacherId) {
+        const { rows } = await pool.query(
+            `SELECT author_id FROM courses WHERE id = $1`,
+            [courseId]
+        );
+        if (rows.length === 0) {
+            throw new ApiError(404, 'Курс не найден');
+        }
+        if (Number(rows[0].author_id) !== Number(teacherId)) {
+            throw new ApiError(403, 'Нет доступа к этому курсу');
+        }
+    }
+
+    async getCourseStudents(courseId, teacherId) {
+        await this.assertTeacherOwnsCourse(courseId, teacherId);
+        const { rows } = await pool.query(
+            `SELECT u.id, u.name, u.email, u.avatar
+             FROM student_courses sc
+             JOIN users u ON u.id = sc.student_id
+             WHERE sc.course_id = $1
+             ORDER BY COALESCE(NULLIF(TRIM(u.name), ''), u.email) ASC`,
+            [courseId]
+        );
+        return rows;
+    }
+
+    async getCourseStudentProfile(courseId, studentId, teacherId) {
+        await this.assertTeacherOwnsCourse(courseId, teacherId);
+        const { rows } = await pool.query(
+            `SELECT u.id, u.name, u.email, u.avatar
+             FROM student_courses sc
+             JOIN users u ON u.id = sc.student_id
+             WHERE sc.course_id = $1 AND sc.student_id = $2`,
+            [courseId, studentId]
+        );
+        if (rows.length === 0) {
+            throw new ApiError(404, 'Ученик не найден на этом курсе');
+        }
+        return rows[0];
+    }
+
+    async removeStudentFromCourse(courseId, studentId, teacherId) {
+        await this.assertTeacherOwnsCourse(courseId, teacherId);
+        const client = await pool.connect();
+        try {
+            await client.query('BEGIN');
+            await client.query(
+                `DELETE FROM submissions s
+                 USING lessons l
+                 WHERE s.lesson_id = l.id
+                   AND l.course_id = $1
+                   AND s.student_id = $2`,
+                [courseId, studentId]
+            );
+            await client.query(
+                `DELETE FROM course_reviews WHERE course_id = $1 AND student_id = $2`,
+                [courseId, studentId]
+            );
+            const removed = await client.query(
+                `DELETE FROM student_courses
+                 WHERE course_id = $1 AND student_id = $2
+                 RETURNING student_id`,
+                [courseId, studentId]
+            );
+            if (removed.rowCount === 0) {
+                throw new ApiError(404, 'Ученик не записан на этот курс');
+            }
+            await client.query(
+                `UPDATE courses
+                 SET students_count = GREATEST(COALESCE(students_count, 0) - 1, 0)
+                 WHERE id = $1`,
+                [courseId]
+            );
+            await client.query('COMMIT');
+            return { message: 'Ученик удалён с курса' };
+        } catch (e) {
+            await client.query('ROLLBACK');
+            throw e;
+        } finally {
+            client.release();
+        }
+    }
+
     async enrollStudentInCourse(courseId, studentId, studentName) {
         // Check if student is already enrolled
         const existingEnrollment = await pool.query(

@@ -8,6 +8,7 @@ import { ICourse } from "../models/ICourse";
 import { ICourseGrade } from "../models/ICourseGrade";
 import { ICourseReview, ICourseReviewsResponse } from "../models/ICourseReview";
 import { ISearchDetails, Module, Material, Lesson } from "../models/ICourseDetail";
+import { ICourseStudent } from "../models/ICourseStudent";
 
 export type AppTheme = 'light' | 'dark';
 
@@ -317,6 +318,40 @@ export default class Store {
             return response.data;
         } catch (e) {
             console.log("FULL ERROR:", e);
+        }
+    }
+
+    async getCourseStudents(courseId: number): Promise<ICourseStudent[]> {
+        try {
+            const response = await $api.get<ICourseStudent[]>(`/teacher/course/${courseId}/students`);
+            return response.data;
+        } catch (e) {
+            console.log("FULL ERROR:", e);
+            return [];
+        }
+    }
+
+    async getCourseStudentProfile(
+        courseId: number,
+        studentId: number
+    ): Promise<ICourseStudent | undefined> {
+        try {
+            const response = await $api.get<ICourseStudent>(
+                `/teacher/course/${courseId}/students/${studentId}`
+            );
+            return response.data;
+        } catch (e) {
+            console.log("FULL ERROR:", e);
+        }
+    }
+
+    async removeStudentFromCourse(courseId: number, studentId: number): Promise<boolean> {
+        try {
+            await $api.delete(`/teacher/course/${courseId}/students/${studentId}`);
+            return true;
+        } catch (e) {
+            console.log("FULL ERROR:", e);
+            return false;
         }
     }
 

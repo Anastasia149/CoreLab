@@ -9,6 +9,7 @@ import '../dashboard/TeacherLayout.css';
 import './CourseDetail.css';
 
 import { ISearchDetails, Module, Lesson } from '../../../models/ICourseDetail';
+import { ICourseStudent } from '../../../models/ICourseStudent';
 import Loader from '../../common/Loader';
 
 const CourseDetail: React.FC = () => {
@@ -20,6 +21,9 @@ const CourseDetail: React.FC = () => {
   const [activeModule, setActiveModule] = useState<number[]>([]);
   const [activeTab, setActiveTab] = useState('lessons');
   const [isAddLessonOpen, setIsAddLessonOpen] = useState(false);
+  const [courseStudents, setCourseStudents] = useState<ICourseStudent[]>([]);
+  const [studentsLoading, setStudentsLoading] = useState(false);
+  const [removingStudentId, setRemovingStudentId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchCourseDetails = async () => {
@@ -40,6 +44,42 @@ const CourseDetail: React.FC = () => {
       fetchCourseDetails();
     }
   }, [id, store]);
+
+  useEffect(() => {
+    if (!id || activeTab !== 'settings') return;
+    setStudentsLoading(true);
+    store
+      .getCourseStudents(Number(id))
+      .then((list) => setCourseStudents(list))
+      .finally(() => setStudentsLoading(false));
+  }, [id, activeTab, store]);
+
+  const handleRemoveStudent = async (student: ICourseStudent) => {
+    const label = student.name?.trim() || student.email;
+    if (
+      !window.confirm(
+        `Удалить ${label} с курса? Ученик потеряет доступ к материалам и работам этого курса.`
+      )
+    ) {
+      return;
+    }
+    setRemovingStudentId(student.id);
+    const ok = await store.removeStudentFromCourse(Number(id), student.id);
+    setRemovingStudentId(null);
+    if (ok) {
+      setCourseStudents((prev) => prev.filter((s) => s.id !== student.id));
+      setCourse((prev) =>
+        prev
+          ? {
+              ...prev,
+              students_count: Math.max(0, (prev.students_count ?? 1) - 1),
+            }
+          : prev
+      );
+    } else {
+      alert('Не удалось удалить ученика с курса. Попробуйте позже.');
+    }
+  };
 
   const toggleModule = (moduleId: number) => {
     setActiveModule(prev => 
@@ -203,7 +243,56 @@ const CourseDetail: React.FC = () => {
                 </div>
                 <div className="settings-section">
                   <h4>Управление учениками</h4>
-                  <p>Здесь будет список учеников.</p>
+                  {studentsLoading ? (
+                    <p className="course-students-status">Загрузка...</p>
+                  ) : courseStudents.length === 0 ? (
+                    <p className="course-students-status">На курс пока никто не записался.</p>
+                  ) : (
+                    <ul className="course-students-list">
+                      {courseStudents.map((student) => {
+                        const displayName =
+                          student.name?.trim() || student.email || 'Ученик';
+                        return (
+                          <li key={student.id} className="course-student-item">
+                            <div className="course-student-main">
+                              <div className="course-student-avatar">
+                                {student.avatar ? (
+                                  <img src={student.avatar} alt="" />
+                                ) : (
+                                  <Icon icon="solar:user-circle-linear" aria-hidden />
+                                )}
+                              </div>
+                              <div className="course-student-text">
+                                <span className="course-student-name">{displayName}</span>
+                                {student.name?.trim() && (
+                                  <span className="course-student-email">{student.email}</span>
+                                )}
+                              </div>
+                            </div>
+                            <div className="course-student-actions">
+                              <button
+                                type="button"
+                                className="course-student-btn course-student-btn--view"
+                                onClick={() =>
+                                  navigate(`/teacher/course/${id}/student/${student.id}`)
+                                }
+                              >
+                                Профиль
+                              </button>
+                              <button
+                                type="button"
+                                className="course-student-btn course-student-btn--remove"
+                                disabled={removingStudentId === student.id}
+                                onClick={() => handleRemoveStudent(student)}
+                              >
+                                {removingStudentId === student.id ? 'Удаление...' : 'Удалить'}
+                              </button>
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
                 </div>
               </div>
             )}
