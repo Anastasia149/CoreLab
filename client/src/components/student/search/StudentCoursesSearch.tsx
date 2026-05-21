@@ -7,6 +7,9 @@ import { Icon } from '@iconify/react';
 import './StudentCoursesSearch.css';
 import { useNavigate } from 'react-router-dom';
 import { formatCoursePriceDisplay } from '../../../utils/coursePrice';
+import { loadFavoriteCourseIds, saveFavoriteCourseIds } from '../../../utils/courseFavorites';
+
+type CourseListFilter = 'all' | 'free' | 'paid' | 'favorites';
 
 const categories = [
   'Все',
@@ -22,14 +25,18 @@ const categories = [
 const StudentCoursesSearch: React.FC = () => {
   const { store } = useContext(Context);
   const [activeCategory, setActiveCategory] = useState('Все');
-  const [priceSort, setPriceSort] = useState<'all' | 'free' | 'paid'>('all');
+  const [listFilter, setListFilter] = useState<CourseListFilter>('all');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [favoriteCourseIds, setFavoriteCourseIds] = useState<number[]>([]);
+  const [favoriteCourseIds, setFavoriteCourseIds] = useState<number[]>(() => loadFavoriteCourseIds());
   const navigate = useNavigate();
 
   useEffect(() => {
     store.getAllCourses();
   }, [store]);
+
+  useEffect(() => {
+    saveFavoriteCourseIds(favoriteCourseIds);
+  }, [favoriteCourseIds]);
 
   const isEnrolled = (courseId: number): boolean => {
     return store.user.courses?.some((course) => Number(course.id) === courseId) || false;
@@ -68,21 +75,22 @@ const StudentCoursesSearch: React.FC = () => {
       // result = result.filter(course => course.category === activeCategory);
     }
 
-    // Сортировка/фильтрация по цене - с проверкой типа
-    if (priceSort === 'free') {
-      result = result.filter(course => {
+    if (listFilter === 'favorites') {
+      result = result.filter((course) => favoriteCourseIds.includes(course.id));
+    } else if (listFilter === 'free') {
+      result = result.filter((course) => {
         const price = Number(course.price);
         return isNaN(price) || price <= 0;
       });
-    } else if (priceSort === 'paid') {
-      result = result.filter(course => {
+    } else if (listFilter === 'paid') {
+      result = result.filter((course) => {
         const price = Number(course.price);
         return !isNaN(price) && price > 0;
       });
     }
 
     return result;
-  }, [store.courses, activeCategory, priceSort]);
+  }, [store.courses, activeCategory, listFilter, favoriteCourseIds]);
 
   return (
     <div className="student-courses-page">
@@ -136,25 +144,31 @@ const StudentCoursesSearch: React.FC = () => {
             {isSettingsOpen && (
               <div className="courses-settings-popup">
                 <div className="settings-popup-section">
-                  <h4>Цена</h4>
+                  <h4>Сортировка</h4>
                   <div className="popup-sort-options">
                     <button 
-                      className={`popup-sort-option ${priceSort === 'all' ? 'active' : ''}`}
-                      onClick={() => { setPriceSort('all'); setIsSettingsOpen(false); }}
+                      className={`popup-sort-option ${listFilter === 'all' ? 'active' : ''}`}
+                      onClick={() => { setListFilter('all'); setIsSettingsOpen(false); }}
                     >
                       Все курсы
                     </button>
                     <button 
-                      className={`popup-sort-option ${priceSort === 'free' ? 'active' : ''}`}
-                      onClick={() => { setPriceSort('free'); setIsSettingsOpen(false); }}
+                      className={`popup-sort-option ${listFilter === 'free' ? 'active' : ''}`}
+                      onClick={() => { setListFilter('free'); setIsSettingsOpen(false); }}
                     >
                       Бесплатные
                     </button>
                     <button 
-                      className={`popup-sort-option ${priceSort === 'paid' ? 'active' : ''}`}
-                      onClick={() => { setPriceSort('paid'); setIsSettingsOpen(false); }}
+                      className={`popup-sort-option ${listFilter === 'paid' ? 'active' : ''}`}
+                      onClick={() => { setListFilter('paid'); setIsSettingsOpen(false); }}
                     >
                       Платные
+                    </button>
+                    <button 
+                      className={`popup-sort-option ${listFilter === 'favorites' ? 'active' : ''}`}
+                      onClick={() => { setListFilter('favorites'); setIsSettingsOpen(false); }}
+                    >
+                      Понравившиеся
                     </button>
                   </div>
                 </div>
@@ -167,7 +181,11 @@ const StudentCoursesSearch: React.FC = () => {
       {/* Сетка курсов */}
       {filteredAndSortedCourses.length === 0 ? (
         <div className="teacher-courses-empty">
-          <h2>По вашему запросу ничего не найдено.</h2>
+          <h2>
+            {listFilter === 'favorites'
+              ? 'У вас пока нет понравившихся курсов. Нажмите на сердечко у карточки курса.'
+              : 'По вашему запросу ничего не найдено.'}
+          </h2>
         </div>
       ) : (
         <div className="teacher-courses-grid">
