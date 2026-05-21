@@ -17,7 +17,8 @@ import {
   getReviewStatusLabel,
   normalizeReviewStatus,
 } from '../../../utils/submissionReview';
-import { formatDeadline, lessonTypeHasDeadline } from '../../../utils/lessonDeadline';
+import { lessonTypeHasDeadline } from '../../../utils/lessonDeadline';
+import { LessonDeadlineInfo } from '../../common/LessonDeadlineInfo';
 import { SubmissionOverdueBadge } from '../../common/SubmissionOverdueBadge';
 
 type DraftLink = { id: string; kind: 'link'; url: string };
@@ -185,9 +186,9 @@ const StudentLessonDetail: React.FC = () => {
   }
 
   const isAssignment = lesson.type === 'assignment';
-  const hasDeadline = lessonTypeHasDeadline(lesson.type) && !!lesson.deadline;
+  const showsDeadlineInfo = lessonTypeHasDeadline(lesson.type);
   const hasMaterials = lesson.materials.length > 0;
-  const showAfterDescription = hasMaterials || isAssignment || hasDeadline;
+  const showAfterDescription = hasMaterials || isAssignment || showsDeadlineInfo;
   const submittedItems = submission ? parseSubmissionItems(submission) : [];
   const submittedCompletedOnly =
     submission && isSubmissionCompletedOnly(submission);
@@ -224,10 +225,12 @@ const StudentLessonDetail: React.FC = () => {
                 }
               >
                 <div className="lesson-after-main">
-                  {hasDeadline && !isAssignment && (
-                    <p className="lesson-deadline-info lesson-deadline-info--main">
-                      Сдать до: {formatDeadline(lesson.deadline)}
-                    </p>
+                  {showsDeadlineInfo && !isAssignment && (
+                    <LessonDeadlineInfo
+                      deadline={lesson.deadline}
+                      lessonType={lesson.type}
+                      className="lesson-deadline-info--main"
+                    />
                   )}
                   {hasMaterials && (
                     <div className="lesson-materials-section">
@@ -255,10 +258,11 @@ const StudentLessonDetail: React.FC = () => {
                     <div className="submission-card">
                       <h3 className="lesson-plank-section-title">Ваше решение</h3>
 
-                      {hasDeadline && (
-                        <p className="lesson-deadline-info">
-                          Сдать до: {formatDeadline(lesson.deadline)}
-                        </p>
+                      {showsDeadlineInfo && (
+                        <LessonDeadlineInfo
+                          deadline={lesson.deadline}
+                          lessonType={lesson.type}
+                        />
                       )}
 
                       {submission ? (

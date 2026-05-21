@@ -227,14 +227,6 @@
   background: #fee2e2;
 }
 
-.lesson-deadline-info {
-  margin: 0 0 14px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #374151;
-  line-height: 1.45;
-}
-
 .submission-done .submission-overdue-pill {
   margin-top: 2px;
 }

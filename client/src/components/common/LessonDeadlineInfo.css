@@ -1,0 +1,47 @@
+.lesson-deadline-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 0 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  line-height: 1.45;
+}
+
+.lesson-deadline-info--unset {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.lesson-deadline-info-icon {
+  flex-shrink: 0;
+  font-size: 22px;
+  margin-top: 1px;
+}
+
+.lesson-deadline-info--main {
+  margin-bottom: 16px;
+}
+
+.lesson-deadline-info--teacher-page {
+  margin: 0 0 20px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+}
+
+.lesson-deadline-info--teacher-page.lesson-deadline-info--unset .lesson-deadline-info-icon {
+  color: #9ca3af;
+}
+
+.lesson-deadline-info--teacher-page:not(.lesson-deadline-info--unset) {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+  color: #312e81;
+}
+
+.lesson-deadline-info--teacher-page:not(.lesson-deadline-info--unset) .lesson-deadline-info-icon {
+  color: #4f46e5;
+}

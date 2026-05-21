@@ -109,6 +109,34 @@
   border: 1px solid #e5e7eb;
 }
 
+.materials-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.material-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.material-item a {
+  font-size: 14px;
+  color: #4f46e5;
+  text-decoration: none;
+}
+
+.material-item a:hover {
+  text-decoration: underline;
+}
+
+.material-item .lesson-action-btn {
+  margin-right: 0;
+}
+
 .auth-submit-button {
   justify-self: start;
   width: auto;
@@ -318,6 +346,57 @@
   font-size: 13px;
   color: #6b7280;
   line-height: 1.45;
+}
+
+.lesson-deadline-field-label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.lesson-deadline-options {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.lesson-deadline-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f9fafb;
+  font-size: 13px;
+  color: #374151;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.lesson-deadline-option.active {
+  border-color: #4f46e5;
+  background: #eef2ff;
+  color: #312e81;
+}
+
+.lesson-deadline-option input {
+  margin: 0;
+}
+
+.lesson-deadline-input {
+  width: 100%;
+  max-width: 280px;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 15px;
+  margin-bottom: 4px;
 }
 
 .submission-overdue-pill {

@@ -1,5 +1,7 @@
 export const DEADLINE_LESSON_TYPES = ['assignment', 'test'] as const;
 
+export const DEADLINE_NOT_ASSIGNED_LABEL = 'Срок не назначен';
+
 export function lessonTypeHasDeadline(type: string): boolean {
   return DEADLINE_LESSON_TYPES.includes(type as (typeof DEADLINE_LESSON_TYPES)[number]);
 }
@@ -18,6 +20,20 @@ export function deadlineLocalToIso(localValue: string): string | null {
   const d = new Date(trimmed);
   if (Number.isNaN(d.getTime())) return null;
   return d.toISOString();
+}
+
+export function getDeadlineStatusText(deadline: string | null | undefined): string {
+  if (!deadline) return DEADLINE_NOT_ASSIGNED_LABEL;
+  const formatted = formatDeadline(deadline);
+  return formatted ? `Сдать до: ${formatted}` : DEADLINE_NOT_ASSIGNED_LABEL;
+}
+
+export function getTeacherDeadlineStatusText(deadline: string | null | undefined): string {
+  if (!deadline) return DEADLINE_NOT_ASSIGNED_LABEL;
+  const formatted = formatDeadline(deadline);
+  return formatted
+    ? `Ограничение по времени: сдать до ${formatted}`
+    : DEADLINE_NOT_ASSIGNED_LABEL;
 }
 
 export function formatDeadline(iso: string | null | undefined): string {

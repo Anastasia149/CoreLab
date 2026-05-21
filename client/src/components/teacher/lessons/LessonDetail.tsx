@@ -12,6 +12,7 @@ import { TeacherSubmissionMaterial, LessonSubmissionRow } from './lessonSubmissi
 import { SubmissionReviewControls } from './SubmissionReviewControls';
 import { partitionSubmissionsByReview } from '../../../utils/submissionReview';
 import { SubmissionOverdueBadge } from '../../common/SubmissionOverdueBadge';
+import { LessonDeadlineInfo } from '../../common/LessonDeadlineInfo';
 
 const LessonDetail: React.FC = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
@@ -129,6 +130,13 @@ const LessonDetail: React.FC = () => {
           ) : (
             <>
               <h1>{lesson.title}</h1>
+
+              <LessonDeadlineInfo
+                deadline={lesson.deadline}
+                lessonType={lesson.type}
+                audience="teacher"
+                className="lesson-deadline-info--teacher-page"
+              />
 
               <div className="lesson-detail-tabs">
                 {lesson.type !== 'test' && (
