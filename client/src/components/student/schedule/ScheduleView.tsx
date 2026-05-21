@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Icon } from '@iconify/react';
 import './ScheduleView.css';
+import { formatScheduleHour, scheduleHours } from '../../../utils/scheduleHours';
 
 function alignToMonday(date: Date) {
   const d = new Date(date);
@@ -71,13 +72,13 @@ const ScheduleView: React.FC<Props> = ({ selectedDate, onDateChange }) => {
           ))}
         </div>
         <div className="time-scale">
-          {Array.from({ length: 15 }, (_, i) => (
-            <div key={i} className="time-slot">{`${i + 8}:00`}</div>
+          {scheduleHours.map(h => (
+            <div key={h} className="time-slot">{formatScheduleHour(h)}</div>
           ))}
         </div>
         <div className="schedule-events">
-          {Array.from({ length: 15 }, (_, i) => (
-            <div key={i} className="schedule-event-row">&nbsp;</div>
+          {scheduleHours.map(h => (
+            <div key={h} className="schedule-event-row">&nbsp;</div>
           ))}
         </div>
       </div>

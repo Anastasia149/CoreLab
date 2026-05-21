@@ -1,19 +1,16 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
 import './TeacherSchedule.css';
-
-const hours = Array.from({ length: 15 }, (_, i) => i + 8);
-
-const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`);
+import { formatScheduleHour, scheduleHours } from '../../../../utils/scheduleHours';
 
 const TeacherSchedule: React.FC = () => {
   return (
     <div className="teacher-schedule">
       <div className="teacher-section-title">Моё расписание</div>
       <div className="schedule-grid">
-        {hours.map(h => (
+        {scheduleHours.map(h => (
           <div className="schedule-row" key={h}>
-            <div className="schedule-time">{pad(h)}:00</div>
+            <div className="schedule-time">{formatScheduleHour(h)}</div>
             <div className="schedule-slot">
               <button className="schedule-add" aria-label="Добавить в расписание">
                 <Icon icon="ei:plus" />
