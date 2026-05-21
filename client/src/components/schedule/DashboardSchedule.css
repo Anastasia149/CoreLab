@@ -4,41 +4,10 @@
   min-height: 0;
 }
 
-.dashboard-schedule-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 16px;
+.dashboard-schedule .teacher-section-title,
+.dashboard-schedule .student-section-title {
+  margin: 10px 0 16px;
   padding: 0 10px;
-}
-
-.dashboard-schedule-head .teacher-section-title,
-.dashboard-schedule-head .student-section-title {
-  margin: 10px 0 0;
-}
-
-.dashboard-schedule-fab {
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  border: none;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  transition: background 0.15s ease, transform 0.15s ease;
-}
-
-.dashboard-schedule-fab:hover {
-  background: var(--accent-soft);
-}
-
-.dashboard-schedule-fab svg {
-  width: 22px;
-  height: 22px;
 }
 
 .schedule-grid-wrap {

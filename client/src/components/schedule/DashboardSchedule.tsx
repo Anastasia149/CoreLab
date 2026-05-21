@@ -53,17 +53,7 @@ const DashboardSchedule: React.FC<Props> = observer(({ titleClassName, scheduleP
 
   return (
     <div className="dashboard-schedule">
-      <div className="dashboard-schedule-head">
-        <div className={titleClassName}>Моё расписание</div>
-        <button
-          type="button"
-          className="dashboard-schedule-fab"
-          aria-label="Добавить событие"
-          onClick={() => navigate(schedulePath)}
-        >
-          <Icon icon="ei:plus" />
-        </button>
-      </div>
+      <div className={titleClassName}>Моё расписание</div>
 
       <div className="schedule-grid-wrap" style={{ height: gridHeight }}>
         <div className="schedule-grid">

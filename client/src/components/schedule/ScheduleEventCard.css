@@ -89,8 +89,9 @@
 
 /* Главная — как в макете */
 .schedule-event-card--dashboard {
-  left: 0;
-  right: 0;
+  left: 10px;
+  right: 8px;
+  width: auto;
   max-width: none;
   min-height: 72px;
   padding: 12px 14px;
