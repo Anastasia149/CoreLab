@@ -1,0 +1,48 @@
+.schedule-page {
+  position: relative;
+}
+
+.schedule-add-event-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 11px 16px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #7b5cff, #5d3bff);
+  color: var(--on-accent, #fff);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(88, 80, 236, 0.35);
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.schedule-add-event-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.schedule-add-event-btn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.schedule-category-empty {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.schedule-page--panel-open .schedule-home {
+  pointer-events: none;
+}
+
+.schedule-page--panel-open .schedule-event-panel,
+.schedule-page--panel-open .schedule-panel-backdrop {
+  pointer-events: auto;
+}

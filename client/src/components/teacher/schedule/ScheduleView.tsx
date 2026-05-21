@@ -1,85 +1,95 @@
 import React, { useMemo } from 'react';
 import { Icon } from '@iconify/react';
 import './ScheduleView.css';
-import { formatScheduleHour, scheduleHours } from '../../../utils/scheduleHours';
-
-function alignToMonday(date: Date) {
-  const d = new Date(date);
-  const offset = (d.getDay() + 6) % 7;
-  d.setDate(d.getDate() - offset);
-  return d;
-}
-
-function ymd(d: Date) {
-  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
-}
+import ScheduleEventCard from '../../schedule/ScheduleEventCard';
+import { ScheduleEvent } from '../../../types/scheduleEvent';
+import {
+  formatScheduleHour,
+  getEventPositionPercent,
+  scheduleHours,
+  SCHEDULE_GRID_HEIGHT_PX,
+  SCHEDULE_SLOT_HEIGHT_PX,
+  toDateKey,
+} from '../../../utils/scheduleHours';
 
 type Props = {
   selectedDate: Date;
   onDateChange: (date: Date) => void;
+  events: ScheduleEvent[];
 };
 
-const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+const ScheduleView: React.FC<Props> = ({ selectedDate, onDateChange, events }) => {
+  const selectedKey = toDateKey(selectedDate);
 
-const ScheduleView: React.FC<Props> = ({ selectedDate, onDateChange }) => {
-  const formattedDate = new Intl.DateTimeFormat('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' }).format(selectedDate);
+  const formattedDate = new Intl.DateTimeFormat('ru-RU', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(selectedDate);
 
-  const weekDays = useMemo(() => {
-    const startOfWeek = alignToMonday(selectedDate);
-    return Array.from({ length: 7 }, (_, i) => {
-      const day = new Date(startOfWeek);
-      day.setDate(day.getDate() + i);
-      return day;
-    });
-  }, [selectedDate]);
+  const dayEvents = useMemo(
+    () => events.filter((ev) => ev.date === selectedKey),
+    [events, selectedKey]
+  );
 
-  const handlePrevWeek = () => {
+  const handlePrevDay = () => {
     const newDate = new Date(selectedDate);
-    newDate.setDate(newDate.getDate() - 7);
+    newDate.setDate(newDate.getDate() - 1);
     onDateChange(newDate);
   };
 
-  const handleNextWeek = () => {
+  const handleNextDay = () => {
     const newDate = new Date(selectedDate);
-    newDate.setDate(newDate.getDate() + 7);
+    newDate.setDate(newDate.getDate() + 1);
     onDateChange(newDate);
   };
 
   return (
     <div className="schedule-view">
       <div className="schedule-header">
-        <h2 className="schedule-title">Планируемые задачи</h2>
-        <div className="schedule-header-separator"></div>
+        <h2 className="schedule-title">Расписание на день</h2>
+        <div className="schedule-header-separator" />
         <div className="schedule-date">{formattedDate}</div>
         <div className="schedule-actions">
-          <button className="schedule-action-btn" onClick={handlePrevWeek}><Icon icon="mdi:chevron-left" /></button>
-          <button className="schedule-action-btn" onClick={handleNextWeek}><Icon icon="mdi:chevron-right" /></button>
+          <button type="button" className="schedule-action-btn" onClick={handlePrevDay} aria-label="Предыдущий день">
+            <Icon icon="mdi:chevron-left" />
+          </button>
+          <button type="button" className="schedule-action-btn" onClick={handleNextDay} aria-label="Следующий день">
+            <Icon icon="mdi:chevron-right" />
+          </button>
         </div>
       </div>
 
-      <div className="schedule-body-grid">
-        <div className="time-header-label">время</div>
-        <div className="week-view">
-          {weekDays.map((day, index) => (
-            <div
-              key={day.toISOString()}
-              className={`week-day ${ymd(day) === ymd(selectedDate) ? 'active' : ''}`}
-              onClick={() => onDateChange(day)}
-            >
-              <div className="week-day-name">{dayNames[index]}</div>
-              <div className="week-day-date">{day.getDate()}</div>
+      <div
+        className="schedule-timeline"
+        style={{ height: SCHEDULE_GRID_HEIGHT_PX }}
+      >
+        {scheduleHours.map((h) => (
+          <div
+            key={h}
+            className="schedule-timeline-row"
+            style={{ height: SCHEDULE_SLOT_HEIGHT_PX }}
+          >
+            <div className="time-slot">{formatScheduleHour(h)}</div>
+            <div className="schedule-timeline-track">
+              <div className="schedule-hour-line" aria-hidden />
             </div>
-          ))}
-        </div>
-        <div className="time-scale">
-          {scheduleHours.map(h => (
-            <div key={h} className="time-slot">{formatScheduleHour(h)}</div>
-          ))}
-        </div>
-        <div className="schedule-events">
-          {scheduleHours.map(h => (
-            <div key={h} className="schedule-event-row">&nbsp;</div>
-          ))}
+          </div>
+        ))}
+
+        <div className="schedule-timeline-events">
+          {dayEvents.map((ev) => {
+            const { top, height } = getEventPositionPercent(ev.startTime, ev.endTime);
+            return (
+              <ScheduleEventCard
+                key={ev.id}
+                event={ev}
+                topPercent={top}
+                heightPercent={height}
+              />
+            );
+          })}
         </div>
       </div>
     </div>

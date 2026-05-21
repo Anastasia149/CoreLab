@@ -1,0 +1,132 @@
+.schedule-event-card--slot {
+  position: relative;
+  z-index: 1;
+}
+
+.schedule-event-card {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  max-width: 420px;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.schedule-event-card-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.schedule-event-card-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.schedule-event-card-course {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.schedule-event-card-menu {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin: -4px -4px -4px 0;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: default;
+  opacity: 0.6;
+}
+
+.schedule-event-card-menu svg {
+  width: 16px;
+  height: 16px;
+}
+
+.schedule-event-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text-primary);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.schedule-event-card-time {
+  margin-top: auto;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+/* Главная — как в макете */
+.schedule-event-card--dashboard {
+  left: 0;
+  right: 0;
+  max-width: none;
+  min-height: 72px;
+  padding: 12px 14px;
+  gap: 6px;
+  border-radius: 14px;
+  border: none;
+  box-sizing: border-box;
+}
+
+.schedule-event-card--dashboard .schedule-event-card-course {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--event-accent, var(--accent-soft));
+}
+
+.schedule-event-card--dashboard .schedule-event-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.schedule-event-card--dashboard .schedule-event-card-time {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--event-accent, var(--accent-soft));
+  opacity: 0.85;
+}
+
+.schedule-event-card--dashboard .schedule-event-card-menu {
+  opacity: 0.55;
+  color: var(--event-accent, var(--text-muted));
+}
+
+.schedule-event-card--dashboard .schedule-event-card-menu svg {
+  width: 18px;
+  height: 18px;
+}
