@@ -593,3 +593,11 @@
 .tab-content {
   margin-top: 24px;
 }
+
+.lesson-detail-page .tab-content {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+}

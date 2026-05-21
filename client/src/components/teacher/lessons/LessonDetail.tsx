@@ -124,7 +124,7 @@ const LessonDetail: React.FC = () => {
       <TeacherSidebar />
       <main className="teacher-content">
         <TeacherHeader name={lesson?.title || 'Урок'} />
-        <div className="teacher-courses-page">
+        <div className="teacher-courses-page lesson-detail-page">
           {!lesson ? (
             <div>Загрузка...</div>
           ) : (
