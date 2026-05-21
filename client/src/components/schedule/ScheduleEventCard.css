@@ -89,16 +89,17 @@
 
 /* Главная — как в макете */
 .schedule-event-card--dashboard {
-  left: 10px;
-  right: 8px;
+  left: 4px;
+  right: 4px;
   width: auto;
   max-width: none;
-  min-height: 72px;
-  padding: 12px 14px;
-  gap: 6px;
+  min-height: 0;
+  padding: 8px 10px;
+  gap: 4px;
   border-radius: 14px;
   border: none;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .schedule-event-card--dashboard .schedule-event-card-course {
@@ -108,11 +109,11 @@
 }
 
 .schedule-event-card--dashboard .schedule-event-card-title {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text-primary);
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
 }
 
 .schedule-event-card--dashboard .schedule-event-card-time {

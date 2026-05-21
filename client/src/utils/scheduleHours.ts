@@ -82,9 +82,6 @@ export const DASHBOARD_SLOT_GAP_PX = 12;
 export const DASHBOARD_HOUR_TRACK_PX =
   DASHBOARD_SLOT_HEIGHT_PX + DASHBOARD_SLOT_GAP_PX;
 
-/** Доп. отступ под блоком события перед следующим пустым слотом */
-export const DASHBOARD_EVENT_GAP_AFTER_PX = 10;
-
 export function getDashboardGridHeightPx(): number {
   return (
     scheduleHours.length * DASHBOARD_SLOT_HEIGHT_PX +
@@ -92,12 +89,30 @@ export function getDashboardGridHeightPx(): number {
   );
 }
 
-function minutesToDashboardPx(minutesFromMidnight: number): number {
+function minutesToDashboardPxStart(minutesFromMidnight: number): number {
   const fromStart = minutesFromMidnight - SCHEDULE_START_HOUR * 60;
   const maxMinutes = SCHEDULE_SLOT_COUNT * 60;
   const clamped = Math.max(0, Math.min(fromStart, maxMinutes));
   const hourIndex = Math.floor(clamped / 60);
   const minuteInHour = clamped % 60;
+  return (
+    hourIndex * DASHBOARD_HOUR_TRACK_PX +
+    (minuteInHour / 60) * DASHBOARD_SLOT_HEIGHT_PX
+  );
+}
+
+/** Конец интервала: на границе часа — низ слота, без межстрочного gap */
+function minutesToDashboardPxEnd(minutesFromMidnight: number): number {
+  const fromStart = minutesFromMidnight - SCHEDULE_START_HOUR * 60;
+  const maxMinutes = SCHEDULE_SLOT_COUNT * 60;
+  const clamped = Math.max(0, Math.min(fromStart, maxMinutes));
+  const hourIndex = Math.floor(clamped / 60);
+  const minuteInHour = clamped % 60;
+
+  if (minuteInHour === 0 && clamped > 0) {
+    return hourIndex * DASHBOARD_HOUR_TRACK_PX - DASHBOARD_SLOT_GAP_PX;
+  }
+
   return (
     hourIndex * DASHBOARD_HOUR_TRACK_PX +
     (minuteInHour / 60) * DASHBOARD_SLOT_HEIGHT_PX
@@ -110,11 +125,8 @@ export function getEventDashboardPositionPx(startTime: string, endTime: string) 
   const dayEnd = dayStart + SCHEDULE_SLOT_COUNT * 60;
   const start = Math.max(timeToMinutes(startTime), dayStart);
   const end = Math.min(timeToMinutes(endTime), dayEnd);
-  const top = minutesToDashboardPx(start);
-  const bottom = minutesToDashboardPx(end);
-  const height = Math.max(
-    bottom - top - DASHBOARD_EVENT_GAP_AFTER_PX,
-    28
-  );
+  const top = minutesToDashboardPxStart(start);
+  const bottom = minutesToDashboardPxEnd(end);
+  const height = Math.max(bottom - top, 24);
   return { top, height };
 }
