@@ -80,7 +80,7 @@ const CourseDetail: React.FC = () => {
       <TeacherSidebar />
       <main className="teacher-content">
         <TeacherHeader name={course?.title || 'Курс'} />
-        <div className="teacher-courses-page">
+        <div className="teacher-courses-page course-detail-page">
           <h1>{course?.title}</h1>
 
           <div className="lesson-detail-tabs">

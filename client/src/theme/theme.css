@@ -175,9 +175,13 @@ body,
 .teacher-card,
 .lesson-footer-plank,
 .submission-card,
-.tab-content,
 .materials-tab .material-card,
 .student-lesson-container .submission-card {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.tab-content {
   background: var(--bg-surface);
   color: var(--text-primary);
 }
