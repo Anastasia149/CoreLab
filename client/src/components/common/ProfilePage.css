@@ -303,6 +303,144 @@
   transform: translateY(0);
 }
 
+.profile-account-section {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-light);
+}
+
+.profile-account-title {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.profile-account-desc {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.profile-account-actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.profile-logout-button {
+  border: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: linear-gradient(145deg, #7b5cff, #5d3bff);
+  color: var(--on-accent, #fff);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(88, 80, 236, 0.35);
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.profile-logout-button:hover:not(:disabled) {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.profile-logout-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.profile-delete-toggle {
+  border: 1px solid var(--border-color);
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--danger);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.profile-delete-toggle:hover:not(:disabled) {
+  background: var(--status-error-bg-soft);
+  border-color: var(--danger);
+}
+
+.profile-delete-panel {
+  flex: 1 1 100%;
+  width: 100%;
+  max-width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--status-error-border);
+  background: var(--status-error-bg-soft);
+}
+
+.profile-delete-warning {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.profile-delete-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.profile-delete-input {
+  margin-bottom: 12px;
+}
+
+.profile-delete-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.profile-delete-cancel {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profile-delete-cancel:hover:not(:disabled) {
+  background: var(--bg-surface-hover);
+}
+
+.profile-delete-confirm-btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  background: var(--danger);
+  color: var(--on-accent, #fff);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profile-delete-confirm-btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.profile-delete-confirm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .profile-page--loading {
   width: 100%;
   box-sizing: border-box;

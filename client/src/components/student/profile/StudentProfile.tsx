@@ -3,6 +3,7 @@ import { Context } from '../../../index';
 import { observer } from 'mobx-react-lite';
 import { Icon } from '@iconify/react';
 import '../../common/ProfilePage.css';
+import { ProfileAccountSection } from '../../common/ProfileAccountSection';
 import { getAvatarFileTypeError } from '../../../utils/avatarFile';
 
 const StudentProfile: React.FC = observer(() => {
@@ -153,6 +154,8 @@ const StudentProfile: React.FC = observer(() => {
         <button type="button" className="profile-save-button" onClick={handleSave}>
           Сохранить изменения
         </button>
+
+        <ProfileAccountSection />
       </div>
     </div>
   );

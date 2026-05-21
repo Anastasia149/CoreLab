@@ -118,6 +118,21 @@ class UserController{
             next(e);
         }
     }
+
+    async deleteAccount(req, res, next) {
+        try {
+            const userId = req.user.id;
+            const { refreshToken } = req.cookies;
+            await userService.deleteAccount(userId);
+            if (refreshToken) {
+                await userService.logout(refreshToken);
+            }
+            res.clearCookie('refreshToken');
+            return res.json({ message: 'Аккаунт удалён' });
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 module.exports = new UserController();

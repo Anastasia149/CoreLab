@@ -62,6 +62,10 @@ class UserModel {
     );
   }
 
+  async deleteById(id) {
+    await pool.query(`DELETE FROM users WHERE id = $1`, [id]);
+  }
+
 }
 
 module.exports = new UserModel();

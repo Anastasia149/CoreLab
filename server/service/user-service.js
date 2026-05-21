@@ -1,6 +1,7 @@
 const UserModel = require('../models/user-model');
 const bcrypt = require('bcrypt');
 const uuid = require('uuid');
+const pool = require('../db');
 const mailService = require('./mail-service');
 const tokenService = require('./token-service');
 const courseService = require('./course-service');
@@ -179,6 +180,40 @@ class UserService{
       }
       const updated = await UserModel.findById(userId);
       return this.buildUserData(updated);
+    }
+
+    async deleteAccount(userId) {
+      const user = await UserModel.findById(userId);
+      if (!user) {
+        throw ApiError.BadRequest('Пользователь не найден');
+      }
+
+      const client = await pool.connect();
+      try {
+        await client.query('BEGIN');
+
+        await client.query(`DELETE FROM submissions WHERE student_id = $1`, [userId]);
+        await client.query(`DELETE FROM student_courses WHERE student_id = $1`, [userId]);
+
+        const teacherCourses = await client.query(
+          `SELECT id FROM courses WHERE author_id = $1`,
+          [userId]
+        );
+        for (const row of teacherCourses.rows) {
+          await client.query(`DELETE FROM courses WHERE id = $1`, [row.id]);
+        }
+
+        await client.query(`DELETE FROM tokens WHERE user_id = $1`, [userId]);
+        await client.query(`DELETE FROM users WHERE id = $1`, [userId]);
+
+        await client.query('COMMIT');
+      } catch (e) {
+        await client.query('ROLLBACK');
+        console.error('deleteAccount', e);
+        throw new ApiError(500, 'Не удалось удалить аккаунт');
+      } finally {
+        client.release();
+      }
     }
 }
 

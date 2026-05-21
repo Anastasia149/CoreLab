@@ -25,11 +25,6 @@ const TeacherHome: React.FC = () => {
   useEffect(() => {
     store.getTeacherCourses();
   }, []);
-  const logout = () => {
-    store.logout();
-    navigate('/', { replace: true });
-  };
-
   return (
     <div className="teacher-layout">
       <TeacherSidebar />
@@ -43,14 +38,6 @@ const TeacherHome: React.FC = () => {
 
             <div className="settings-card">
               <ThemeSettingsSection />
-            </div>
-
-            <div className="settings-card">
-              <h4 className="settings-block-title">Аккаунт</h4>
-              <p className="settings-block-desc">Выход из текущего профиля на этом устройстве.</p>
-              <button type="button" className="settings-logout-btn" onClick={logout}>
-                Выйти из аккаунта
-              </button>
             </div>
           </section>
         ) : (

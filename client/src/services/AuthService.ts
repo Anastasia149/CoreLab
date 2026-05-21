@@ -14,5 +14,9 @@ export default class AuthService{
     static async logout() {
         return $api.post<AuthResponse>('/logout')
     }
+
+    static async deleteAccount() {
+        return $api.delete<{ message: string }>('/users/account')
+    }
 }
 

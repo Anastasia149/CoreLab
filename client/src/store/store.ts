@@ -330,6 +330,13 @@ export default class Store {
         }
     }
 
+    async deleteAccount() {
+        await AuthService.deleteAccount();
+        localStorage.removeItem('token');
+        this.setAuth(false);
+        this.setUser({} as IUser);
+    }
+
     async checkAuth(){
         this.setLoading(true);
         try{

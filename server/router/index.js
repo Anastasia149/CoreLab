@@ -31,6 +31,7 @@ router.put('/users/profile',
     body('career').optional({ nullable: true }).isString().isLength({ max: 12000 }),
     userController.updateProfile
 );
+router.delete('/users/account', authMiddleware, userController.deleteAccount);
 router.post('/courses', authMiddleware, courseController.createCourse);
 router.get('/courses', courseController.getAllPublishedCourses);
 router.get('/courses/:id', courseController.getCourseById);
