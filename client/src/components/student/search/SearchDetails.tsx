@@ -155,8 +155,8 @@ const SearchDetails: React.FC = () => {
             <h4>О менторе</h4>
             <div className="mentor-info">
                 <div className="mentor-avatar">
-                    {mentor.avatar ? (
-                        <img src={mentor.avatar} alt={course.author_name ?? 'Автор'} />
+                    {course.author_avatar ? (
+                        <img src={course.author_avatar} alt={course.author_name ?? 'Автор'} />
                     ) : (
                         <Icon icon="solar:user-linear" />
                     )}

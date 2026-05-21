@@ -31,6 +31,7 @@ export interface ISearchDetails {
   title: string;
   description: string;
   author_name?: string | null;
+  author_avatar?: string | null;
   modules: Module[];
   lessons: Lesson[];
   status: 'draft' | 'published';

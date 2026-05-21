@@ -7,6 +7,7 @@ export interface ICourse {
     price: number;
     author_id: number;
     author_name?: string;
+    author_avatar?: string | null;
     students_count?: number;
     lessons_count?: number;
 }

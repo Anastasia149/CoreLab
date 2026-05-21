@@ -33,12 +33,17 @@ class CourseService {
     }
 
     async getAllPublishedCourses() {
-        const courses = await pool.query("SELECT c.*, u.name as author_name FROM courses c JOIN users u ON c.author_id = u.id WHERE c.status = 'published' ORDER BY c.students_count DESC");
+        const courses = await pool.query(
+            "SELECT c.*, u.name AS author_name, u.avatar AS author_avatar FROM courses c JOIN users u ON c.author_id = u.id WHERE c.status = 'published' ORDER BY c.students_count DESC"
+        );
         return courses.rows;
     }
 
     async getCourseById(courseId) {
-        const course = await pool.query('SELECT c.*, u.name as author_name, COUNT(DISTINCT l.id) AS lessons_count FROM courses c JOIN users u ON c.author_id = u.id LEFT JOIN lessons l ON c.id = l.course_id WHERE c.id = $1 GROUP BY c.id, u.name', [courseId]);
+        const course = await pool.query(
+            'SELECT c.*, u.name AS author_name, u.avatar AS author_avatar, COUNT(DISTINCT l.id) AS lessons_count FROM courses c JOIN users u ON c.author_id = u.id LEFT JOIN lessons l ON c.id = l.course_id WHERE c.id = $1 GROUP BY c.id, u.name, u.avatar',
+            [courseId]
+        );
         return course.rows[0];
     }
 
@@ -52,6 +57,7 @@ class CourseService {
                 c.price,
                 c.image_url,
                 u.name AS author_name,
+                u.avatar AS author_avatar,
                 COALESCE(c.students_count, 0)::int AS students_count,
                 (
                     SELECT COUNT(*)::int FROM lessons lcnt WHERE lcnt.course_id = c.id
@@ -122,7 +128,8 @@ class CourseService {
                 c.author_id,
                 c.students_count,
                 u.id,
-                u.name;
+                u.name,
+                u.avatar;
         `;
         const { rows } = await pool.query(query, [courseId]);
         return rows[0];

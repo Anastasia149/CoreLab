@@ -258,11 +258,26 @@
   margin-top: auto; /* Прижимает автора и цену к низу */
 }
 
-.student-course-author .author-icon {
+.student-course-author .author-icon,
+.student-course-author .author-avatar {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background-color: var(--border-color); /* gray-200 */
+  flex-shrink: 0;
+}
+
+.student-course-author .author-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--border-color);
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.student-course-author .author-avatar {
+  object-fit: cover;
+  background-color: var(--border-color);
 }
 
 .student-course-price {

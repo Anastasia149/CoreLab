@@ -8,7 +8,6 @@ import './StudentCoursesSearch.css';
 import { useNavigate } from 'react-router-dom';
 import { formatCoursePriceDisplay } from '../../../utils/coursePrice';
 import { loadFavoriteCourseIds, saveFavoriteCourseIds } from '../../../utils/courseFavorites';
-import { loadCartCourseIds } from '../../../utils/courseCart';
 
 type CourseListFilter = 'all' | 'free' | 'paid' | 'favorites';
 
@@ -29,9 +28,6 @@ const StudentCoursesSearch: React.FC = () => {
   const [listFilter, setListFilter] = useState<CourseListFilter>('all');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [favoriteCourseIds, setFavoriteCourseIds] = useState<number[]>(() => loadFavoriteCourseIds());
-  const [cartCourseIds, setCartCourseIds] = useState<number[]>(() =>
-    store.user?.id ? loadCartCourseIds(store.user.id) : []
-  );
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,31 +37,6 @@ const StudentCoursesSearch: React.FC = () => {
   useEffect(() => {
     saveFavoriteCourseIds(favoriteCourseIds);
   }, [favoriteCourseIds]);
-
-  useEffect(() => {
-    const userId = store.user?.id;
-    if (!userId) {
-      setCartCourseIds([]);
-      return;
-    }
-    setCartCourseIds(loadCartCourseIds(userId));
-  }, [store.user?.id]);
-
-  useEffect(() => {
-    if (!store.user?.id) return;
-
-    const onCartUpdated = (e: Event) => {
-      const detail = (e as CustomEvent<{ userId?: string | number }>).detail;
-      if (
-        detail?.userId === undefined ||
-        String(detail.userId) === String(store.user?.id)
-      ) {
-        setCartCourseIds(loadCartCourseIds(store.user!.id));
-      }
-    };
-    window.addEventListener('course-cart-updated', onCartUpdated);
-    return () => window.removeEventListener('course-cart-updated', onCartUpdated);
-  }, [store.user?.id]);
 
   const isEnrolled = (courseId: number): boolean => {
     return store.user.courses?.some((course) => Number(course.id) === courseId) || false;
@@ -221,13 +192,8 @@ const StudentCoursesSearch: React.FC = () => {
           {filteredAndSortedCourses.map((course: ICourse) => {
             const isFreeAndNotEnrolled = store.isAuth && (Number(course.price) === 0 || course.price === null) && !isEnrolled(course.id);
 
-            const inCart = cartCourseIds.includes(Number(course.id));
-            const courseLink = inCart
-              ? `/student/billing?courseId=${course.id}`
-              : `/student/search/${course.id}`;
-
             return (
-              <Link to={courseLink} key={course.id} className="student-course-card-link">
+              <Link to={`/student/search/${course.id}`} key={course.id} className="student-course-card-link">
                 <div className="student-course-card">
                   <div className="student-course-card-header">
                     <img src={course.image_url || 'https://via.placeholder.com/300x160'} alt={course.title} className="student-course-card-img" />
@@ -248,7 +214,17 @@ const StudentCoursesSearch: React.FC = () => {
                       <Icon icon="mdi:star-outline" />
                     </div>
                     <div className="student-course-author">
-                      <div className="author-icon"></div>
+                      {course.author_avatar ? (
+                        <img
+                          src={course.author_avatar}
+                          alt=""
+                          className="author-avatar"
+                        />
+                      ) : (
+                        <div className="author-icon" aria-hidden>
+                          <Icon icon="solar:user-linear" />
+                        </div>
+                      )}
                       <span>{course.author_name || 'Инструктор'}</span>
                       <span className="student-course-price">
                         {formatCoursePriceDisplay(course.price)}
