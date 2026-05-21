@@ -172,7 +172,6 @@ body,
 .create-course-form,
 .student-course-card,
 .settings-card,
-.teacher-task,
 .teacher-card,
 .lesson-footer-plank,
 .submission-card,
@@ -388,14 +387,9 @@ body,
   color: var(--text-secondary);
 }
 
-.teacher-tasks,
 .teacher-schedule-box,
 .teacher-calendar {
   color: var(--text-primary);
-}
-
-.teacher-task {
-  border-color: var(--border-color);
 }
 
 .teacher-empty,

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Context } from '../../../index';
-import { Icon } from '@iconify/react';
 import TeacherHeader from './components/TeacherHeader';
 import TeacherSidebar from './components/TeacherSidebar';
 import TeacherCalendar from './components/TeacherCalendar';
@@ -93,41 +92,6 @@ const TeacherHome: React.FC = () => {
             <section className="teacher-schedule-box">
               <TeacherSchedule />
             </section>
-
-            <div className="teacher-tasks-group">
-              <div className="teacher-section-title">Задачи на сегодня</div>
-              <div className="teacher-tasks">
-                <div className="teacher-tasks-list">
-                  <label className="teacher-task">
-                    <div className="teacher-task-content">
-                      <span className="teacher-task-icon-wrapper">
-                        <Icon icon="system-uicons:book-text" />
-                      </span>
-                      Проверить домашнее задание по JSX
-                    </div>
-                    <input type="checkbox" />
-                  </label>
-                  <label className="teacher-task">
-                    <div className="teacher-task-content">
-                      <span className="teacher-task-icon-wrapper">
-                        <Icon icon="system-uicons:book-text" />
-                      </span>
-                      Подготовить материал к лекции по массивам
-                    </div>
-                    <input type="checkbox" />
-                  </label>
-                  <label className="teacher-task">
-                    <div className="teacher-task-content">
-                      <span className="teacher-task-icon-wrapper">
-                        <Icon icon="system-uicons:book-text" />
-                      </span>
-                      Ответить на вопросы студентов
-                    </div>
-                    <input type="checkbox" />
-                  </label>
-                </div>
-              </div>
-            </div>
           </div>
         )}
       </main>
