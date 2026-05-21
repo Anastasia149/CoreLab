@@ -6,7 +6,15 @@ import { Lesson } from '../../../models/ICourseDetail';
 import { Icon } from '@iconify/react';
 import $api from '../../../http';
 import './StudentLessonDetail.css';
-import { getLessonTypeLabel } from '../../../utils/lessonTypeDisplay';
+import { getLessonTypeIcon, getLessonTypeLabel, normalizeLessonType } from '../../../utils/lessonTypeDisplay';
+import {
+  parseTestQuestions,
+  parseTestSubmission,
+  formatTestScoreLabel,
+  isTestSubmissionType,
+} from '../../../utils/testContent';
+import { StudentTestPanel } from './StudentTestPanel';
+import './StudentTestPanel.css';
 import {
   parseSubmissionItems,
   isSubmissionCompletedOnly,
@@ -46,6 +54,7 @@ const StudentLessonDetail: React.FC = () => {
   const [draftItems, setDraftItems] = useState<DraftItem[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
+  const [takingTest, setTakingTest] = useState(false);
 
   useEffect(() => {
     if (lessonId) {
@@ -156,6 +165,26 @@ const StudentLessonDetail: React.FC = () => {
     }
   };
 
+  const handleSubmitTest = async (answers: Record<string, string[]>) => {
+    if (!lessonId || isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      const newSubmission = await store.submitTest(Number(lessonId), answers);
+      if (newSubmission) {
+        setSubmission(newSubmission as StudentSubmission);
+        setTakingTest(false);
+        alert('Тест успешно отправлен!');
+      } else {
+        alert('Не удалось отправить тест. Попробуйте позже.');
+      }
+    } catch (error) {
+      console.error('Test submission failed:', error);
+      alert('Ошибка при отправке теста.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleCancelSubmission = async () => {
     if (!lessonId || isCancelling) return;
     if (
@@ -170,6 +199,7 @@ const StudentLessonDetail: React.FC = () => {
       const ok = await store.deleteMySubmission(lessonId);
       if (ok) {
         setSubmission(null);
+        setTakingTest(false);
         setDraftItems([]);
         setLink('');
         setFile(null);
@@ -185,16 +215,25 @@ const StudentLessonDetail: React.FC = () => {
     return <div className="student-lesson-loading">Загрузка…</div>;
   }
 
-  const isAssignment = lesson.type === 'assignment';
+  const lessonType = normalizeLessonType(lesson.type);
+  const isAssignment = lessonType === 'assignment';
+  const isTest = lessonType === 'test';
   const showsDeadlineInfo = lessonTypeHasDeadline(lesson.type);
   const hasMaterials = lesson.materials.length > 0;
-  const showAfterDescription = hasMaterials || isAssignment || showsDeadlineInfo;
+  const testQuestions = isTest ? parseTestQuestions(lesson.content) : [];
+  const showAfterDescription = hasMaterials || isAssignment || isTest || showsDeadlineInfo;
   const submittedItems = submission ? parseSubmissionItems(submission) : [];
   const submittedCompletedOnly =
     submission && isSubmissionCompletedOnly(submission);
+  const testResult =
+    submission && isTestSubmissionType(submission.type)
+      ? parseTestSubmission(submission.content)
+      : null;
   const reviewStatus = submission
     ? normalizeReviewStatus(submission.review_status)
     : 'pending';
+  const showLessonHtml =
+    !isTest && lesson.content?.trim() && !lesson.content.trim().startsWith('[');
 
   return (
     <div className="student-lesson-container">
@@ -207,10 +246,19 @@ const StudentLessonDetail: React.FC = () => {
         </header>
 
         <div className="lesson-main-content">
-          <div
-            className="lesson-text"
-            dangerouslySetInnerHTML={{ __html: lesson.content }}
-          />
+          {isTest && takingTest && !submission ? (
+            <StudentTestPanel
+              questions={testQuestions}
+              onSubmit={handleSubmitTest}
+              onCancel={() => setTakingTest(false)}
+              isSubmitting={isSubmitting}
+            />
+          ) : showLessonHtml ? (
+            <div
+              className="lesson-text"
+              dangerouslySetInnerHTML={{ __html: lesson.content }}
+            />
+          ) : null}
         </div>
 
         {showAfterDescription && (
@@ -219,7 +267,7 @@ const StudentLessonDetail: React.FC = () => {
             <div className="lesson-footer-plank">
               <div
                 className={
-                  isAssignment
+                  isAssignment || isTest
                     ? 'lesson-after-row lesson-after-row--with-sidebar'
                     : 'lesson-after-row'
                 }
@@ -232,7 +280,7 @@ const StudentLessonDetail: React.FC = () => {
                       className="lesson-deadline-info--main"
                     />
                   )}
-                  {hasMaterials && (
+                  {(hasMaterials || isTest) && (
                     <div className="lesson-materials-section">
                       <h3 className="lesson-plank-section-title">Материалы</h3>
                       <div className="materials-grid">
@@ -248,12 +296,30 @@ const StudentLessonDetail: React.FC = () => {
                             <span>{m.title}</span>
                           </a>
                         ))}
+                        {isTest && (
+                          <button
+                            type="button"
+                            className="material-card test-material-card"
+                            onClick={() => {
+                              if (submission) return;
+                              if (testQuestions.length === 0) {
+                                alert('Тест пока не содержит вопросов.');
+                                return;
+                              }
+                              setTakingTest(true);
+                            }}
+                            disabled={!!submission || testQuestions.length === 0}
+                          >
+                            <Icon icon={getLessonTypeIcon('test')} />
+                            <span>тест</span>
+                          </button>
+                        )}
                       </div>
                     </div>
                   )}
                 </div>
 
-                {isAssignment && (
+                {(isAssignment || isTest) && (
                   <aside className="lesson-sidebar">
                     <div className="submission-card">
                       <h3 className="lesson-plank-section-title">Ваше решение</h3>
@@ -272,39 +338,64 @@ const StudentLessonDetail: React.FC = () => {
                             <div>
                               <p className="status-title">Работа отправлена</p>
                               <p className="status-date">
-                                {new Date(submission.created_at).toLocaleDateString()}
+                                {new Date(submission.created_at).toLocaleDateString('ru-RU')}
                               </p>
                             </div>
                           </div>
 
-                          <p
-                            className={`submission-review-badge submission-review-badge--${reviewStatus}`}
-                          >
-                            {getReviewStatusLabel(reviewStatus)}
-                          </p>
+                          <div className="submission-status-row">
+                            <p
+                              className={`submission-review-badge submission-review-badge--${reviewStatus}`}
+                            >
+                              {getReviewStatusLabel(reviewStatus)}
+                            </p>
+                            {submission.is_overdue &&
+                              (isTest ? (
+                                <span className="submission-overdue-inline">с опозданием</span>
+                              ) : (
+                                <SubmissionOverdueBadge />
+                              ))}
+                          </div>
 
-                          {submission.is_overdue && <SubmissionOverdueBadge />}
+                          {testResult && (
+                            <p className="submission-test-score">
+                              {formatTestScoreLabel(
+                                testResult.correctCount,
+                                testResult.totalCount
+                              )}
+                            </p>
+                          )}
 
-                          {submittedCompletedOnly ? (
+                          {!testResult && submittedCompletedOnly && (
                             <p className="submission-sent-summary">
                               Задание отмечено как выполненное.
                             </p>
-                          ) : (
+                          )}
+
+                          {!testResult && !submittedCompletedOnly && (
                             <div className="submission-sent-materials">
                               <p className="submission-sent-heading">Отправлено:</p>
                               <SubmissionMaterialList items={submittedItems} />
                             </div>
                           )}
 
-                          <button
-                            type="button"
-                            className="submission-cancel-btn"
-                            onClick={handleCancelSubmission}
-                            disabled={isCancelling}
-                          >
-                            {isCancelling ? 'Отмена…' : 'Отменить'}
-                          </button>
+                          {!isTest && (
+                            <button
+                              type="button"
+                              className="submission-cancel-btn"
+                              onClick={handleCancelSubmission}
+                              disabled={isCancelling}
+                            >
+                              {isCancelling ? 'Отмена…' : 'Отменить'}
+                            </button>
+                          )}
                         </div>
+                      ) : isTest ? (
+                        <p className="submission-hint">
+                          {takingTest
+                            ? 'Заполните тест слева и нажмите «Отправить».'
+                            : 'Нажмите «тест» в материалах, чтобы начать.'}
+                        </p>
                       ) : (
                         <form onSubmit={handleSubmit} className="submission-form">
                           <div className="submit-type-selector">

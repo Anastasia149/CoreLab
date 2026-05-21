@@ -270,6 +270,22 @@
   background: var(--status-info-bg);
 }
 
+.submission-status-pill--passed {
+  color: var(--status-published-text);
+  background: var(--status-published-bg);
+}
+
+.submission-status-pill--not-passed {
+  color: var(--status-error-text);
+  background: var(--status-error-bg);
+}
+
+.submission-not-passed-text {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
 .submission-review {
   margin-top: 16px;
   padding-top: 16px;

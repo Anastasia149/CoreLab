@@ -198,6 +198,19 @@ export default class Store {
         }
     }
 
+    async submitTest(lessonId: number, answers: Record<string, string[]>) {
+        try {
+            const response = await $api.post('/submissions', {
+                lessonId,
+                type: 'test',
+                answers,
+            });
+            return response.data;
+        } catch (e) {
+            console.log("FULL ERROR:", e);
+        }
+    }
+
     async getLessonSubmissions(lessonId: string) {
         try {
             const response = await $api.get(`/lessons/${lessonId}/submissions`);

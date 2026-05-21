@@ -1,7 +1,49 @@
 const pool = require('../db');
 const ApiError = require('../exceptions/api-error');
+const { gradeTest, parseQuestions } = require('../utils/test-grading');
 
 class SubmissionService {
+    async submitTest(lessonId, studentId, answers) {
+        const existing = await this.getStudentSubmission(lessonId, studentId);
+        if (existing) {
+            throw ApiError.BadRequest('Тест уже отправлен');
+        }
+
+        const lessonResult = await pool.query(
+            `SELECT type, content FROM lessons WHERE id = $1`,
+            [lessonId]
+        );
+        const lesson = lessonResult.rows[0];
+        if (!lesson || lesson.type !== 'test') {
+            throw ApiError.BadRequest('Урок не является тестом');
+        }
+
+        let questions;
+        try {
+            questions = parseQuestions(lesson.content);
+        } catch {
+            throw ApiError.BadRequest('Некорректное содержимое теста');
+        }
+
+        let graded;
+        try {
+            graded = gradeTest(questions, answers);
+        } catch (e) {
+            if (e.status === 400) {
+                throw ApiError.BadRequest(e.message);
+            }
+            throw ApiError.BadRequest('Некорректные ответы теста');
+        }
+
+        const newSubmission = await pool.query(
+            `INSERT INTO submissions (lesson_id, student_id, type, content, review_status)
+             VALUES ($1, $2, 'test', $3, 'passed')
+             RETURNING *`,
+            [lessonId, studentId, graded.storedContent]
+        );
+        return this._attachOverdue(newSubmission.rows[0], lessonId);
+    }
+
     async submitAssignment(lessonId, studentId, type, content, items) {
         let storedType = type;
         let storedContent = content || '';
@@ -77,6 +119,14 @@ class SubmissionService {
     }
 
     async deleteStudentSubmission(lessonId, studentId) {
+        const lesson = await pool.query(
+            `SELECT type FROM lessons WHERE id = $1`,
+            [lessonId]
+        );
+        if (lesson.rows[0]?.type === 'test') {
+            throw ApiError.BadRequest('Отмена сдачи теста недоступна');
+        }
+
         const result = await pool.query(
             `DELETE FROM submissions WHERE lesson_id = $1 AND student_id = $2 RETURNING id`,
             [lessonId, studentId]

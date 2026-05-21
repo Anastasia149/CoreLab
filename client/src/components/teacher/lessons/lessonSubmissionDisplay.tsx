@@ -3,6 +3,11 @@ import {
   parseSubmissionItems,
   isSubmissionCompletedOnly,
 } from '../../../utils/submissionContent';
+import {
+  parseTestSubmission,
+  formatTestScoreLabel,
+  isTestSubmissionType,
+} from '../../../utils/testContent';
 import { SubmissionMaterialList } from '../../common/SubmissionMaterialList';
 
 export type LessonSubmissionRow = {
@@ -17,6 +22,19 @@ export type LessonSubmissionRow = {
 };
 
 export function TeacherSubmissionMaterial({ s }: { s: LessonSubmissionRow }) {
+  if (isTestSubmissionType(s.type)) {
+    const result = parseTestSubmission(s.content);
+    return (
+      <SubmissionMaterialBlock>
+        <p className="submission-material-text">
+          {result
+            ? `Результат теста: ${formatTestScoreLabel(result.correctCount, result.totalCount)}`
+            : 'Тест отправлен (результат недоступен).'}
+        </p>
+      </SubmissionMaterialBlock>
+    );
+  }
+
   const items = parseSubmissionItems(s);
 
   if (isSubmissionCompletedOnly(s)) {

@@ -1,4 +1,5 @@
 const lessonService = require('../service/lesson-service');
+const { sanitizeTestContentForStudent } = require('../utils/test-grading');
 
 class LessonController {
     async createLesson(req, res, next) {
@@ -42,7 +43,24 @@ class LessonController {
         try {
             const { lessonId } = req.params;
             const lesson = await lessonService.getLessonById(lessonId);
-            return res.json(lesson);
+            if (!lesson) {
+                return res.status(404).json({ message: 'Урок не найден' });
+            }
+
+            const payload = { ...lesson };
+            if (
+                lesson.type === 'test' &&
+                req.user?.role === 'student' &&
+                lesson.content
+            ) {
+                try {
+                    payload.content = sanitizeTestContentForStudent(lesson.content);
+                } catch {
+                    payload.content = '[]';
+                }
+            }
+
+            return res.json(payload);
         } catch (e) {
             next(e);
         }
