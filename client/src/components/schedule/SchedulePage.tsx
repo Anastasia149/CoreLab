@@ -5,7 +5,11 @@ import ScheduleView from '../teacher/schedule/ScheduleView';
 import ScheduleEventPanel from './ScheduleEventPanel';
 import ScheduleSidebar from './ScheduleSidebar';
 import { ScheduleEvent } from '../../types/scheduleEvent';
-import { loadScheduleEvents, saveScheduleEvents } from '../../utils/scheduleEventsStorage';
+import {
+  createScheduleEvent,
+  fetchScheduleEvents,
+  saveScheduleEventsToLocal,
+} from '../../utils/scheduleEventsStorage';
 import '../teacher/schedule/ScheduleHome.css';
 import './SchedulePage.css';
 
@@ -15,18 +19,32 @@ const SchedulePage: React.FC = observer(() => {
   const [panelOpen, setPanelOpen] = useState(false);
   const [events, setEvents] = useState<ScheduleEvent[]>([]);
 
-  const userId = store.user?.id;
+  const userId = store.user?.id != null ? String(store.user.id) : '';
 
   useEffect(() => {
     if (store.user?.role === 'teacher') {
       store.getTeacherCourses();
+    } else if (store.user?.role === 'student') {
+      store.refreshMyCourses();
     }
   }, [store]);
 
   useEffect(() => {
-    if (userId) {
-      setEvents(loadScheduleEvents(userId));
-    }
+    if (!userId) return;
+
+    const reload = async () => {
+      const list = await fetchScheduleEvents(userId);
+      setEvents(list);
+    };
+    reload();
+
+    window.addEventListener('schedule-events-updated', reload);
+    window.addEventListener('focus', reload);
+
+    return () => {
+      window.removeEventListener('schedule-events-updated', reload);
+      window.removeEventListener('focus', reload);
+    };
   }, [userId]);
 
   const courses = useMemo(() => {
@@ -36,11 +54,23 @@ const SchedulePage: React.FC = observer(() => {
     return store.user?.courses ?? [];
   }, [store.user?.role, store.courses, store.user?.courses]);
 
-  const handleSaveEvent = (event: ScheduleEvent) => {
+  const handleSaveEvent = async (event: ScheduleEvent) => {
     if (!userId) return;
-    const next = [...events, event];
-    setEvents(next);
-    saveScheduleEvents(userId, next);
+    try {
+      const created = await createScheduleEvent(event);
+      if (created) {
+        setEvents((prev) => [...prev, created]);
+      } else {
+        const next = [...events, event];
+        setEvents(next);
+        saveScheduleEventsToLocal(userId, next);
+      }
+    } catch (e) {
+      console.log('FULL ERROR (create schedule event):', e);
+      const next = [...events, event];
+      setEvents(next);
+      saveScheduleEventsToLocal(userId, next);
+    }
     window.dispatchEvent(new Event('schedule-events-updated'));
     setPanelOpen(false);
   };

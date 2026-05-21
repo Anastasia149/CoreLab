@@ -76,6 +76,16 @@ export function getEventPositionPercent(startTime: string, endTime: string) {
   return { top, height };
 }
 
+/** Позиция события на странице расписания (px) */
+export function getEventTimelinePositionPx(startTime: string, endTime: string) {
+  const { top, height } = getEventPositionPercent(startTime, endTime);
+  const gridHeight = SCHEDULE_GRID_HEIGHT_PX;
+  return {
+    top: (top / 100) * gridHeight,
+    height: Math.max((height / 100) * gridHeight, 44),
+  };
+}
+
 /** Сетка «Моё расписание» на главной: слот 48px + отступ 12px между часами */
 export const DASHBOARD_SLOT_HEIGHT_PX = 48;
 export const DASHBOARD_SLOT_GAP_PX = 12;

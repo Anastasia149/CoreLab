@@ -5,7 +5,7 @@ import ScheduleEventCard from '../../schedule/ScheduleEventCard';
 import { ScheduleEvent } from '../../../types/scheduleEvent';
 import {
   formatScheduleHour,
-  getEventPositionPercent,
+  getEventTimelinePositionPx,
   scheduleHours,
   SCHEDULE_GRID_HEIGHT_PX,
   SCHEDULE_SLOT_HEIGHT_PX,
@@ -63,7 +63,7 @@ const ScheduleView: React.FC<Props> = ({ selectedDate, onDateChange, events }) =
 
       <div
         className="schedule-timeline"
-        style={{ height: SCHEDULE_GRID_HEIGHT_PX }}
+        style={{ height: `${SCHEDULE_GRID_HEIGHT_PX}px` }}
       >
         {scheduleHours.map((h) => (
           <div
@@ -80,13 +80,13 @@ const ScheduleView: React.FC<Props> = ({ selectedDate, onDateChange, events }) =
 
         <div className="schedule-timeline-events">
           {dayEvents.map((ev) => {
-            const { top, height } = getEventPositionPercent(ev.startTime, ev.endTime);
+            const { top, height } = getEventTimelinePositionPx(ev.startTime, ev.endTime);
             return (
               <ScheduleEventCard
                 key={ev.id}
                 event={ev}
-                topPercent={top}
-                heightPercent={height}
+                topPx={top}
+                heightPx={height}
               />
             );
           })}

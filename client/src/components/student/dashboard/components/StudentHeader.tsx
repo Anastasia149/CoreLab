@@ -6,6 +6,7 @@ import { Context } from '../../../../index';
 import { observer } from 'mobx-react-lite';
 import { getLessonTypeLabel } from '../../../../utils/lessonTypeDisplay';
 import NotificationsBell from '../../../common/NotificationsBell';
+import { useSidebarDrawer } from '../../../../context/SidebarDrawerContext';
 
 type Props = {
   name?: string;
@@ -72,6 +73,7 @@ const StudentHeader: React.FC<Props> = observer(({ name }) => {
   };
 
   const title = getTitle();
+  const { isOpen, toggle: toggleSidebar } = useSidebarDrawer();
 
   const openProfile = () => navigate('/student/profile');
   const openCart = () => navigate('/student/cart');
@@ -87,10 +89,21 @@ const StudentHeader: React.FC<Props> = observer(({ name }) => {
   return (
     <div className="student-header">
       <div className="student-header-title">
-        <div className="student-hello">{title}</div>
-        {title === 'Главная' && (
-          <div className="student-hello-sub">Добро пожаловать{name ? `, ${name}!` : '!'}</div>
-        )}
+        <button
+          type="button"
+          className="student-header-menu-btn"
+          aria-label="Открыть меню"
+          aria-expanded={isOpen}
+          onClick={toggleSidebar}
+        >
+          <Icon icon="mdi:menu" aria-hidden />
+        </button>
+        <div className="student-header-title-text">
+          <div className="student-hello">{title}</div>
+          {title === 'Главная' && (
+            <div className="student-hello-sub">Добро пожаловать{name ? `, ${name}!` : '!'}</div>
+          )}
+        </div>
       </div>
       <div className="student-header-actions">
         <button className="student-icon-btn" aria-label="Поиск">

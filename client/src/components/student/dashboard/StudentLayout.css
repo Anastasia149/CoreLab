@@ -15,10 +15,8 @@
   .student-layout {
     grid-template-columns: 1fr;
   }
-  
+
   .student-sidebar {
-    position: sticky;
-    top: 0;
-    display: none;
+    display: block;
   }
 }

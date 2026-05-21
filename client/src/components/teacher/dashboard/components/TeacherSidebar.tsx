@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon } from '@iconify/react';
 import './TeacherSidebar.css';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { useSidebarDrawer } from '../../../../context/SidebarDrawerContext';
 
 const primary = [
   { icon: 'hugeicons:menu-square', label: 'Главная', tab: 'dashboard' },
@@ -20,7 +21,10 @@ const TeacherSidebar: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const activeTab = (location.pathname.startsWith('/teacher/course') || location.pathname.startsWith('/teacher/lesson') || location.pathname === '/teacher/courses' || location.pathname === '/teacher/create-course') ? 'courses' : searchParams.get('tab') || 'dashboard';
+  const { isOpen, close } = useSidebarDrawer();
+
   const setTab = (tab: string) => {
+    close();
     if (tab === 'courses') {
       navigate('/teacher/courses');
     } else {
@@ -28,8 +32,14 @@ const TeacherSidebar: React.FC = () => {
     }
   };
   return (
-    <aside className="teacher-sidebar">
-      <div className="teacher-brand" onClick={() => navigate('/')}>
+    <aside className={`teacher-sidebar ${isOpen ? 'dashboard-sidebar--open' : ''}`}>
+      <div
+        className="teacher-brand"
+        onClick={() => {
+          close();
+          navigate('/');
+        }}
+      >
         <Icon icon="icomoon-free:book" className="teacher-brand-icon" />
         <div className="teacher-brand-text">CoreLab</div>
       </div>

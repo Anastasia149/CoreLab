@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon } from '@iconify/react';
 import './StudentSidebar.css';
 import { NavLink } from 'react-router-dom';
+import { useSidebarDrawer } from '../../../../context/SidebarDrawerContext';
 
 const primary = [
   { icon: 'hugeicons:menu-square', label: 'Главная', path: '/student' },
@@ -21,9 +22,11 @@ const other = [
 ];
 
 const StudentSidebar: React.FC = () => {
+  const { isOpen, close } = useSidebarDrawer();
+
   return (
-    <aside className="student-sidebar">
-      <NavLink to="/" className="student-brand">
+    <aside className={`student-sidebar ${isOpen ? 'dashboard-sidebar--open' : ''}`}>
+      <NavLink to="/" className="student-brand" onClick={close}>
         <Icon icon="icomoon-free:book" className="student-brand-icon" />
         <div className="student-brand-text">CoreLab</div>
       </NavLink>
@@ -35,6 +38,7 @@ const StudentSidebar: React.FC = () => {
             className={({ isActive }) => `student-nav-item ${isActive ? 'active' : ''}`}
             key={it.label}
             end={it.path === '/student'}
+            onClick={close}
           >
             <Icon icon={it.icon} />
             <span>{it.label}</span>
@@ -48,6 +52,7 @@ const StudentSidebar: React.FC = () => {
             to={it.path}
             className={({ isActive }) => `student-nav-item ${isActive ? 'active' : ''}`}
             key={it.label}
+            onClick={close}
           >
             <Icon icon={it.icon} />
             <span>{it.label}</span>
@@ -61,6 +66,7 @@ const StudentSidebar: React.FC = () => {
             to={it.path}
             className={({ isActive }) => `student-nav-item ${isActive ? 'active' : ''}`}
             key={it.label}
+            onClick={close}
           >
             <Icon icon={it.icon} />
             <span>{it.label}</span>

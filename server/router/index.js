@@ -10,6 +10,7 @@ const fileController = require('../controllers/file-controller');
 const lessonController = require('../controllers/lesson-controller');
 const submissionController = require('../controllers/submission-controller');
 const courseReviewController = require('../controllers/course-review-controller');
+const scheduleEventController = require('../controllers/schedule-event-controller');
 
 router.post('/registration', 
     body('name').isLength({min: 1, max: 20}),
@@ -70,5 +71,9 @@ router.get('/lessons/:lessonId/submissions', authMiddleware, submissionControlle
 router.get('/lessons/:lessonId/my-submission', authMiddleware, submissionController.getStudentSubmission);
 router.delete('/lessons/:lessonId/my-submission', authMiddleware, submissionController.deleteMySubmission);
 router.patch('/submissions/:submissionId/review', authMiddleware, submissionController.updateReviewStatus);
+
+router.get('/schedule/events', authMiddleware, scheduleEventController.listMine);
+router.post('/schedule/events', authMiddleware, scheduleEventController.create);
+router.post('/schedule/events/import', authMiddleware, scheduleEventController.importLocal);
 
 module.exports = router;

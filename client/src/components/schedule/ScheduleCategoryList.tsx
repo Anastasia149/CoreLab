@@ -13,7 +13,9 @@ const ScheduleCategoryList: React.FC<Props> = ({ courses, events }) => {
   const countByCourse = useMemo(() => {
     const map = new Map<number, number>();
     for (const ev of events) {
-      map.set(ev.courseId, (map.get(ev.courseId) ?? 0) + 1);
+      const courseId = Number(ev.courseId);
+      if (!Number.isFinite(courseId)) continue;
+      map.set(courseId, (map.get(courseId) ?? 0) + 1);
     }
     return map;
   }, [events]);
@@ -35,7 +37,9 @@ const ScheduleCategoryList: React.FC<Props> = ({ courses, events }) => {
                 aria-hidden
               />
               <span className="schedule-category-name">{course.title}</span>
-              <span className="schedule-category-count">{countByCourse.get(course.id) ?? 0}</span>
+              <span className="schedule-category-count">
+                {countByCourse.get(Number(course.id)) ?? 0}
+              </span>
             </div>
           ))
         )}

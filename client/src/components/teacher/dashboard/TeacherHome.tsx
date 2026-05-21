@@ -10,6 +10,7 @@ import { ICourse } from '../../../models/ICourse';
 import ScheduleHome from '../schedule/ScheduleHome';
 import '../courses/TeacherCourses.css';
 import './TeacherHome.css';
+import './TeacherLayout.css';
 import illustration from '../../home/pictures/Online learning-bro.svg';
 import { formatCoursePriceDisplay } from '../../../utils/coursePrice';
 import { ThemeSettingsSection } from '../../common/ThemeSettingsSection';

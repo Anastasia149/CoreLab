@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react';
 import { Context } from '../../index';
 import ScheduleEventCard from './ScheduleEventCard';
 import { ScheduleEvent } from '../../types/scheduleEvent';
-import { loadScheduleEvents } from '../../utils/scheduleEventsStorage';
+import { fetchScheduleEvents } from '../../utils/scheduleEventsStorage';
 import {
   findEventForHour,
   formatScheduleHour,
@@ -24,7 +24,7 @@ type Props = {
 const DashboardSchedule: React.FC<Props> = observer(({ titleClassName, schedulePath }) => {
   const { store } = useContext(Context);
   const navigate = useNavigate();
-  const userId = store.user?.id;
+  const userId = store.user?.id != null ? String(store.user.id) : '';
   const [events, setEvents] = useState<ScheduleEvent[]>([]);
 
   const todayKey = toDateKey(new Date());
@@ -37,7 +37,10 @@ const DashboardSchedule: React.FC<Props> = observer(({ titleClassName, scheduleP
   useEffect(() => {
     if (!userId) return;
 
-    const reload = () => setEvents(loadScheduleEvents(userId));
+    const reload = async () => {
+      const list = await fetchScheduleEvents(userId);
+      setEvents(list);
+    };
 
     reload();
     window.addEventListener('schedule-events-updated', reload);
@@ -55,7 +58,22 @@ const DashboardSchedule: React.FC<Props> = observer(({ titleClassName, scheduleP
     <div className="dashboard-schedule">
       <div className={titleClassName}>Моё расписание</div>
 
-      <div className="schedule-grid-wrap" style={{ height: gridHeight }}>
+      <div className="schedule-grid-wrap" style={{ height: `${gridHeight}px` }}>
+        <div className="dashboard-schedule-events">
+          {todayEvents.map((ev) => {
+            const { top, height } = getEventDashboardPositionPx(ev.startTime, ev.endTime);
+            return (
+              <ScheduleEventCard
+                key={ev.id}
+                event={ev}
+                topPx={top}
+                heightPx={height}
+                variant="dashboard"
+              />
+            );
+          })}
+        </div>
+
         <div className="schedule-grid">
           {scheduleHours.map((hour) => {
             const covered = findEventForHour(hour, todayEvents) != null;
@@ -76,21 +94,6 @@ const DashboardSchedule: React.FC<Props> = observer(({ titleClassName, scheduleP
                   )}
                 </div>
               </div>
-            );
-          })}
-        </div>
-
-        <div className="dashboard-schedule-events">
-          {todayEvents.map((ev) => {
-            const { top, height } = getEventDashboardPositionPx(ev.startTime, ev.endTime);
-            return (
-              <ScheduleEventCard
-                key={ev.id}
-                event={ev}
-                topPx={top}
-                heightPx={height}
-                variant="dashboard"
-              />
             );
           })}
         </div>

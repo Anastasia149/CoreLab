@@ -1,0 +1,108 @@
+.dashboard-sidebar-backdrop {
+  display: none;
+}
+
+body.dashboard-sidebar-open {
+  overflow: hidden;
+}
+
+@media (max-width: 980px) {
+  .student-layout,
+  .teacher-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .student-layout > .student-sidebar,
+  .student-layout > .student-content,
+  .teacher-layout > .teacher-sidebar,
+  .teacher-layout > .teacher-content {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .dashboard-sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    border: none;
+    padding: 0;
+    margin: 0;
+    background: rgba(15, 23, 42, 0.45);
+    cursor: pointer;
+  }
+
+  .student-sidebar:not(.dashboard-sidebar--open),
+  .teacher-sidebar:not(.dashboard-sidebar--open) {
+    pointer-events: none;
+  }
+
+  .student-sidebar,
+  .teacher-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1200;
+    width: min(280px, 85vw);
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: none;
+  }
+
+  .student-sidebar.dashboard-sidebar--open,
+  .teacher-sidebar.dashboard-sidebar--open {
+    transform: translateX(0);
+    box-shadow: 8px 0 24px rgba(15, 23, 42, 0.18);
+  }
+
+  .student-header-menu-btn,
+  .teacher-header-menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    margin-right: 4px;
+    padding: 0;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+
+  .student-header-menu-btn:hover,
+  .teacher-header-menu-btn:hover {
+    background: var(--bg-surface-muted);
+  }
+
+  .student-header-menu-btn svg,
+  .teacher-header-menu-btn svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .student-header-title,
+  .teacher-header-title {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .student-header-title-text,
+  .teacher-header-title-text {
+    min-width: 0;
+  }
+}
+
+@media (min-width: 981px) {
+  .student-header-menu-btn,
+  .teacher-header-menu-btn {
+    display: none;
+  }
+}

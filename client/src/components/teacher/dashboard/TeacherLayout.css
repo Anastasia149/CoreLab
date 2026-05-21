@@ -15,10 +15,8 @@
   .teacher-layout {
     grid-template-columns: 1fr;
   }
-  
+
   .teacher-sidebar {
-    position: sticky;
-    top: 0;
-    display: none;
+    display: block;
   }
 }

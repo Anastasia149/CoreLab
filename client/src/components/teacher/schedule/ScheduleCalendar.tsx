@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Icon } from '@iconify/react';
+import { toDateKey } from '../../../utils/scheduleHours';
 import './ScheduleCalendar.css';
 
 const months = [
@@ -9,7 +10,7 @@ const months = [
 const days = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
 
 function ymd(d: Date) {
-  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+  return toDateKey(d);
 }
 
 function alignToMonday(date: Date) {

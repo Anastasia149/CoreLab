@@ -5,6 +5,7 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Context } from '../../../../index';
 import { observer } from 'mobx-react-lite';
 import NotificationsBell from '../../../common/NotificationsBell';
+import { useSidebarDrawer } from '../../../../context/SidebarDrawerContext';
 
 type Props = {
   name?: string;
@@ -36,6 +37,7 @@ const TeacherHeader = observer(({ name }: Props) => {
   };
 
   const title = getTitle();
+  const { isOpen, toggle: toggleSidebar } = useSidebarDrawer();
   const isHome = title === 'Главная';
   const avatarUrl = store.user?.avatar;
 
@@ -51,10 +53,21 @@ const TeacherHeader = observer(({ name }: Props) => {
   return (
     <div className="teacher-header">
       <div className="teacher-header-title">
-        <div className="teacher-hello">{title}</div>
-        {isHome && userDisplayName && (
-          <div className="teacher-hello-sub">Добро пожаловать, {userDisplayName}!</div>
-        )}
+        <button
+          type="button"
+          className="teacher-header-menu-btn"
+          aria-label="Открыть меню"
+          aria-expanded={isOpen}
+          onClick={toggleSidebar}
+        >
+          <Icon icon="mdi:menu" aria-hidden />
+        </button>
+        <div className="teacher-header-title-text">
+          <div className="teacher-hello">{title}</div>
+          {isHome && userDisplayName && (
+            <div className="teacher-hello-sub">Добро пожаловать, {userDisplayName}!</div>
+          )}
+        </div>
       </div>
       <div className="teacher-header-actions">
         <button className="teacher-icon-btn" aria-label="Поиск">

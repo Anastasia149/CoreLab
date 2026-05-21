@@ -59,9 +59,13 @@
 .schedule-timeline {
   position: relative;
   margin-top: 8px;
+  overflow: visible;
+  isolation: isolate;
 }
 
 .schedule-timeline-row {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: 56px 1fr;
   column-gap: 16px;
@@ -99,9 +103,14 @@
   left: 72px;
   right: 0;
   bottom: 0;
+  z-index: 10;
   pointer-events: none;
+  overflow: visible;
 }
 
 .schedule-timeline-events .schedule-event-card {
   pointer-events: auto;
+  left: 0;
+  right: 8px;
+  max-width: none;
 }

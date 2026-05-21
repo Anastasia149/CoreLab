@@ -1,9 +1,22 @@
 .schedule-home {
   display: grid;
-  grid-template-columns: 1fr 370px;
+  grid-template-columns: minmax(0, 1fr) 370px;
   gap: 24px;
+  align-items: start;
 }
 
 .schedule-sidebar {
   display: block;
+  min-width: 0;
+}
+
+.schedule-home > .schedule-view {
+  min-width: 0;
+}
+
+@media (max-width: 980px) {
+  .schedule-home {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 }

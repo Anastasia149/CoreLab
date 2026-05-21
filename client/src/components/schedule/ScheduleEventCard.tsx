@@ -27,12 +27,23 @@ const ScheduleEventCard: React.FC<Props> = ({
 }) => {
   const isDashboard = variant === 'dashboard';
 
-  const positionStyle =
-    topPx != null && heightPx != null
-      ? { top: `${topPx}px`, height: `${heightPx}px` }
-      : layout === 'overlay' && topPercent != null && heightPercent != null
-        ? { top: `${topPercent}%`, height: `${heightPercent}%` }
-        : {};
+  const hasPx =
+    topPx != null &&
+    heightPx != null &&
+    Number.isFinite(topPx) &&
+    Number.isFinite(heightPx);
+  const hasPercent =
+    layout === 'overlay' &&
+    topPercent != null &&
+    heightPercent != null &&
+    Number.isFinite(topPercent) &&
+    Number.isFinite(heightPercent);
+
+  const positionStyle = hasPx
+    ? { top: `${topPx}px`, height: `${Math.max(heightPx, 44)}px` }
+    : hasPercent
+      ? { top: `${topPercent}%`, height: `${Math.max(heightPercent, 4)}%` }
+      : { top: 0, height: '48px' };
 
   const className = [
     'schedule-event-card',
