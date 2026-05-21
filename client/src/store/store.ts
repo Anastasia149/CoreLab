@@ -95,6 +95,16 @@ export default class Store {
         }
     }
 
+    async refreshMyCourses(): Promise<void> {
+        if (!this.isAuth || this.user?.role !== 'student') return;
+        try {
+            const response = await $api.get<ICourse[]>('/courses/my');
+            this.setUser({ ...this.user, courses: response.data });
+        } catch (e) {
+            console.log('FULL ERROR:', e);
+        }
+    }
+
     async createLesson(
         courseId: string,
         moduleId: string | null,

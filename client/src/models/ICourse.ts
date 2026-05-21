@@ -10,4 +10,8 @@ export interface ICourse {
     author_avatar?: string | null;
     students_count?: number;
     lessons_count?: number;
+    /** Задания и тесты, по которым считается прогресс */
+    gradable_lessons_count?: number;
+    /** Уроки с проверкой «Сдал» */
+    completed_lessons?: number;
 }

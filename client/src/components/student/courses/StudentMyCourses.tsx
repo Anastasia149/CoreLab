@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../../../index';
 import { Link } from 'react-router-dom';
@@ -6,9 +6,14 @@ import { Icon } from '@iconify/react';
 import '../../teacher/courses/TeacherCourses.css';
 import './StudentMyCourses.css';
 import CourseMetaIcons from '../../common/CourseMetaIcons';
+import { getCourseProgressTotals } from '../../../utils/courseProgress';
 
 const StudentMyCourses: React.FC = () => {
   const { store } = useContext(Context);
+
+  useEffect(() => {
+    store.refreshMyCourses();
+  }, [store]);
 
   return (
     <div className="student-my-courses-page">
@@ -17,9 +22,7 @@ const StudentMyCourses: React.FC = () => {
         {Array.isArray((store.user as any)?.courses) && (store.user as any).courses.length > 0 ? (
           <div className="student-courses-grid">
             {(store.user as any).courses.map((course: any) => {
-              const totalLessons = course.lessons_count || 0;
-              const completedLessons = course.completed_lessons || 0;
-              const progressPercent = totalLessons ? Math.round((completedLessons / totalLessons) * 100) : 0;
+              const { completed, total, percent } = getCourseProgressTotals(course);
 
               return (
                 <Link
@@ -42,11 +45,11 @@ const StudentMyCourses: React.FC = () => {
                       </div>
                       <div className="student-course-progress">
                         <div className="progress-bar">
-                          <div className="progress-fill" style={{ width: `${progressPercent}%` }}></div>
+                          <div className="progress-fill" style={{ width: `${percent}%` }}></div>
                         </div>
                         <span className="progress-text">
-                          {totalLessons > 0
-                            ? `${progressPercent}% пройдено`
+                          {total > 0
+                            ? `${percent}% пройдено`
                             : '0% пройдено'}
                         </span>
                       </div>

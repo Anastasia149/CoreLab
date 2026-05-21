@@ -195,8 +195,28 @@ class CourseService {
         const query = `
             SELECT 
                 c.*, 
-                u.name as author_name,
-                (SELECT COUNT(l.id) FROM lessons l WHERE l.course_id = c.id) as lessons_count
+                u.name AS author_name,
+                u.avatar AS author_avatar,
+                (
+                    SELECT COUNT(l.id)::int
+                    FROM lessons l
+                    WHERE l.course_id = c.id
+                ) AS lessons_count,
+                (
+                    SELECT COUNT(l.id)::int
+                    FROM lessons l
+                    WHERE l.course_id = c.id
+                      AND l.type IN ('assignment', 'test')
+                ) AS gradable_lessons_count,
+                (
+                    SELECT COUNT(DISTINCT l.id)::int
+                    FROM lessons l
+                    INNER JOIN submissions s
+                        ON s.lesson_id = l.id
+                       AND s.student_id = $1
+                    WHERE l.course_id = c.id
+                      AND s.review_status = 'passed'
+                ) AS completed_lessons
             FROM student_courses sc
             JOIN courses c ON sc.course_id = c.id
             JOIN users u ON c.author_id = u.id

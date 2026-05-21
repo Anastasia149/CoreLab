@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../teacher/courses/TeacherCourses.css';
 import '../../student/courses/StudentMyCourses.css';
@@ -8,10 +8,15 @@ import { Context } from '../../../index';
 import StudentCalendar from './components/StudentCalendar';
 import StudentSchedule from './components/StudentSchedule';
 import illustration from '../../home/pictures/Online learning-bro.svg';
+import { getCourseProgressTotals } from '../../../utils/courseProgress';
 
 const StudentHome: React.FC = () => {
   const { store } = useContext(Context);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    store.refreshMyCourses();
+  }, [store]);
 
   return (
     <div className="student-grid">
@@ -42,9 +47,7 @@ const StudentHome: React.FC = () => {
           {Array.isArray((store.user as any)?.courses) && (store.user as any).courses.length > 0 ? (
             <div className="teacher-courses-grid-home">
               {(store.user as any).courses.slice(0, 2).map((course: any) => {
-                const totalLessons = course.lessons_count || 0;
-                const completedLessons = course.completed_lessons || 0;
-                const progressPercent = totalLessons ? Math.round((completedLessons / totalLessons) * 100) : 0;
+                const { completed, total, percent } = getCourseProgressTotals(course);
 
                 return (
                   <Link to={`/student/my-courses/${course.id}`} key={course.id} className="student-course-card-link">
@@ -55,9 +58,11 @@ const StudentHome: React.FC = () => {
                         <div className="course-card-description">{course.description}</div>
                         <div className="student-course-progress">
                           <div className="progress-bar">
-                            <div className="progress-fill" style={{ width: `${progressPercent}%` }}></div>
+                            <div className="progress-fill" style={{ width: `${percent}%` }}></div>
                           </div>
-                          <span className="progress-text">{`${completedLessons}/${totalLessons} занятий`}</span>
+                          <span className="progress-text">
+                            {total > 0 ? `${completed}/${total} заданий` : '0% пройдено'}
+                          </span>
                         </div>
                       </div>
                     </div>
