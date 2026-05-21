@@ -9,6 +9,7 @@ import './TeacherCourses.css';
 import { Icon } from '@iconify/react';
 
 import { useNavigate } from 'react-router-dom';
+import { formatCoursePriceDisplay } from '../../../utils/coursePrice';
 
 const TeacherCourses: React.FC = () => {
   const { store } = useContext(Context);
@@ -41,7 +42,7 @@ const TeacherCourses: React.FC = () => {
                     <div className="course-card-description">{course.description}</div>
                     <div className="course-card-details">
                       <div className={`course-card-status ${course.status}`}>{course.status === 'draft' ? 'Черновик' : 'Опубликован'}</div>
-                      <div className="course-card-price">{course.price > 0 ? `${course.price} BYN` : 'Бесплатно'}</div>
+                      <div className="course-card-price">{formatCoursePriceDisplay(course.price)}</div>
                     </div>
                   </div>
                 </div>

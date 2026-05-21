@@ -1,14 +1,28 @@
 const pool = require('../db');
 const mailService = require('./mail-service');
 const UserModel = require('../models/user-model');
+const ApiError = require('../exceptions/api-error');
+
+function normalizeCoursePrice(price) {
+    const n = Number(price);
+    if (Number.isNaN(n)) {
+        throw ApiError.BadRequest('Некорректная цена курса');
+    }
+    if (n < 0) {
+        throw ApiError.BadRequest('Цена не может быть отрицательной');
+    }
+    return n;
+}
 
 class CourseService {
     async createCourse(title, description, author_id, status, image_url, price) {
+        const safePrice = normalizeCoursePrice(price ?? 0);
+
         const newCourse = await pool.query(
             `INSERT INTO courses (title, description, author_id, status, image_url, price) 
              VALUES ($1, $2, $3, $4, $5, $6) 
              RETURNING *`,
-            [title, description, author_id, status, image_url, price]
+            [title, description, author_id, status, image_url, safePrice]
         );
         return newCourse.rows[0];
     }
@@ -123,9 +137,11 @@ class CourseService {
     }
 
     async updateCourse(id, title, description, status, image_url, price) {
+        const safePrice = normalizeCoursePrice(price ?? 0);
+
         const updatedCourse = await pool.query(
             `UPDATE courses SET title = $1, description = $2, status = $3, image_url = $4, price = $5 WHERE id = $6 RETURNING *`,
-            [title, description, status, image_url, price, id]
+            [title, description, status, image_url, safePrice, id]
         );
         return updatedCourse.rows[0];
     }

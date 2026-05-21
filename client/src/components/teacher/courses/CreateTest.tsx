@@ -9,7 +9,7 @@ import { Module } from '../../../models/ICourseDetail';
 import $api from '../../../http';
 import './CreateTest.css';
 import { LessonDeadlineField } from './LessonDeadlineField';
-import { deadlineLocalToIso } from '../../../utils/lessonDeadline';
+import { deadlineLocalToIso, validateDeadlineLocal } from '../../../utils/lessonDeadline';
 
 interface Option {
   id: string;
@@ -157,6 +157,12 @@ const CreateTest: React.FC = () => {
     const isValid = questions.every(q => q.text && q.options.some(o => o.isCorrect) && q.options.every(o => o.text));
     if (!isValid) {
       alert('Пожалуйста, заполните все вопросы и отметьте правильные ответы.');
+      return;
+    }
+
+    const deadlineError = validateDeadlineLocal(deadline);
+    if (deadlineError) {
+      alert(deadlineError);
       return;
     }
 

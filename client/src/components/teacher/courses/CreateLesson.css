@@ -399,6 +399,17 @@
   margin-bottom: 4px;
 }
 
+.lesson-deadline-input--error {
+  border-color: #f87171;
+  box-shadow: 0 0 0 1px #fecaca;
+}
+
+.lesson-deadline-error {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: #b91c1c;
+}
+
 .submission-overdue-pill {
   font-size: 12px;
   font-weight: 700;

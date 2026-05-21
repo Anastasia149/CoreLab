@@ -8,6 +8,7 @@ import '../dashboard/TeacherLayout.css';
 import './CreateCourse.css';
 
 import { useNavigate } from 'react-router-dom';
+import { parseCoursePrice, validateCoursePrice } from '../../../utils/coursePrice';
 
 const CreateCourse: React.FC = () => {
   const { store } = useContext(Context);
@@ -68,7 +69,14 @@ const CreateCourse: React.FC = () => {
       return;
     }
 
-    await store.createCourse(fields.title, fields.description, fields.status, fields.image, fields.price);
+    const priceError = validateCoursePrice(fields.price);
+    if (priceError) {
+      alert(priceError);
+      return;
+    }
+
+    const price = parseCoursePrice(fields.price);
+    await store.createCourse(fields.title, fields.description, fields.status, fields.image, price);
     navigate('/teacher/courses');
   };
 
@@ -98,13 +106,19 @@ const CreateCourse: React.FC = () => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="price">Цена</label>
+              <label htmlFor="price">Цена (Б)</label>
               <input
                 type="number"
                 id="price"
+                min={0}
+                step={0.01}
                 value={fields.price}
-                onChange={handleChange('price')}
+                onChange={(e) => {
+                  const next = e.target.value === '' ? 0 : parseFloat(e.target.value);
+                  setFieldValue('price', Number.isNaN(next) ? 0 : Math.max(0, next));
+                }}
               />
+              <p className="form-hint">0 — бесплатный курс. Отрицательная цена недоступна.</p>
             </div>
             <div className="form-group">
               <label htmlFor="status">Статус</label>

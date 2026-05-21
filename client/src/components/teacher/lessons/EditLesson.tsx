@@ -16,6 +16,7 @@ import {
   deadlineLocalToIso,
   lessonTypeHasDeadline,
   toDatetimeLocalValue,
+  validateDeadlineLocal,
 } from '../../../utils/lessonDeadline';
 
 interface Option {
@@ -53,6 +54,7 @@ const EditLesson: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newModuleName, setNewModuleName] = useState('');
   const [courseId, setCourseId] = useState<string | null>(null);
+  const [initialDeadlineLocal, setInitialDeadlineLocal] = useState('');
 
   // Test specific states
   const [testQuestions, setTestQuestions] = useState<Question[]>(
@@ -88,6 +90,7 @@ const EditLesson: React.FC = () => {
             file: null,
             deadline: toDatetimeLocalValue(data.deadline),
           });
+          setInitialDeadlineLocal(toDatetimeLocalValue(data.deadline));
           setImagePreview(data.image_url || null);
           setMaterials(data.materials || []);
           setCourseId(data.course_id.toString());
@@ -334,6 +337,14 @@ const EditLesson: React.FC = () => {
         formData.append('file', fields.image);
         const response = await $api.post<{ url: string }>('/upload', formData);
         finalImageUrl = response.data.url;
+      }
+    }
+
+    if (lessonTypeHasDeadline(fields.type)) {
+      const deadlineError = validateDeadlineLocal(fields.deadline, initialDeadlineLocal);
+      if (deadlineError) {
+        alert(deadlineError);
+        return;
       }
     }
 

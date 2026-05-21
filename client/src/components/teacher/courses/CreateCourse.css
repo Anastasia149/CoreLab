@@ -40,6 +40,13 @@
   resize: vertical;
 }
 
+.form-hint {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.45;
+}
+
 .file-upload-wrapper {
   display: flex;
   align-items: center;

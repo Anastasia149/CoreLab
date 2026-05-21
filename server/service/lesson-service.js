@@ -1,9 +1,30 @@
 const pool = require('../db');
 const fileService = require('./file-service');
 const { decodeMultipartFilename } = require('../utils/multipart-text');
+const ApiError = require('../exceptions/api-error');
+
+function assertDeadlineNotInPast(deadline, existingDeadline = null) {
+    if (deadline == null || deadline === '') return;
+
+    const next = new Date(deadline).getTime();
+    if (Number.isNaN(next)) {
+        throw ApiError.BadRequest('Некорректный срок сдачи');
+    }
+
+    if (existingDeadline != null && existingDeadline !== '') {
+        const prev = new Date(existingDeadline).getTime();
+        if (!Number.isNaN(prev) && prev === next) return;
+    }
+
+    if (next < Date.now()) {
+        throw ApiError.BadRequest('Срок сдачи не может быть раньше текущего времени');
+    }
+}
 
 class LessonService {
     async createLesson(courseId, moduleId, title, content, imageUrl, type = 'lecture', deadline = null) {
+        assertDeadlineNotInPast(deadline);
+
         const newLesson = await pool.query(
             `INSERT INTO lessons (course_id, module_id, title, content, image_url, type, deadline) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
             [courseId, moduleId, title, content, imageUrl, type, deadline]
@@ -13,6 +34,10 @@ class LessonService {
 
     async updateLesson(lessonId, title, content, moduleId, imageUrl, type = 'lecture', deadline = null) {
         console.log("lesson-service.updateLesson called with:", { lessonId, title, content, moduleId, imageUrl, type, deadline });
+
+        const existing = await pool.query(`SELECT deadline FROM lessons WHERE id = $1`, [lessonId]);
+        assertDeadlineNotInPast(deadline, existing.rows[0]?.deadline);
+
         const updatedLesson = await pool.query(
             `UPDATE lessons SET title = $1, content = $2, module_id = $3, image_url = $4, type = $5, deadline = $6 WHERE id = $7 RETURNING *`,
             [title, content, moduleId, imageUrl, type, deadline, lessonId]

@@ -10,7 +10,11 @@ import $api from '../../../http';
 import '../dashboard/TeacherLayout.css';
 import './CreateLesson.css';
 import { LessonDeadlineField } from './LessonDeadlineField';
-import { deadlineLocalToIso, lessonTypeHasDeadline } from '../../../utils/lessonDeadline';
+import {
+  deadlineLocalToIso,
+  lessonTypeHasDeadline,
+  validateDeadlineLocal,
+} from '../../../utils/lessonDeadline';
 
 const CreateLesson: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -141,6 +145,14 @@ const CreateLesson: React.FC = () => {
       formData.append('file', fields.image);
       const response = await $api.post<{ url: string }>('/upload', formData);
       imageUrl = response.data.url;
+    }
+
+    if (lessonTypeHasDeadline(fields.type)) {
+      const deadlineError = validateDeadlineLocal(fields.deadline);
+      if (deadlineError) {
+        alert(deadlineError);
+        return;
+      }
     }
 
     const moduleId = fields.moduleId === '' ? null : fields.moduleId;

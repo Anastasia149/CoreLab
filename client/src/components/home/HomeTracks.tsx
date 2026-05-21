@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { ICourse } from '../../models/ICourse';
 import { useNavigate } from 'react-router-dom';
 import './HomeTracks.css';
+import { formatCoursePriceDisplay } from '../../utils/coursePrice';
 
 const HomeTracks: React.FC = () => {
   const { store } = useContext(Context);
@@ -14,11 +15,7 @@ const HomeTracks: React.FC = () => {
     store.getAllCourses();
   }, [store]);
 
-  const formatPrice = (price: number | string) => {
-    const numPrice = typeof price === 'string' ? parseFloat(price) : price;
-    if (!numPrice || numPrice === 0) return 'Бесплатно';
-    return `${numPrice.toLocaleString('ru-RU')} BYN`;
-  };
+  const formatPrice = (price: number | string) => formatCoursePriceDisplay(price);
 
   const formatStudents = (count?: number) => {
     if (!count) return '0';

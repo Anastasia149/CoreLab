@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import './StudentCoursesSearch.css';
 import { useNavigate } from 'react-router-dom';
+import { formatCoursePriceDisplay } from '../../../utils/coursePrice';
 
 const categories = [
   'Все',
@@ -198,7 +199,7 @@ const StudentCoursesSearch: React.FC = () => {
                       <div className="author-icon"></div>
                       <span>{course.author_name || 'Инструктор'}</span>
                       <span className="student-course-price">
-                        {course.price && course.price > 0 ? `${course.price} BYN` : 'Бесплатно'}
+                        {formatCoursePriceDisplay(course.price)}
                       </span>
                     </div>
 

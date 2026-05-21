@@ -68,6 +68,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 12px;
+  align-items: stretch;
 }
 
 .teacher-courses-grid-home .course-card-image {
@@ -80,14 +81,15 @@
 
 .teacher-courses-grid-home .course-card-title {
   font-size: 15px;
-  margin-bottom: 6px;
+  min-height: 2.7em;
 }
 
 .teacher-courses-grid-home .course-card-description {
   font-size: 13px;
-  margin-bottom: 10px;
-  min-height: 34px;
+  line-height: 1.43;
+  min-height: 2.86em;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 .teacher-courses-grid-home .course-card-status {

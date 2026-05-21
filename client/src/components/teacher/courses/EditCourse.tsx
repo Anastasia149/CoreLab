@@ -7,6 +7,7 @@ import TeacherHeader from '../dashboard/components/TeacherHeader';
 import { useFormFields } from '../../../hooks/useFormFields';
 import '../dashboard/TeacherLayout.css';
 import './CreateCourse.css';
+import { parseCoursePrice, validateCoursePrice } from '../../../utils/coursePrice';
 
 const EditCourse: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -77,7 +78,14 @@ const EditCourse: React.FC = () => {
       return;
     }
 
-    await store.updateCourse(Number(id), fields.title, fields.description, fields.status, fields.image, fields.price, imagePreview);
+    const priceError = validateCoursePrice(fields.price);
+    if (priceError) {
+      alert(priceError);
+      return;
+    }
+
+    const price = parseCoursePrice(fields.price);
+    await store.updateCourse(Number(id), fields.title, fields.description, fields.status, fields.image, price, imagePreview);
     navigate(`/teacher/course/${id}`);
   };
 
@@ -107,13 +115,19 @@ const EditCourse: React.FC = () => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="price">Цена</label>
+              <label htmlFor="price">Цена (Б)</label>
               <input
                 type="number"
                 id="price"
+                min={0}
+                step={0.01}
                 value={fields.price}
-                onChange={handleChange('price')}
+                onChange={(e) => {
+                  const next = e.target.value === '' ? 0 : parseFloat(e.target.value);
+                  setFieldValue('price', Number.isNaN(next) ? 0 : Math.max(0, next));
+                }}
               />
+              <p className="form-hint">0 — бесплатный курс. Отрицательная цена недоступна.</p>
             </div>
             <div className="form-group">
               <label htmlFor="status">Статус</label>

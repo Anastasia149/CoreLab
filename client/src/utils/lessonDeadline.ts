@@ -22,6 +22,43 @@ export function deadlineLocalToIso(localValue: string): string | null {
   return d.toISOString();
 }
 
+/** Минимальное значение для input[type="datetime-local"] — текущий момент. */
+export function getMinDatetimeLocalValue(): string {
+  return toDatetimeLocalValue(new Date().toISOString());
+}
+
+export function isDeadlineLocalInPast(localValue: string): boolean {
+  const iso = deadlineLocalToIso(localValue);
+  if (!iso) return false;
+  return new Date(iso).getTime() < Date.now();
+}
+
+/**
+ * Проверка перед сохранением. null — ок, строка — текст ошибки.
+ * originalLocalValue — при редактировании: если срок не меняли, прошедшая дата допустима.
+ */
+export function validateDeadlineLocal(
+  localValue: string,
+  originalLocalValue?: string
+): string | null {
+  const trimmed = localValue.trim();
+  if (!trimmed) return null;
+
+  if (originalLocalValue && trimmed === originalLocalValue.trim()) {
+    return null;
+  }
+
+  if (!deadlineLocalToIso(trimmed)) {
+    return 'Укажите корректную дату и время срока сдачи.';
+  }
+
+  if (isDeadlineLocalInPast(trimmed)) {
+    return 'Срок сдачи не может быть раньше текущего времени.';
+  }
+
+  return null;
+}
+
 export function getDeadlineStatusText(deadline: string | null | undefined): string {
   if (!deadline) return DEADLINE_NOT_ASSIGNED_LABEL;
   const formatted = formatDeadline(deadline);
