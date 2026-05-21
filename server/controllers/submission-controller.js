@@ -39,6 +39,17 @@ class SubmissionController {
         }
     }
 
+    async getMyCourseGrades(req, res, next) {
+        try {
+            const { courseId } = req.params;
+            const studentId = req.user.id;
+            const grades = await submissionService.getStudentCourseGrades(courseId, studentId);
+            return res.json(grades);
+        } catch (e) {
+            next(e);
+        }
+    }
+
     async deleteMySubmission(req, res, next) {
         try {
             const { lessonId } = req.params;

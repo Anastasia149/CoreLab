@@ -238,53 +238,102 @@
 .student-course-card-info h3 {
   font-size: 1.125rem;
   font-weight: 600;
-  margin: 0 0 8px 0;
+  margin: 0 0 6px 0;
 }
 
-.student-course-rating {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: #f59e0b; /* amber-500 */
-  margin-bottom: 12px;
-}
-
-.student-course-author {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.student-course-card-description {
+  margin: 0 0 12px 0;
   font-size: 0.875rem;
-  color: var(--text-secondary); /* gray-500 */
-  margin-top: auto; /* Прижимает автора и цену к низу */
+  line-height: 1.45;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-height: 1.45em;
 }
 
-.student-course-author .author-icon,
-.student-course-author .author-avatar {
-  width: 24px;
-  height: 24px;
+.student-course-card-meta {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.student-course-meta-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.student-course-author-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+}
+
+.student-course-card-avatar {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-.student-course-author .author-icon {
+.student-course-card-meta .author-icon {
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--border-color);
   color: var(--text-secondary);
-  font-size: 14px;
+  font-size: 18px;
 }
 
-.student-course-author .author-avatar {
+.student-course-card-meta .author-avatar {
   object-fit: cover;
   background-color: var(--border-color);
 }
 
+.student-course-author-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.student-search-card-stars {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2px;
+  color: #f59e0b;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
 .student-course-price {
+  flex-shrink: 0;
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--accent); /* indigo-600 */
-  margin-left: auto;
+  color: var(--accent);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.student-search-card-stars svg {
+  display: block;
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
 }
 
 .student-course-card-link {

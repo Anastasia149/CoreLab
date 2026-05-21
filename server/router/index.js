@@ -9,6 +9,7 @@ const courseController = require('../controllers/course-controller');
 const fileController = require('../controllers/file-controller');
 const lessonController = require('../controllers/lesson-controller');
 const submissionController = require('../controllers/submission-controller');
+const courseReviewController = require('../controllers/course-review-controller');
 
 router.post('/registration', 
     body('name').isLength({min: 1, max: 20}),
@@ -38,13 +39,23 @@ router.put('/users/profile',
 router.delete('/users/account', authMiddleware, userController.deleteAccount);
 router.post('/courses', authMiddleware, courseController.createCourse);
 router.get('/courses', courseController.getAllPublishedCourses);
+router.get('/courses/my', authMiddleware, courseController.getStudentEnrollments);
+router.get('/courses/:courseId/my-grades', authMiddleware, submissionController.getMyCourseGrades);
+router.get('/courses/:courseId/reviews', courseReviewController.getCourseReviews);
+router.get('/courses/:courseId/my-review', authMiddleware, courseReviewController.getMyReview);
+router.put(
+    '/courses/:courseId/my-review',
+    authMiddleware,
+    body('rating').isInt({ min: 1, max: 5 }),
+    body('comment').optional({ nullable: true }).isString().isLength({ max: 2000 }),
+    courseReviewController.upsertMyReview
+);
 router.get('/courses/:id', courseController.getCourseById);
 router.put('/courses/:id', authMiddleware, courseController.updateCourse);
 router.delete('/courses/:id', authMiddleware, courseController.deleteCourse);
 router.get('/teacher/courses', authMiddleware, courseController.getTeacherCourses);
 router.get('/teacher/course/:id', authMiddleware, courseController.getCourseDetails);
 router.post('/courses/:courseId/enroll', authMiddleware, courseController.enrollStudentInCourse);
-router.get('/courses/my', authMiddleware, courseController.getStudentEnrollments);
 router.post('/courses/:courseId/modules', authMiddleware, courseController.createModule);
 router.post('/upload', authMiddleware, fileController.uploadFile);
 router.post('/lessons', authMiddleware, lessonController.createLesson);

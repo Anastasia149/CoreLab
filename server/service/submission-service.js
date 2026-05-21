@@ -84,6 +84,35 @@ class SubmissionService {
         return result.rowCount > 0;
     }
 
+    async getStudentCourseGrades(courseId, studentId) {
+        const enrollment = await pool.query(
+            `SELECT 1 FROM student_courses WHERE student_id = $1 AND course_id = $2`,
+            [studentId, courseId]
+        );
+        if (enrollment.rowCount === 0) {
+            throw ApiError.BadRequest('Вы не записаны на этот курс');
+        }
+
+        const { rows } = await pool.query(
+            `SELECT
+                l.id AS lesson_id,
+                l.title AS lesson_title,
+                l.type AS lesson_type,
+                s.id AS submission_id,
+                s.review_status,
+                s.created_at AS submitted_at,
+                (l.deadline IS NOT NULL AND s.created_at > l.deadline) AS is_overdue
+             FROM lessons l
+             LEFT JOIN submissions s
+                ON s.lesson_id = l.id AND s.student_id = $2
+             WHERE l.course_id = $1
+               AND l.type IN ('assignment', 'test')
+             ORDER BY l.id ASC`,
+            [courseId, studentId]
+        );
+        return rows;
+    }
+
     async updateReviewStatus(submissionId, teacherId, status) {
         const allowed = ['passed', 'failed'];
         if (!allowed.includes(status)) {

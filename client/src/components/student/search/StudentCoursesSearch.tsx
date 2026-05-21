@@ -206,31 +206,42 @@ const StudentCoursesSearch: React.FC = () => {
                   </div>
                   <div className="student-course-card-info">
                     <h3>{course.title}</h3>
-                    <div className="student-course-rating">
-                      <Icon icon="mdi:star" />
-                      <Icon icon="mdi:star" />
-                      <Icon icon="mdi:star" />
-                      <Icon icon="mdi:star" />
-                      <Icon icon="mdi:star-outline" />
-                    </div>
-                    <div className="student-course-author">
-                      {course.author_avatar ? (
-                        <img
-                          src={course.author_avatar}
-                          alt=""
-                          className="author-avatar"
-                        />
-                      ) : (
-                        <div className="author-icon" aria-hidden>
-                          <Icon icon="solar:user-linear" />
+                    <p className="student-course-card-description">
+                      {course.description || '\u00A0'}
+                    </p>
+                    <div className="student-course-card-meta">
+                      <div className="student-course-meta-left">
+                        <div className="student-course-author-row">
+                          {course.author_avatar ? (
+                            <img
+                              src={course.author_avatar}
+                              alt=""
+                              className="author-avatar student-course-card-avatar"
+                            />
+                          ) : (
+                            <div className="author-icon student-course-card-avatar" aria-hidden>
+                              <Icon icon="solar:user-linear" />
+                            </div>
+                          )}
+                          <span className="student-course-author-name">
+                            {course.author_name || 'Инструктор'}
+                          </span>
                         </div>
-                      )}
-                      <span>{course.author_name || 'Инструктор'}</span>
+                        <div
+                          className="student-search-card-stars"
+                          aria-label="Оценка курса 4 из 5"
+                        >
+                          <Icon icon="mdi:star" />
+                          <Icon icon="mdi:star" />
+                          <Icon icon="mdi:star" />
+                          <Icon icon="mdi:star" />
+                          <Icon icon="mdi:star-outline" />
+                        </div>
+                      </div>
                       <span className="student-course-price">
                         {formatCoursePriceDisplay(course.price)}
                       </span>
                     </div>
-
                   </div>
                 </div>
               </Link>

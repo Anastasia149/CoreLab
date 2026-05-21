@@ -5,6 +5,8 @@ import $api from "../http";
 import { AuthResponse } from '../models/response/AuthResponse';
 
 import { ICourse } from "../models/ICourse";
+import { ICourseGrade } from "../models/ICourseGrade";
+import { ICourseReview, ICourseReviewsResponse } from "../models/ICourseReview";
 import { ISearchDetails, Module, Material, Lesson } from "../models/ICourseDetail";
 
 export type AppTheme = 'light' | 'dark';
@@ -210,6 +212,53 @@ export default class Store {
             return response.data;
         } catch (e) {
             console.log("FULL ERROR:", e);
+        }
+    }
+
+    async getMyCourseGrades(courseId: number): Promise<ICourseGrade[]> {
+        try {
+            const response = await $api.get<ICourseGrade[]>(`/courses/${courseId}/my-grades`);
+            return response.data;
+        } catch (e) {
+            console.log("FULL ERROR:", e);
+            return [];
+        }
+    }
+
+    async getCourseReviews(courseId: number): Promise<ICourseReviewsResponse | null> {
+        try {
+            const response = await $api.get<ICourseReviewsResponse>(`/courses/${courseId}/reviews`);
+            return response.data;
+        } catch (e) {
+            console.log("FULL ERROR:", e);
+            return null;
+        }
+    }
+
+    async getMyCourseReview(courseId: number): Promise<ICourseReview | null> {
+        try {
+            const response = await $api.get<ICourseReview | null>(`/courses/${courseId}/my-review`);
+            return response.data;
+        } catch (e) {
+            console.log("FULL ERROR:", e);
+            return null;
+        }
+    }
+
+    async saveMyCourseReview(
+        courseId: number,
+        rating: number,
+        comment: string
+    ): Promise<ICourseReview | null> {
+        try {
+            const response = await $api.put<ICourseReview>(`/courses/${courseId}/my-review`, {
+                rating,
+                comment: comment.trim() || null,
+            });
+            return response.data;
+        } catch (e) {
+            console.log("FULL ERROR:", e);
+            throw e;
         }
     }
 
