@@ -60,7 +60,7 @@ const StudentCart: React.FC = () => {
           <div className="student-courses-grid">
             {cartCourses.map((course) => (
               <Link
-                to={`/student/search/${course.id}`}
+                to={`/student/billing?courseId=${course.id}`}
                 key={course.id}
                 className="student-course-card-link"
               >

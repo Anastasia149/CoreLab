@@ -1,0 +1,220 @@
+.student-billing-page {
+  padding: 24px;
+  max-width: 1200px;
+}
+
+.student-billing-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 32px;
+  align-items: start;
+}
+
+.student-billing-section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 20px;
+  color: var(--text-primary);
+}
+
+.student-billing-payment,
+.student-billing-summary {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.student-billing-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.billing-method-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  cursor: pointer;
+  background: var(--bg-surface-muted);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.billing-method-option.active {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.billing-method-option input {
+  accent-color: var(--accent);
+}
+
+.billing-method-logos {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  font-size: 28px;
+}
+
+.billing-paypal-logo {
+  margin-left: auto;
+  font-size: 28px;
+}
+
+.billing-card-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 4px 0 8px;
+}
+
+.billing-card-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.billing-card-form input {
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.billing-card-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.billing-order-item {
+  display: flex;
+  gap: 14px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.billing-order-thumb {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--accent-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--accent);
+  font-size: 32px;
+}
+
+.billing-order-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.billing-order-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.billing-order-meta {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.billing-order-price {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.billing-totals {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.billing-total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+}
+
+.billing-total-row--final {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  padding-top: 12px;
+  margin-top: 4px;
+  border-top: 1px solid var(--border-light);
+}
+
+.billing-terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.billing-terms input {
+  margin-top: 2px;
+  accent-color: var(--accent);
+}
+
+.billing-pay-button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.billing-pay-button:hover:not(:disabled) {
+  background: var(--btn-primary-hover);
+}
+
+.billing-pay-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.student-billing-empty {
+  text-align: center;
+  padding: 48px 24px;
+}
+
+.student-billing-back-link {
+  display: inline-block;
+  margin-top: 16px;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .student-billing-layout {
+    grid-template-columns: 1fr;
+  }
+}

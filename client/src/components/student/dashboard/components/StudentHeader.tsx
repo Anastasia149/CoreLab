@@ -62,6 +62,9 @@ const StudentHeader: React.FC<Props> = observer(({ name }) => {
     if (path.startsWith('/student/cart')) {
       return 'Корзина';
     }
+    if (path.startsWith('/student/billing')) {
+      return 'Оплата';
+    }
     if (path.startsWith('/student/lesson/')) {
       return lessonTypeHeader ?? 'Загрузка…';
     }
