@@ -583,20 +583,11 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.tab-button {
+.lesson-detail-tabs .tab-button {
   padding: 10px 20px;
-  background: none;
-  border: none;
   cursor: pointer;
   font-size: 16px;
-  color: var(--text-secondary);
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s ease;
-}
-
-.tab-button.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
 .tab-content {

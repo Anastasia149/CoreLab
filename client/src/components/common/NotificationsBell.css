@@ -1,0 +1,122 @@
+.notifications-bell {
+  position: relative;
+}
+
+.notifications-bell-btn--active {
+  color: var(--accent-soft);
+}
+
+.notifications-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 200;
+  width: min(380px, calc(100vw - 32px));
+  max-height: min(520px, calc(100vh - 120px));
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.12);
+  overflow: hidden;
+}
+
+.notifications-panel-head {
+  padding: 18px 18px 12px;
+}
+
+.notifications-panel-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.notifications-panel-empty {
+  margin: 0;
+  padding: 24px 18px 28px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.notifications-panel-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 10px 14px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.notifications-panel-item {
+  display: grid;
+  grid-template-columns: 40px 1fr 28px;
+  gap: 10px;
+  align-items: start;
+  padding: 12px 8px;
+  border-radius: 12px;
+}
+
+.notifications-panel-item:hover {
+  background: var(--bg-surface-muted);
+}
+
+.notifications-panel-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent-bg);
+  color: var(--accent-soft);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.notifications-panel-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.notifications-panel-body {
+  min-width: 0;
+}
+
+.notifications-panel-text {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-primary);
+}
+
+.notifications-panel-time {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.notifications-panel-menu {
+  width: 28px;
+  height: 28px;
+  margin-top: 2px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.notifications-panel-menu:hover {
+  opacity: 1;
+  background: var(--bg-surface-muted);
+}
+
+.notifications-panel-menu svg {
+  width: 18px;
+  height: 18px;
+}

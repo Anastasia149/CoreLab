@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Context } from '../../../../index';
 import { observer } from 'mobx-react-lite';
 import { getLessonTypeLabel } from '../../../../utils/lessonTypeDisplay';
+import NotificationsBell from '../../../common/NotificationsBell';
 
 type Props = {
   name?: string;
@@ -88,9 +89,7 @@ const StudentHeader: React.FC<Props> = observer(({ name }) => {
         <button className="student-icon-btn" aria-label="Поиск">
           <Icon icon="si:search-line" />
         </button>
-        <button className="student-icon-btn" aria-label="Уведомления">
-          <Icon icon="solar:bell-linear" />
-        </button>
+        <NotificationsBell iconButtonClassName="student-icon-btn" />
         <button className="student-icon-btn" aria-label="Корзина">
           <Icon icon="streamline-ultimate:shopping-basket-1" />
         </button>

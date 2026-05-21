@@ -5,6 +5,12 @@ import { Icon } from '@iconify/react';
 import '../../common/ProfilePage.css';
 import { ProfileAccountSection } from '../../common/ProfileAccountSection';
 import { getAvatarFileTypeError } from '../../../utils/avatarFile';
+import {
+  isEmailValid,
+  isNameLengthValid,
+  EMAIL_MAX_LENGTH,
+  NAME_MAX_LENGTH,
+} from '../../../constants/auth';
 
 const StudentProfile: React.FC = observer(() => {
   const { store } = useContext(Context);
@@ -23,6 +29,14 @@ const StudentProfile: React.FC = observer(() => {
 
   const handleSave = async () => {
     setMessage('');
+    if (!isNameLengthValid(name)) {
+      setMessage(`Имя должно быть от 1 до ${NAME_MAX_LENGTH} символов`);
+      return;
+    }
+    if (!isEmailValid(email)) {
+      setMessage('Введите корректный email');
+      return;
+    }
     try {
       await store.updateUserProfile({
         name,
@@ -127,6 +141,7 @@ const StudentProfile: React.FC = observer(() => {
                   className="profile-input"
                   placeholder="Как к вам обращаться"
                   autoComplete="name"
+                  maxLength={NAME_MAX_LENGTH}
                 />
               </div>
 
@@ -145,6 +160,7 @@ const StudentProfile: React.FC = observer(() => {
                   className="profile-input"
                   placeholder="you@example.com"
                   autoComplete="email"
+                  maxLength={EMAIL_MAX_LENGTH}
                 />
               </div>
             </div>

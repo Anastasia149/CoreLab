@@ -5,6 +5,13 @@ import { Icon } from '@iconify/react';
 import { useNavigate } from 'react-router-dom';
 import './LoginForm.css';
 import { useFormFields } from '../hooks/useFormFields';
+import {
+  isEmailValid,
+  isPasswordLengthValid,
+  EMAIL_MAX_LENGTH,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+} from '../constants/auth';
 
 import illustration from './home/pictures/Education-rafiki.svg';
 
@@ -33,6 +40,15 @@ const LoginForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isEmailValid(fields.email)) {
+      setError('Введите корректный email');
+      return;
+    }
+    if (!isPasswordLengthValid(fields.password)) {
+      setError(`Пароль должен быть от ${PASSWORD_MIN_LENGTH} до ${PASSWORD_MAX_LENGTH} символов`);
+      return;
+    }
+    setError('');
     try {
       await store.login(fields.email, fields.password);
     } catch (err) {
@@ -62,6 +78,7 @@ const LoginForm: React.FC = () => {
                   value={fields.email}
                   onChange={handleChange('email')}
                   className="auth-input"
+                  maxLength={EMAIL_MAX_LENGTH}
                   required
                 />
               </label>
@@ -76,6 +93,8 @@ const LoginForm: React.FC = () => {
                   value={fields.password}
                   onChange={handleChange('password')}
                   className="auth-input"
+                  minLength={PASSWORD_MIN_LENGTH}
+                  maxLength={PASSWORD_MAX_LENGTH}
                   required
                 />
               </label>

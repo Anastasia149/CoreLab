@@ -5,6 +5,15 @@ import { Icon } from "@iconify/react";
 import { Link, useNavigate } from "react-router-dom";
 import './RegistrationForm.css';
 import { useFormFields } from '../hooks/useFormFields';
+import {
+  isEmailValid,
+  isNameLengthValid,
+  isPasswordLengthValid,
+  EMAIL_MAX_LENGTH,
+  NAME_MAX_LENGTH,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+} from '../constants/auth';
 
 import illustration from './home/pictures/Education-rafiki.svg';
 
@@ -21,9 +30,22 @@ const RegistrationForm: React.FC = () => {
     const [submitted, setSubmitted] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
 
-    const passwordsMatch = fields.password.length > 0 && fields.confirmPassword.length > 0 && fields.password === fields.confirmPassword;
-    const canSubmit = fields.name.trim().length > 0 && fields.email.trim().length > 0 && passwordsMatch;
+    const passwordsMatch =
+      fields.password.length > 0 &&
+      fields.confirmPassword.length > 0 &&
+      fields.password === fields.confirmPassword;
+    const passwordValid = isPasswordLengthValid(fields.password);
+    const nameValid = isNameLengthValid(fields.name);
+    const emailValid = isEmailValid(fields.email);
+    const canSubmit =
+      nameValid &&
+      emailValid &&
+      passwordsMatch &&
+      passwordValid;
     const showMismatch = !passwordsMatch && fields.confirmPassword.length > 0;
+    const showPasswordLengthHint =
+      fields.password.length > 0 && !passwordValid;
+    const showEmailHint = fields.email.length > 0 && !emailValid;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -64,6 +86,7 @@ const RegistrationForm: React.FC = () => {
                                     value={fields.name}
                                     onChange={handleChange('name')}
                                     className="auth-input"
+                                    maxLength={NAME_MAX_LENGTH}
                                     required
                                 />
                             </label>
@@ -78,6 +101,7 @@ const RegistrationForm: React.FC = () => {
                                     value={fields.email}
                                     onChange={handleChange('email')}
                                     className="auth-input"
+                                    maxLength={EMAIL_MAX_LENGTH}
                                     required
                                 />
                             </label>
@@ -92,6 +116,8 @@ const RegistrationForm: React.FC = () => {
                                     value={fields.password}
                                     onChange={handleChange('password')}
                                     className="auth-input"
+                                    minLength={PASSWORD_MIN_LENGTH}
+                                    maxLength={PASSWORD_MAX_LENGTH}
                                     required
                                 />
                             </label>
@@ -106,6 +132,7 @@ const RegistrationForm: React.FC = () => {
                                     value={fields.confirmPassword}
                                     onChange={handleChange('confirmPassword')}
                                     className="auth-input"
+                                    maxLength={PASSWORD_MAX_LENGTH}
                                     required
                                 />
                             </label>
@@ -123,6 +150,16 @@ const RegistrationForm: React.FC = () => {
                                     <option value="teacher">Преподаватель</option>
                                 </select>
                             </label>
+
+                            {showEmailHint && (
+                                <div className="auth-error">Введите корректный email</div>
+                            )}
+
+                            {showPasswordLengthHint && (
+                                <div className="auth-error">
+                                    Пароль должен быть от {PASSWORD_MIN_LENGTH} до {PASSWORD_MAX_LENGTH} символов
+                                </div>
+                            )}
 
                             {showMismatch && (
                                 <div className="auth-error">Пароли не совпадают</div>

@@ -4,6 +4,7 @@ import './TeacherHeader.css';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Context } from '../../../../index';
 import { observer } from 'mobx-react-lite';
+import NotificationsBell from '../../../common/NotificationsBell';
 
 type Props = {
   name?: string;
@@ -59,9 +60,7 @@ const TeacherHeader = observer(({ name }: Props) => {
         <button className="teacher-icon-btn" aria-label="Поиск">
           <Icon icon="si:search-line" />
         </button>
-        <button className="teacher-icon-btn" aria-label="Уведомления">
-          <Icon icon="solar:bell-linear" />
-        </button>
+        <NotificationsBell iconButtonClassName="teacher-icon-btn" />
         <div
           className="teacher-avatar"
           onClick={openProfile}

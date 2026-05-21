@@ -11,20 +11,24 @@ const lessonController = require('../controllers/lesson-controller');
 const submissionController = require('../controllers/submission-controller');
 
 router.post('/registration', 
-    body('name').isLength({min: 1, max: 64}),
-    body('email').isEmail(),
-    body('password').isLength({min: 3, max: 32}),
+    body('name').isLength({min: 1, max: 20}),
+    body('email').isEmail().isLength({ min: 5, max: 40 }),
+    body('password').isLength({min: 3, max: 20}),
     userController.registration
 );
-router.post('/login', userController.login);
+router.post('/login',
+    body('email').isEmail().isLength({ min: 5, max: 40 }),
+    body('password').isLength({min: 3, max: 20}),
+    userController.login
+);
 router.post('/logout', userController.logout);
 router.get('/refresh', userController.refresh);
 router.get('/activate/:link', userController.activation);
 router.get('/users', authMiddleware, userController.getUsers);
 router.put('/users/profile',
     authMiddleware,
-    body('name').isLength({ min: 1, max: 128 }),
-    body('email').isEmail(),
+    body('name').isLength({ min: 1, max: 20 }),
+    body('email').isEmail().isLength({ min: 5, max: 40 }),
     body('avatar').optional({ nullable: true }).isString(),
     body('aboutMe').optional({ nullable: true }).isString().isLength({ max: 12000 }),
     body('certificates').optional({ nullable: true }).isString().isLength({ max: 12000 }),

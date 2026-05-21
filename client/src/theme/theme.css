@@ -232,10 +232,6 @@ body,
   background-color: var(--btn-primary-hover);
 }
 
-.lesson-detail-tabs .tab-button.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
 
 .schedule-category-add-btn {
   background: var(--accent-soft);
@@ -326,21 +322,10 @@ body,
 .lesson-deadline-input,
 .courses-settings-btn,
 .filter-button,
-.tab-button,
 .auth-form input {
   background: var(--input-bg);
   color: var(--text-primary);
   border-color: var(--border-color);
-}
-
-.tab-button {
-  background: var(--bg-surface-muted);
-  color: var(--text-secondary);
-}
-
-.tab-button.active {
-  background: var(--accent);
-  color: #fff;
 }
 
 .filter-button {
@@ -369,9 +354,32 @@ body,
   color: var(--text-primary);
 }
 
-.lesson-detail-tabs .tab-button,
-.lesson-detail-tabs {
+.lesson-detail-tabs,
+.course-details-tabs {
   border-color: var(--border-color);
+}
+
+.lesson-detail-tabs .tab-button,
+.course-details-tabs .tab-button {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  color: var(--text-secondary);
+}
+
+.lesson-detail-tabs .tab-button:hover:not(.active),
+.course-details-tabs .tab-button:hover:not(.active) {
+  color: var(--text-primary);
+  background: var(--bg-surface-hover);
+}
+
+.lesson-detail-tabs .tab-button.active,
+.course-details-tabs .tab-button.active {
+  background: var(--bg-active);
+  color: var(--accent-soft);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
 }
 
 .submission-item--card,
