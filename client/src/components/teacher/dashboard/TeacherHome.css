@@ -139,4 +139,8 @@
   .teacher-grid {
     grid-template-columns: 1fr;
   }
+
+  .teacher-schedule-box {
+    display: none;
+  }
 }

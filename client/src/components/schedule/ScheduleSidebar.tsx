@@ -21,7 +21,11 @@ const ScheduleSidebar: React.FC<Props> = ({
   events,
 }) => (
   <div className="schedule-sidebar">
-    <button type="button" className="schedule-add-event-btn" onClick={onAddEvent}>
+    <button
+      type="button"
+      className="schedule-add-event-btn schedule-add-event-btn--sidebar"
+      onClick={onAddEvent}
+    >
       <Icon icon="mdi:plus" />
       Добавить событие
     </button>

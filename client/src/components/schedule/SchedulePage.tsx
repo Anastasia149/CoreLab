@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { Icon } from '@iconify/react';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../../index';
 import ScheduleView from '../teacher/schedule/ScheduleView';
@@ -77,11 +78,21 @@ const SchedulePage: React.FC = observer(() => {
 
   return (
     <div className={`schedule-home schedule-page${panelOpen ? ' schedule-page--panel-open' : ''}`}>
-      <ScheduleView
-        selectedDate={selectedDate}
-        onDateChange={setSelectedDate}
-        events={events}
-      />
+      <div className="schedule-main-column">
+        <button
+          type="button"
+          className="schedule-add-event-btn schedule-add-event-btn--above"
+          onClick={() => setPanelOpen(true)}
+        >
+          <Icon icon="mdi:plus" />
+          Добавить событие
+        </button>
+        <ScheduleView
+          selectedDate={selectedDate}
+          onDateChange={setSelectedDate}
+          events={events}
+        />
+      </div>
       <ScheduleSidebar
         selectedDate={selectedDate}
         onDateChange={setSelectedDate}

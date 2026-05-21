@@ -10,6 +10,10 @@
   min-width: 0;
 }
 
+.schedule-main-column {
+  min-width: 0;
+}
+
 .schedule-home > .schedule-view {
   min-width: 0;
 }
@@ -18,5 +22,23 @@
   .schedule-home {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+
+  .schedule-main-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .schedule-sidebar .schedule-cal {
+    display: none;
+  }
+
+  .schedule-sidebar {
+    margin-top: 0;
+  }
+
+  .schedule-category-list {
+    margin-top: 0;
   }
 }

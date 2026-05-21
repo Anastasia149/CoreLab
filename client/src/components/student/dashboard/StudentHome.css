@@ -147,4 +147,8 @@
   .student-grid {
     grid-template-columns: 1fr;
   }
+
+  .student-schedule-box {
+    display: none;
+  }
 }
