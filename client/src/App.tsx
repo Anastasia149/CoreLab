@@ -28,6 +28,7 @@ import StudentCourseDetails from './components/student/courses/StudentCourseDeta
 import StudentLessonDetail from './components/student/courses/StudentLessonDetail';
 import CreateTest from './components/teacher/courses/CreateTest';
 import StudentProfile from './components/student/profile/StudentProfile';
+import StudentCart from './components/student/cart/StudentCart';
 import TeacherProfilePage from './components/teacher/profile/TeacherProfilePage';
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
             <Route path="search/:id" element={<SearchDetails />} />
             <Route path="lesson/:lessonId" element={<StudentLessonDetail />} />
             <Route path="profile" element={<StudentProfile />} />
+            <Route path="cart" element={<StudentCart />} />
           </Route>
 
           <Route path="/teacher" element={isTeacher ? <TeacherHome /> : <Navigate to="/" replace />} />

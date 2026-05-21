@@ -6,6 +6,8 @@ import { Icon } from '@iconify/react';
 import './SearchDetails.css';
 import { ISearchDetails } from '../../../models/ICourseDetail';
 import Loader from '../../common/Loader';
+import { addCourseToCart, isCourseInCart, removeCourseFromCart } from '../../../utils/courseCart';
+import { isPaidCoursePrice } from '../../../utils/coursePrice';
 const SearchDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { store } = useContext(Context);
@@ -14,6 +16,7 @@ const SearchDetails: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('description');
   const [isFavorite, setIsFavorite] = useState(false);
+  const [inCart, setInCart] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -25,6 +28,15 @@ const SearchDetails: React.FC = () => {
       });
     }
   }, [id, store]);
+
+  useEffect(() => {
+    const userId = store.user?.id;
+    if (!userId || !id) {
+      setInCart(false);
+      return;
+    }
+    setInCart(isCourseInCart(userId, Number(id)));
+  }, [id, store.user?.id]);
 
   if (loading) {
     return <Loader size="full-page" />;
@@ -46,12 +58,8 @@ const SearchDetails: React.FC = () => {
 
   const courseIdNum = Number(id);
 
-  const isFreeCourse =
-    course.price === null ||
-    course.price === undefined ||
-    Number(course.price) === 0;
-
-  const isPaidCourse = !isFreeCourse;
+  const isPaidCourse = isPaidCoursePrice(course.price);
+  const isFreeCourse = !isPaidCourse;
 
   const alreadyEnrolled =
     store.user?.courses?.some((c) => Number(c.id) === courseIdNum) ?? false;
@@ -88,9 +96,18 @@ const SearchDetails: React.FC = () => {
     navigateToCoursePage();
   };
 
-  const handleAddToCart = () => {
-    // TODO: API корзины
-    console.log('Добавить в корзину', courseIdNum);
+  const handleCartToggle = () => {
+    const userId = store.user?.id;
+    if (!userId) return;
+
+    if (inCart) {
+      const next = removeCourseFromCart(userId, courseIdNum);
+      setInCart(next.includes(courseIdNum));
+      return;
+    }
+
+    const next = addCourseToCart(userId, courseIdNum);
+    setInCart(next.includes(courseIdNum));
   };
 
   return (
@@ -119,14 +136,13 @@ const SearchDetails: React.FC = () => {
                   <Icon icon={isFavorite ? 'mdi:heart' : 'mdi:heart-outline'} />
                 </button>
                 {isPaidCourse && !alreadyEnrolled ? (
-                  <>
-                    <button type="button" className="cart-icon-button" onClick={handleAddToCart}>
-                      <Icon icon="mdi:cart-outline" />
-                    </button>
-                    <button type="button" className="add-to-cart-button" onClick={handleAddToCart}>
-                      Добавить в корзину
-                    </button>
-                  </>
+                  <button
+                    type="button"
+                    className={`add-to-cart-button ${inCart ? 'in-cart' : ''}`}
+                    onClick={handleCartToggle}
+                  >
+                    {inCart ? 'В корзине' : 'Добавить в корзину'}
+                  </button>
                 ) : (
                   <button type="button" className="go-to-course-button" onClick={handleGoToCourse}>
                     Перейти к курсу

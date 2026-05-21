@@ -59,6 +59,9 @@ const StudentHeader: React.FC<Props> = observer(({ name }) => {
     if (path.startsWith('/student/profile')) {
       return 'Профиль';
     }
+    if (path.startsWith('/student/cart')) {
+      return 'Корзина';
+    }
     if (path.startsWith('/student/lesson/')) {
       return lessonTypeHeader ?? 'Загрузка…';
     }
@@ -68,6 +71,7 @@ const StudentHeader: React.FC<Props> = observer(({ name }) => {
   const title = getTitle();
 
   const openProfile = () => navigate('/student/profile');
+  const openCart = () => navigate('/student/cart');
   const avatarUrl = store.user?.avatar;
 
   const onAvatarKeyDown = (e: React.KeyboardEvent) => {
@@ -90,7 +94,7 @@ const StudentHeader: React.FC<Props> = observer(({ name }) => {
           <Icon icon="si:search-line" />
         </button>
         <NotificationsBell iconButtonClassName="student-icon-btn" />
-        <button className="student-icon-btn" aria-label="Корзина">
+        <button type="button" className="student-icon-btn" aria-label="Корзина" onClick={openCart}>
           <Icon icon="streamline-ultimate:shopping-basket-1" />
         </button>
         <div

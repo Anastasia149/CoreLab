@@ -14,10 +14,15 @@ export function formatCoursePriceDisplay(
   return `${n.toLocaleString('ru-RU')} ${COURSE_PRICE_UNIT}`;
 }
 
-export function parseCoursePrice(value: number | string): number {
+export function parseCoursePrice(value: number | string | null | undefined): number {
+  if (value == null || value === '') return 0;
   const n = typeof value === 'string' ? parseFloat(value) : value;
   if (Number.isNaN(n)) return 0;
   return Math.max(0, n);
+}
+
+export function isPaidCoursePrice(price: number | string | null | undefined): boolean {
+  return parseCoursePrice(price) > 0;
 }
 
 export function validateCoursePrice(value: number | string): string | null {
