@@ -1,7 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import './theme/theme.css';
 import App from './App';
 import Store from './store/store';
+
+(function initThemeBeforeRender() {
+  const saved = localStorage.getItem('app-theme');
+  const theme = saved === 'dark' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', theme);
+})();
 
 interface State{
   store: Store;

@@ -7,9 +7,11 @@
   justify-content: space-between;
   gap: 16px;
   padding: 14px 32px;
-  background: #ffffffaa;
+  background: var(--header-glass-bg);
   backdrop-filter: blur(8px);
-  border-bottom: 1px solid #f3f4f6;
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-primary);
 }
 
 .home-header-left {
@@ -22,12 +24,13 @@
 .home-logo-icon {
   width: 28px;
   height: 28px;
-  color: #7b5cff;
+  color: var(--accent-soft, #7b5cff);
 }
 
 .home-logo-text {
   font-size: 18px;
   font-weight: 700;
+  color: var(--text-primary);
 }
 
 .home-nav {
@@ -38,14 +41,15 @@
 .home-nav-link {
   border: none;
   background: transparent;
-  color: #374151;
+  color: var(--text-primary);
   padding: 8px 10px;
   border-radius: 10px;
   cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .home-nav-link:hover {
-  background: #f3f4f6;
+  background: var(--bg-surface-hover);
 }
 
 .home-header-right {
@@ -55,12 +59,18 @@
 }
 
 .home-link {
-  border: 1px solid #e5e7eb;
-  background: #fff;
-  color: #4b5563;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
   padding: 10px 16px;
   border-radius: 999px;
   cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.home-link:hover {
+  background: var(--bg-surface-hover);
+  color: var(--text-primary);
 }
 
 .home-cta {
@@ -68,9 +78,10 @@
   padding: 10px 16px;
   border-radius: 999px;
   background: linear-gradient(145deg, #7b5cff, #5d3bff);
-  color: #fff;
+  color: var(--on-accent);
   box-shadow: 0 12px 28px rgba(88, 80, 236, 0.45);
   cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
 }
 
 .home-cta:hover {
@@ -80,5 +91,9 @@
 @media (max-width: 640px) {
   .home-nav {
     display: none;
+  }
+
+  .home-header {
+    padding: 12px 16px;
   }
 }

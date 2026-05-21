@@ -1,5 +1,5 @@
 .schedule-category-list {
-  background: #fff;
+  background: var(--bg-surface);
   border-radius: 12px;
   padding: 10px 24px;
   margin-top: 24px;
@@ -18,7 +18,7 @@
 }
 
 .schedule-category-add-btn {
-  background: #8173DA;
+  background: var(--accent-soft);
   color: #fff;
   border: none;
   border-radius: 50%;
@@ -52,7 +52,7 @@
 }
 
 .schedule-category-count {
-  background: #f3f4f6;
+  background: var(--bg-surface-muted);
   border-radius: 6px;
   padding: 2px 8px;
   font-size: 12px;

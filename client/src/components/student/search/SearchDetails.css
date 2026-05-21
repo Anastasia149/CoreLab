@@ -23,7 +23,7 @@
 }
 
 .course-content-panel, .course-comments-panel {
-    background-color: white;
+    background-color: var(--bg-surface);
     border-radius: 16px;
     padding: 3px 24px;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
@@ -65,7 +65,7 @@
 }
 
 .course-overview-card, .mentor-card {
-    background-color: white;
+    background-color: var(--bg-surface);
     border-radius: 16px;
     padding: 0px 24px 20px 24px;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
@@ -84,8 +84,8 @@
 
 .cart-icon-button {
     padding: 10px;
-    background-color: #f3f4f6;
-    border: 1px solid #e5e7eb;
+    background-color: var(--bg-surface-muted);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     cursor: pointer;
 }
@@ -98,7 +98,7 @@
     flex-grow: 1;
     padding: 12px;
     background-color: #8a2be2;
-    color: white;
+    color: var(--on-accent);
     border: none;
     border-radius: 8px;
     font-size: 16px;
@@ -106,13 +106,13 @@
 }
 
 .add-to-cart-button:hover {
-  background-color: #4338ca;
+  background-color: var(--btn-primary-hover);
 }
 
 .favorite-icon-button {
     padding: 10px;
-    background-color: #f3f4f6;
-    border: 1px solid #e5e7eb;
+    background-color: var(--bg-surface-muted);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s;
@@ -120,7 +120,7 @@
 
 .favorite-icon-button svg {
     font-size: 24px;
-    color: #9ca3af;
+    color: var(--text-secondary);
 }
 
 .favorite-icon-button:hover {
@@ -139,8 +139,8 @@
 .go-to-course-button {
     flex-grow: 1;
     padding: 12px;
-    background-color: #4f46e5;
-    color: white;
+    background-color: var(--accent);
+    color: var(--on-accent);
     border: none;
     border-radius: 8px;
     font-size: 16px;
@@ -149,7 +149,7 @@
 }
 
 .go-to-course-button:hover {
-    background-color: #4338ca;
+    background-color: var(--btn-primary-hover);
 }
 
 /* Curriculum Styles */
@@ -162,7 +162,7 @@
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 12px;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 .curriculum-lessons {
@@ -175,16 +175,16 @@
   align-items: center;
   justify-content: space-between;
   padding: 14px 18px;
-  background-color: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background-color: var(--bg-surface-muted);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .curriculum-lesson:hover {
-  border-color: #4f46e5;
-  background-color: #fff;
+  border-color: var(--accent);
+  background-color: var(--bg-surface);
   box-shadow: 0 4px 12px rgba(79, 70, 229, 0.08);
 }
 
@@ -196,19 +196,19 @@
 
 .lesson-left svg {
   font-size: 20px;
-  color: #4f46e5;
+  color: var(--accent);
 }
 
 .lesson-left span {
   font-weight: 500;
-  color: #374151;
+  color: var(--text-primary);
 }
 
 .lesson-type-badge {
   font-size: 11px;
   font-weight: 600;
-  color: #6b7280;
-  background-color: #f3f4f6;
+  color: var(--text-secondary);
+  background-color: var(--bg-surface-muted);
   padding: 2px 8px;
   border-radius: 4px;
   text-transform: uppercase;
@@ -228,7 +228,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f3f4f6;
+    background-color: var(--bg-surface-muted);
 }
 
 .mentor-avatar img {
@@ -239,18 +239,18 @@
 
 .mentor-avatar svg {
     font-size: 28px;
-    color: #6b7280;
+    color: var(--text-secondary);
 }
 
 .mentor-role {
     font-size: 14px;
-    color: #6b7280;
+    color: var(--text-secondary);
     margin: 0;
 }
 
 .mentor-description {
     font-size: 14px;
-    color: #374151;
+    color: var(--text-primary);
     margin: 12px 0;
 }
 

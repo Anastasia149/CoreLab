@@ -1,5 +1,5 @@
 .schedule-view {
-  background: #fff;
+  background: var(--bg-surface);
   border-radius: 12px;
   padding: 24px;
 }
@@ -19,13 +19,13 @@
 }
 
 .schedule-date {
-  color: #8173DA;
+  color: var(--accent-soft);
 }
 
 .schedule-header-separator {
   width: 1px;
   height: 24px;
-  background-color: #e5e7eb;
+  background-color: var(--border-color);
   margin: 0 16px;
 }
 
@@ -37,7 +37,7 @@
 
 .schedule-action-btn {
   background: transparent;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 8px;
   cursor: pointer;
@@ -56,7 +56,7 @@
 }
 
 .time-header-label {
-  color: #9ca3af;
+  color: var(--text-secondary);
   font-size: 14px;
   text-align: right;
   padding-top: 24px;
@@ -79,14 +79,14 @@
 }
 
 .week-day-name {
-  color: #9ca3af;
+  color: var(--text-secondary);
   font-size: 14px;
 }
 
 .week-day-date {
   font-weight: 600;
   font-size: 16px;
-  color: #9ca3af;
+  color: var(--text-secondary);
 }
 
 .week-day.active {
@@ -95,16 +95,16 @@
 
 .week-day.active .week-day-name,
 .week-day.active .week-day-date {
-  color: #8173DA;
+  color: var(--accent-soft);
 }
 
 .week-day:hover {
-  background-color: #F0EEFD;
+  background-color: var(--bg-active);
 }
 
 .week-day:hover .week-day-date,
 .week-day:hover .week-day-name {
-  color: #8173DA;
+  color: var(--accent-soft);
 }
 
 .time-scale {
@@ -113,7 +113,7 @@
 }
 
 .time-slot {
-  color: #9ca3af;
+  color: var(--text-secondary);
   font-size: 14px;
   text-align: right;
   display: flex;
@@ -140,5 +140,5 @@
   top: 50%;
   left: 0;
   width: 100%;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--border-color);
 }

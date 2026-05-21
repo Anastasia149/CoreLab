@@ -2,8 +2,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #ffffff;
-  border: 1px solid #eef0f5;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
   border-radius: 16px;
   padding: 16px 18px;
   margin-bottom: 16px;
@@ -11,10 +11,11 @@
 
 .student-hello {
   font-weight: 800;
+  color: var(--text-primary);
 }
 
 .student-hello-sub {
-  color: #6b7280;
+  color: var(--text-secondary);
   font-size: 14px;
 }
 
@@ -33,7 +34,7 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #111;
+  color: var(--text-primary);
   outline: none;
 }
 
@@ -43,7 +44,7 @@
 }
 
 .student-icon-btn:hover {
-  color: #4b5563;
+  color: var(--text-secondary);
 }
 
 .student-avatar {
@@ -52,7 +53,7 @@
   width: 46px;
   height: 46px;
   box-sizing: border-box;
-  border: 1px solid #111;
+  border: 1px solid var(--border-color);
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
@@ -66,7 +67,7 @@
   z-index: 1;
   width: 28px;
   height: 28px;
-  color: #111;
+  color: var(--text-primary);
 }
 
 .student-avatar-img {

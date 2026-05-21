@@ -5,8 +5,8 @@
 }
 
 .card {
-  background: #fff;
-  border: 1px solid #e5e7eb;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 24px;
   margin-bottom: 24px;
@@ -32,7 +32,7 @@
 
 .question-number {
   font-weight: 700;
-  color: #4f46e5;
+  color: var(--accent);
   font-size: 14px;
   text-transform: uppercase;
 }
@@ -40,7 +40,7 @@
 .remove-btn {
   background: none;
   border: none;
-  color: #9ca3af;
+  color: var(--text-secondary);
   cursor: pointer;
   padding: 4px;
   border-radius: 6px;
@@ -57,7 +57,7 @@
   gap: 24px;
   margin: 16px 0;
   padding: 16px;
-  background: #f9fafb;
+  background: var(--bg-surface-muted);
   border-radius: 12px;
 }
 
@@ -106,7 +106,7 @@
 .remove-option {
   background: none;
   border: none;
-  color: #9ca3af;
+  color: var(--text-secondary);
   cursor: pointer;
 }
 
@@ -118,7 +118,7 @@
   border: 1px dashed #d1d5db;
   padding: 8px 16px;
   border-radius: 8px;
-  color: #6b7280;
+  color: var(--text-secondary);
   cursor: pointer;
   font-size: 13px;
   width: fit-content;
@@ -126,8 +126,8 @@
 }
 
 .add-option-btn:hover {
-  border-color: #4f46e5;
-  color: #4f46e5;
+  border-color: var(--accent);
+  color: var(--accent);
   background: #f5f3ff;
 }
 
@@ -140,7 +140,7 @@
 
 .primary-btn {
   padding: 12px 32px;
-  background: #4f46e5;
+  background: var(--accent);
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -154,16 +154,16 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
   border-radius: 10px;
   font-weight: 600;
-  color: #374151;
+  color: var(--text-primary);
   cursor: pointer;
 }
 
 .secondary-btn:hover {
-  background: #f9fafb;
+  background: var(--bg-surface-muted);
 }
 
 .question-card .form-group textarea,
@@ -173,7 +173,7 @@
   width: 100%;
   padding: 10px 14px;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
   font-size: 14px;
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -182,14 +182,14 @@
 .question-card .form-group textarea:focus,
 .question-settings select:focus,
 .option-item input[type="text"]:focus {
-  border-color: #8173DA;
+  border-color: var(--accent-soft);
   box-shadow: 0 0 0 1px #8173DA33;
 }
 
 .setting-item.checkbox input[type="checkbox"] {
     width: 18px;
     height: 18px;
-    border: 1px solid #e5e7eb; /* Add border for consistency */
+    border: 1px solid var(--border-color); /* Add border for consistency */
     border-radius: 4px; /* Slightly rounded corners */
     appearance: none; /* Remove default browser styling */
     -webkit-appearance: none;
@@ -203,8 +203,8 @@
 }
 
 .setting-item.checkbox input[type="checkbox"]:checked {
-    background-color: #4f46e5; /* Primary color when checked */
-    border-color: #4f46e5;
+    background-color: var(--accent); /* Primary color when checked */
+    border-color: var(--accent);
 }
 
 .setting-item.checkbox input[type="checkbox"]:checked::after {
@@ -253,7 +253,7 @@
   max-width: 300px;
   max-height: 200px;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
 }
 
 .question-image-preview .remove-btn {
@@ -261,7 +261,7 @@
   top: -10px;
   right: -10px;
   background: #ef4444;
-  color: white;
+  color: var(--on-accent);
   width: 24px;
   height: 24px;
   border-radius: 50%;
@@ -272,7 +272,7 @@
 
 .question-image-preview .remove-btn:hover {
   background: #dc2626;
-  color: white;
+  color: var(--on-accent);
 }
 
 @media (max-width: 640px) {

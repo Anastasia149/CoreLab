@@ -6,7 +6,7 @@
   background-color: #7c3aed; /* purple-600 */
   border-radius: 16px;
   padding: 32px;
-  color: white;
+  color: var(--on-accent);
   margin-bottom: 24px;
   display: flex;
   justify-content: space-between;
@@ -72,15 +72,15 @@
 .courses-settings-btn {
   width: 42px;
   height: 42px;
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s;
-  color: #4b5563;
+  color: var(--text-secondary);
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
 }
 
@@ -90,14 +90,14 @@
 }
 
 .courses-settings-btn:hover {
-  background-color: #f9fafb;
-  border-color: #d1d5db;
+  background-color: var(--bg-surface-muted);
+  border-color: var(--text-muted);
 }
 
 .courses-settings-btn.active {
-  background-color: #4f46e5;
-  border-color: #4f46e5;
-  color: white;
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
 }
 
 .courses-settings-popup {
@@ -105,7 +105,7 @@
   top: calc(100% + 12px);
   right: 0;
   width: 220px;
-  background-color: #ffffff;
+  background-color: var(--bg-surface);
   border-radius: 16px;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
   padding: 16px;
@@ -117,7 +117,7 @@
   margin: 0 0 12px 0;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 .popup-sort-options {
@@ -133,25 +133,25 @@
   border: none;
   border-radius: 8px;
   font-size: 0.875rem;
-  color: #4b5563;
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .popup-sort-option:hover {
-  background-color: #f3f4f6;
-  color: #111827;
+  background-color: var(--bg-surface-muted);
+  color: var(--text-primary);
 }
 
 .popup-sort-option.active {
-  background-color: #f1eefe;
-  color: #4f46e5;
+  background-color: var(--bg-active);
+  color: var(--accent);
   font-weight: 600;
 }
 
 
 .filter-button {
-  background-color: #f3f4f6; /* gray-100 */
+  background-color: var(--bg-surface-muted); /* gray-100 */
   border: none;
   padding: 8px 16px;
   border-radius: 20px;
@@ -161,21 +161,21 @@
 }
 
 .filter-button.active {
-  background-color: #4f46e5; /* indigo-600 */
-  color: white;
+  background-color: var(--accent); /* indigo-600 */
+  color: var(--on-accent);
 }
 
 .filter-button:hover {
-  background-color: #e5e7eb; /* gray-200 */
+  background-color: var(--border-color); /* gray-200 */
 }
 
 .filter-button.active:hover {
-  background-color: #4338ca; /* indigo-700 */
+  background-color: var(--btn-primary-hover); /* indigo-700 */
 }
 
 /* Стили для карточки курса, адаптированные под новый дизайн */
 .student-course-card {
-  background-color: white;
+  background-color: var(--bg-surface);
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
@@ -213,7 +213,7 @@
 
 .card-favorite-button svg {
   font-size: 20px;
-  color: #9ca3af;
+  color: var(--text-secondary);
 }
 
 .card-favorite-button:hover {
@@ -254,7 +254,7 @@
   align-items: center;
   gap: 8px;
   font-size: 0.875rem;
-  color: #6b7280; /* gray-500 */
+  color: var(--text-secondary); /* gray-500 */
   margin-top: auto; /* Прижимает автора и цену к низу */
 }
 
@@ -262,13 +262,13 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background-color: #e5e7eb; /* gray-200 */
+  background-color: var(--border-color); /* gray-200 */
 }
 
 .student-course-price {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #4f46e5; /* indigo-600 */
+  color: var(--accent); /* indigo-600 */
   margin-left: auto;
 }
 

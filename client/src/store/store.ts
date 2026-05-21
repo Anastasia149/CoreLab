@@ -7,15 +7,43 @@ import { AuthResponse } from '../models/response/AuthResponse';
 import { ICourse } from "../models/ICourse";
 import { ISearchDetails, Module, Material, Lesson } from "../models/ICourseDetail";
 
+export type AppTheme = 'light' | 'dark';
+
+const THEME_STORAGE_KEY = 'app-theme';
+
 export default class Store {
     user = {} as IUser;
     isAuth = false;
     isLoading = false;
     courses = [] as ICourse[];
+    theme: AppTheme = 'light';
 
     constructor() {
         makeAutoObservable(this);
-    }   
+        this.initTheme();
+    }
+
+    initTheme() {
+        const saved = localStorage.getItem(THEME_STORAGE_KEY);
+        if (saved === 'light' || saved === 'dark') {
+            this.theme = saved;
+        }
+        this.applyTheme();
+    }
+
+    setTheme(theme: AppTheme) {
+        this.theme = theme;
+        localStorage.setItem(THEME_STORAGE_KEY, theme);
+        this.applyTheme();
+    }
+
+    toggleTheme() {
+        this.setTheme(this.theme === 'light' ? 'dark' : 'light');
+    }
+
+    applyTheme() {
+        document.documentElement.setAttribute('data-theme', this.theme);
+    }
 
     setAuth(bool: boolean) {
         this.isAuth = bool;

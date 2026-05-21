@@ -1,5 +1,5 @@
 .schedule-cal {
-  background: #fff;
+  background: var(--bg-surface);
   border-radius: 12px;
   padding: 24px;
 }
@@ -30,7 +30,7 @@
 
 .schedule-cal-day {
   text-align: center;
-  color: #9ca3af;
+  color: var(--text-secondary);
 }
 
 .schedule-cal-date {
@@ -42,10 +42,10 @@
 }
 
 .schedule-cal-date.today {
-  background: #F0EEFD;
-  color: #7F73D3;
+  background: var(--bg-active);
+  color: var(--accent-soft);
 }
 
 .schedule-cal-date.other-month {
-  color: #d1d5db;
+  color: var(--text-muted);
 }

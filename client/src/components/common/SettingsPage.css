@@ -1,0 +1,100 @@
+.settings-page {
+  max-width: 560px;
+}
+
+.settings-page-title {
+  margin: 0 0 20px;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.settings-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 20px 22px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.settings-theme-block {
+  margin: 0;
+}
+
+.settings-block-title {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.settings-block-desc {
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.theme-switch {
+  display: inline-flex;
+  padding: 4px;
+  gap: 4px;
+  background: var(--bg-surface-muted);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.theme-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.theme-switch-btn svg {
+  font-size: 20px;
+}
+
+.theme-switch-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-surface-hover);
+}
+
+.theme-switch-btn.active {
+  background: var(--bg-surface);
+  color: var(--accent-soft);
+  box-shadow: var(--shadow-sm);
+}
+
+.settings-logout-btn {
+  border: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: linear-gradient(145deg, #7b5cff, #5d3bff);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(88, 80, 236, 0.35);
+}
+
+.settings-logout-btn:hover {
+  filter: brightness(1.05);
+}
+
+.teacher-settings-panel {
+  max-width: 560px;
+}
+
+.teacher-settings-panel .teacher-section-title {
+  margin-bottom: 16px;
+}

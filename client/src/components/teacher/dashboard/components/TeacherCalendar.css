@@ -5,8 +5,8 @@
 .teacher-cal {
   display: grid;
   gap: 10px;
-  background: #fff;
-  border: 1px solid #eef0f5;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
   border-radius: 16px;
   padding: 16px;
 }
@@ -26,7 +26,7 @@
 }
 
 .teacher-cal-year {
-  color: #6b7280;
+  color: var(--text-secondary);
   font-size: 16px;
 }
 
@@ -38,7 +38,7 @@
   border: none;
   background: transparent;
   cursor: pointer;
-  color: #111;
+  color: var(--text-primary);
 }
 
 .teacher-cal-arrow svg {
@@ -54,7 +54,7 @@
 
 .teacher-cal-day {
   text-align: center;
-  color: #A0A0A0;
+  color: var(--text-muted);
   font-size: 13px;
 }
 
@@ -65,15 +65,15 @@
   border: none;
   border-radius: 10px;
   background: transparent;
-  color: #111;
+  color: var(--text-primary);
 }
 
 .teacher-cal-date.today {
-  background: #F1EEFE;
-  color: #8173DA;
+  background: var(--bg-active);
+  color: var(--accent-soft);
   font-weight: 700;
 }
 
 .teacher-cal-date.other-month {
-  color: #d1d5db;
+  color: var(--text-muted);
 }

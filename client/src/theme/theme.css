@@ -1,0 +1,462 @@
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+  --bg-page: #f7f7fb;
+  --bg-surface: #ffffff;
+  --bg-surface-muted: #f9fafb;
+  --bg-surface-hover: #f3f4f6;
+  --bg-active: #f1eefe;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --text-muted: #a0a0a0;
+  --border-color: #e5e7eb;
+  --border-light: #eef0f5;
+  --accent: #4f46e5;
+  --accent-soft: #8173da;
+  --accent-bg: #eef2ff;
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.08);
+  --input-bg: #ffffff;
+  --danger: #ef4444;
+  --on-accent: #ffffff;
+  --btn-primary-hover: #4338ca;
+  --status-published-bg: #dcfce7;
+  --status-published-text: #166534;
+  --hint-bg: #eef2ff;
+  --hint-border: #c7d2fe;
+  --hint-text: #312e81;
+  --hint-bg-hover: #e0e7ff;
+  --hint-border-hover: #a5b4fc;
+  --status-info-bg: #dbeafe;
+  --status-info-text: #1e40af;
+  --status-warning-bg: #fef3c7;
+  --status-warning-text: #92400e;
+  --status-error-bg: #fee2e2;
+  --status-error-text: #991b1b;
+  --status-error-bg-soft: #fef2f2;
+  --status-error-border: #fecaca;
+  --status-success-border: #86efac;
+  --upload-zone-bg: #f5f3ff;
+  --upload-zone-disabled: #9ca3af;
+  --upload-success-bg: #f0fdf4;
+  --status-overdue-bg: #ffedd5;
+  --status-overdue-text: #9a3412;
+  --focus-ring: #8173da33;
+  --header-glass-bg: rgba(255, 255, 255, 0.67);
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg-page: #0f1117;
+  --bg-surface: #1a1d27;
+  --bg-surface-muted: #222633;
+  --bg-surface-hover: #2a2f3d;
+  --bg-active: #2d2640;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --border-color: #374151;
+  --border-light: #2d3344;
+  --accent: #818cf8;
+  --accent-soft: #a5b4fc;
+  --accent-bg: #312e81;
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.45);
+  --input-bg: #252936;
+  --danger: #f87171;
+  --btn-primary-hover: #6366f1;
+  --status-published-bg: #14532d;
+  --status-published-text: #bbf7d0;
+  --hint-bg: #312e81;
+  --hint-border: #4338ca;
+  --hint-text: #e0e7ff;
+  --hint-bg-hover: #3730a3;
+  --hint-border-hover: #6366f1;
+  --status-info-bg: #1e3a5f;
+  --status-info-text: #bfdbfe;
+  --status-warning-bg: #422006;
+  --status-warning-text: #fde68a;
+  --status-error-bg: #450a0a;
+  --status-error-text: #fecaca;
+  --status-error-bg-soft: #450a0a;
+  --status-error-border: #7f1d1d;
+  --status-success-border: #166534;
+  --upload-zone-bg: #2d2640;
+  --upload-zone-disabled: #6b7280;
+  --upload-success-bg: #14532d;
+  --status-overdue-bg: #431407;
+  --status-overdue-text: #fdba74;
+  --focus-ring: #818cf833;
+  --header-glass-bg: rgba(15, 17, 23, 0.82);
+}
+
+html,
+body,
+#root {
+  background: var(--bg-page);
+  color: var(--text-primary);
+}
+
+.teacher-layout,
+.student-layout {
+  background: var(--bg-page);
+  color: var(--text-primary);
+}
+
+.teacher-sidebar,
+.student-sidebar {
+  background: var(--bg-surface);
+  border-right-color: var(--border-light);
+}
+
+.teacher-brand,
+.student-brand {
+  color: var(--text-primary);
+}
+
+.teacher-nav-section-title,
+.student-nav-section-title {
+  color: var(--text-muted);
+}
+
+.teacher-nav-item,
+.student-nav-item {
+  color: var(--text-muted);
+}
+
+.teacher-nav-item:hover,
+.teacher-nav-item:focus,
+.student-nav-item:hover,
+.student-nav-item:focus {
+  color: var(--accent-soft);
+}
+
+.teacher-nav-item.active,
+.student-nav-item.active {
+  background: var(--bg-active);
+  color: var(--accent-soft);
+}
+
+.teacher-header,
+.student-header {
+  background: var(--bg-surface);
+  border-color: var(--border-light);
+}
+
+.teacher-hello-sub,
+.student-hello-sub {
+  color: var(--text-secondary);
+}
+
+.teacher-icon-btn,
+.student-icon-btn {
+  color: var(--text-primary);
+}
+
+.teacher-icon-btn:hover,
+.student-icon-btn:hover {
+  color: var(--text-secondary);
+}
+
+.teacher-avatar,
+.student-avatar {
+  border-color: var(--border-color);
+}
+
+.teacher-avatar svg,
+.student-avatar svg {
+  color: var(--text-primary);
+}
+
+.course-card,
+.create-course-form,
+.student-course-card,
+.settings-card,
+.teacher-task,
+.teacher-card,
+.lesson-footer-plank,
+.submission-card,
+.tab-content,
+.materials-tab .material-card,
+.student-lesson-container .submission-card {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.course-card {
+  box-shadow: var(--shadow-sm);
+}
+
+.course-card-description,
+.info-text,
+.students-tab-intro,
+.form-hint,
+.lesson-deadline-info--unset {
+  color: var(--text-secondary);
+}
+
+.course-card-status.draft {
+  background: var(--bg-surface-muted);
+  color: var(--text-secondary);
+}
+
+.course-card-status.published {
+  background: var(--status-published-bg);
+  color: var(--status-published-text);
+}
+
+.course-card-title,
+.course-card-price,
+.teacher-cal-title,
+.teacher-cal-month,
+.student-cal-title,
+.student-cal-month,
+.schedule-cal-title,
+.schedule-category-title,
+.schedule-title,
+.module-header,
+.lesson-header h1,
+.lesson-plank-title {
+  color: var(--text-primary);
+}
+
+.teacher-add-btn,
+.primary-btn,
+.submit-btn-primary {
+  background-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.teacher-add-btn:hover,
+.primary-btn:hover,
+.submit-btn-primary:hover {
+  background-color: var(--btn-primary-hover);
+}
+
+.lesson-detail-tabs .tab-button.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.schedule-category-add-btn {
+  background: var(--accent-soft);
+}
+
+.teacher-show-all:hover,
+.back-btn:hover {
+  color: var(--accent);
+}
+
+.deadline-hint,
+.lesson-info-banner,
+.lesson-submissions-banner {
+  background: var(--hint-bg);
+  border-color: var(--hint-border);
+  color: var(--hint-text);
+}
+
+.submission-add-btn {
+  color: var(--accent);
+  background: var(--hint-bg);
+  border-color: var(--hint-border);
+}
+
+.submission-add-btn:hover:not(:disabled) {
+  background: var(--hint-bg-hover);
+  border-color: var(--hint-border-hover);
+}
+
+.submission-status-pill--submitted {
+  color: var(--status-info-text);
+  background: var(--status-info-bg);
+}
+
+.submission-review-pill--pending,
+.submission-review-badge--pending {
+  color: var(--status-warning-text);
+  background: var(--status-warning-bg);
+}
+
+.submission-review-pill--failed,
+.submission-review-badge--failed {
+  color: var(--status-error-text);
+  background: var(--status-error-bg);
+}
+
+.submission-error,
+.submit-error {
+  color: var(--status-error-text);
+  background: var(--status-error-bg-soft);
+  border-color: var(--status-error-border);
+}
+
+.submission-review-btn--pass:hover:not(:disabled) {
+  border-color: var(--status-success-border);
+}
+
+.submission-review-btn--fail:hover:not(:disabled) {
+  background: var(--status-error-bg);
+  border-color: var(--status-error-border);
+  color: var(--status-error-text);
+}
+
+.file-drop-zone {
+  border-color: var(--border-color);
+  background: var(--upload-zone-bg);
+}
+
+.file-drop-zone.disabled {
+  background: var(--upload-zone-disabled);
+}
+
+.submission-success-message {
+  background: var(--upload-success-bg);
+}
+
+.form-group label,
+.lesson-plank-section-title,
+.teacher-section-title,
+.settings-card h4 {
+  color: var(--text-primary);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select,
+.submit-input,
+.lesson-deadline-input,
+.courses-settings-btn,
+.filter-button,
+.tab-button,
+.auth-form input {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.tab-button {
+  background: var(--bg-surface-muted);
+  color: var(--text-secondary);
+}
+
+.tab-button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.filter-button {
+  background: var(--bg-surface-muted);
+  color: var(--text-secondary);
+}
+
+.filter-button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.filter-button:hover:not(.active) {
+  background: var(--bg-surface-hover);
+}
+
+.courses-settings-btn {
+  background: var(--bg-surface);
+}
+
+.courses-settings-popup,
+.settings-popup-section,
+.modal-content {
+  background: var(--bg-surface);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.lesson-detail-tabs .tab-button,
+.lesson-detail-tabs {
+  border-color: var(--border-color);
+}
+
+.submission-item--card,
+.submission-draft-item,
+.submission-material-list-item,
+.lesson-deadline-info--teacher-page:not(.lesson-deadline-info--unset) {
+  background: var(--bg-surface-muted);
+  border-color: var(--border-color);
+}
+
+.submission-material-text,
+.submission-sent-summary {
+  color: var(--text-secondary);
+}
+
+.teacher-tasks,
+.teacher-schedule-box,
+.teacher-calendar {
+  color: var(--text-primary);
+}
+
+.teacher-task {
+  border-color: var(--border-color);
+}
+
+.teacher-empty,
+.teacher-courses-empty {
+  color: var(--text-secondary);
+}
+
+.student-courses-page {
+  color: var(--text-primary);
+}
+
+.courses-promo-banner {
+  /* keep brand gradient in both themes */
+}
+
+.auth-page,
+.home-page {
+  background: var(--bg-page);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .teacher-hero-card {
+  /* hero gradient stays purple */
+}
+
+[data-theme='dark'] .lesson-text {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .lesson-text a {
+  color: var(--accent-soft);
+}
+
+[data-theme='dark'] .material-card,
+[data-theme='dark'] .file-label {
+  background: var(--bg-surface-muted);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+[data-theme='dark'] .submission-status.success {
+  background: #14532d;
+  color: #bbf7d0;
+}
+
+[data-theme='dark'] .submission-review-pill--pending {
+  background: #422006;
+  color: #fde68a;
+}
+
+[data-theme='dark'] .submission-review-pill--passed {
+  background: #14532d;
+  color: #bbf7d0;
+}
+
+[data-theme='dark'] .submission-review-pill--failed {
+  background: #450a0a;
+  color: #fecaca;
+}
+
+.submission-overdue-pill {
+  color: var(--status-overdue-text);
+  background: var(--status-overdue-bg);
+}

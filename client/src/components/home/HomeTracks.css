@@ -6,7 +6,7 @@
   font-size: 24px;
   font-weight: 800;
   margin-bottom: 18px;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 .home-track-grid {
@@ -16,7 +16,7 @@
 }
 
 .home-course-card {
-  background: #fff;
+  background: var(--bg-surface);
   border: 1px solid #f3f4f6;
   border-radius: 20px;
   overflow: hidden;
@@ -75,12 +75,12 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #6b7280;
+  color: var(--text-secondary);
   transition: all 0.2s ease;
 }
 
 .home-course-favorite:hover {
-  background: #fff;
+  background: var(--bg-surface);
   color: #ef4444;
 }
 
@@ -94,7 +94,7 @@
 .home-course-title {
   font-size: 16px;
   font-weight: 700;
-  color: #111827;
+  color: var(--text-primary);
   margin-bottom: 6px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -106,7 +106,7 @@
 
 .home-course-author {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--text-secondary);
   margin-bottom: 14px;
 }
 
@@ -115,7 +115,7 @@
   align-items: center;
   gap: 16px;
   margin-bottom: 18px;
-  color: #9ca3af;
+  color: var(--text-secondary);
   font-size: 13px;
 }
 
@@ -131,7 +131,7 @@
 }
 
 .home-course-rating span {
-  color: #4b5563;
+  color: var(--text-secondary);
   font-weight: 600;
 }
 
@@ -151,8 +151,8 @@
 .home-no-courses {
   padding: 40px;
   text-align: center;
-  color: #6b7280;
-  background: #f9fafb;
+  color: var(--text-secondary);
+  background: var(--bg-surface-muted);
   border-radius: 20px;
   border: 2px dashed #e5e7eb;
 }
@@ -189,7 +189,7 @@
 .home-feature-description {
   font-size: 14px;
   line-height: 1.5;
-  color: #6b7280;
+  color: var(--text-secondary);
   margin: 0;
 }
 

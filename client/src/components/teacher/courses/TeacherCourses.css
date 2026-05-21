@@ -11,8 +11,8 @@
 
 .teacher-add-btn {
   padding: 10px 20px;
-  background-color: #4f46e5;
-  color: white;
+  background-color: var(--accent);
+  color: var(--on-accent);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -24,7 +24,7 @@
 }
 
 .teacher-add-btn:hover {
-  background-color: #4338ca;
+  background-color: var(--btn-primary-hover);
 }
 
 .teacher-courses-grid {
@@ -38,24 +38,24 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #fff;
+  background-color: var(--bg-surface);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-sm);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
 }
 
 .course-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  box-shadow: var(--shadow-md);
 }
 
 .course-card-image {
   width: 100%;
   height: 180px;
   object-fit: cover;
-  background-color: #f3f4f6;
+  background-color: var(--bg-surface-muted);
 }
 
 .course-card-body {
@@ -84,7 +84,7 @@
 .course-card-description {
   margin: 8px 0 0;
   font-size: 14px;
-  color: #6b7280;
+  color: var(--text-secondary);
   line-height: 1.43;
   min-height: 2.86em;
   display: -webkit-box;
@@ -114,13 +114,13 @@
 }
 
 .course-card-status.draft {
-  background-color: #f3f4f6;
-  color: #4b5563;
+  background-color: var(--bg-surface-muted);
+  color: var(--text-secondary);
 }
 
 .course-card-status.published {
-  background-color: #dcfce7;
-  color: #166534;
+  background-color: var(--status-published-bg);
+  color: var(--status-published-text);
 }
 
 .course-card-price {
@@ -137,6 +137,6 @@
 
 .teacher-courses-empty h2 {
   margin: 0;
-  color: #6b7280;
+  color: var(--text-secondary);
   font-weight: 500;
 }

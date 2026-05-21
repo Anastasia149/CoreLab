@@ -1,7 +1,7 @@
 .student-schedule-box {
   grid-area: 2 / 2 / 4 / 3;
-  background: #fff;
-  border: 1px solid #eef0f5;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
   border-radius: 16px;
   padding: 16px;
 }
@@ -32,7 +32,7 @@
   width: auto;
   height: auto;
   border: none;
-  color: #9ca3af;
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,7 +46,7 @@
 
 .schedule-time {
   font-weight: 400;
-  color: #9ca3af;
+  color: var(--text-secondary);
   font-size: 14px;
   text-align: left;
 }
@@ -55,7 +55,7 @@
   height: 48px;
   border: none;
   border-radius: 10px;
-  background: #f7f8fa;
+  background: var(--bg-surface-muted);
   display: grid;
   place-items: center;
 }

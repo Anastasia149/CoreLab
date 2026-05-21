@@ -13,6 +13,8 @@ import '../courses/TeacherCourses.css';
 import './TeacherHome.css';
 import illustration from '../../home/pictures/Online learning-bro.svg';
 import { formatCoursePriceDisplay } from '../../../utils/coursePrice';
+import { ThemeSettingsSection } from '../../common/ThemeSettingsSection';
+import '../../common/SettingsPage.css';
 
 const TeacherHome: React.FC = () => {
   const { store } = useContext(Context);
@@ -36,9 +38,20 @@ const TeacherHome: React.FC = () => {
         {tab === 'schedule' ? (
           <ScheduleHome />
         ) : tab === 'settings' ? (
-          <section className="teacher-calendar">
+          <section className="teacher-settings-panel">
             <div className="teacher-section-title">Настройки</div>
-            <button className="teacher-logout-btn" onClick={logout}>Выйти из аккаунта</button>
+
+            <div className="settings-card">
+              <ThemeSettingsSection />
+            </div>
+
+            <div className="settings-card">
+              <h4 className="settings-block-title">Аккаунт</h4>
+              <p className="settings-block-desc">Выход из текущего профиля на этом устройстве.</p>
+              <button type="button" className="settings-logout-btn" onClick={logout}>
+                Выйти из аккаунта
+              </button>
+            </div>
           </section>
         ) : (
           <div className="teacher-grid">

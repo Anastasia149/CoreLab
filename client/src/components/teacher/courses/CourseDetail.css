@@ -8,7 +8,7 @@
   display: flex;
   gap: 10px;
   margin-top: 24px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .tab-button {
@@ -17,14 +17,14 @@
   border: none;
   cursor: pointer;
   font-size: 16px;
-  color: #6b7280;
+  color: var(--text-secondary);
   border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
 }
 
 .tab-button.active {
-  color: #4f46e5;
-  border-bottom-color: #4f46e5;
+  color: var(--accent);
+  border-bottom-color: var(--accent);
 }
 
 .tab-content {
@@ -61,8 +61,8 @@
   top: calc(100% + 8px);
   left: 0;
   width: 200px;
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
   padding: 8px;
@@ -81,24 +81,24 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  color: #374151;
+  color: var(--text-primary);
   transition: all 0.2s;
   text-align: left;
 }
 
 .add-lesson-dropdown button:hover {
-  background-color: #f3f4f6;
-  color: #4f46e5;
+  background-color: var(--bg-surface-muted);
+  color: var(--accent);
 }
 
 .add-lesson-dropdown button svg {
   width: 20px;
   height: 20px;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 .add-lesson-dropdown button:hover svg {
-  color: #4f46e5;
+  color: var(--accent);
 }
 
 .course-modules-accordion {
@@ -107,9 +107,9 @@
 }
 
 .module-item {
-  background-color: #fff;
+  background-color: var(--bg-surface);
   border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
 }
 
 .module-header {
@@ -127,7 +127,7 @@
 }
 
 .module-header.active {
-  color: #8173DA;
+  color: var(--accent-soft);
 }
 
 .module-header svg {
@@ -148,7 +148,7 @@
 
 .lesson-item {
   padding: 12px;
-  background-color: #f9fafb;
+  background-color: var(--bg-surface-muted);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -167,13 +167,13 @@
   height: 40px;
   border-radius: 6px;
   object-fit: cover;
-  background-color: #f3f4f6;
+  background-color: var(--bg-surface-muted);
 }
 
 .lesson-goto-btn {
   padding: 6px 12px;
-  background-color: #4f46e5;
-  color: white;
+  background-color: var(--accent);
+  color: var(--on-accent);
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -183,7 +183,7 @@
 }
 
 .lesson-goto-btn:hover {
-  background-color: #4338ca;
+  background-color: var(--btn-primary-hover);
 }
 
 .course-settings-tab {
@@ -193,7 +193,7 @@
 }
 
 .settings-section {
-  background-color: #f9fafb;
+  background-color: var(--bg-surface-muted);
   padding: 24px;
   border-radius: 12px;
   border: 1px solid #f3f4f6;
@@ -228,30 +228,30 @@
 }
 
 .lesson-action-btn.edit {
-  background-color: #f9fafb;
-  color: #111827;
-  border: 1px solid #e5e7eb;
+  background-color: var(--bg-surface-muted);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
 }
 
 .lesson-action-btn.delete {
   background-color: #ef4444;
-  color: white;
+  color: var(--on-accent);
 }
 
 .add-student-btn {
-  background-color: #4f46e5;
-  color: white;
+  background-color: var(--accent);
+  color: var(--on-accent);
 }
 
 .add-student-btn:hover {
-  background-color: #4338ca;
+  background-color: var(--btn-primary-hover);
 }
 
 .lessons-without-module {
   margin-top: 24px;
-  background-color: #fff;
+  background-color: var(--bg-surface);
   border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
 }
 
 .lessons-without-module .module-header {
@@ -275,7 +275,7 @@
 }
 
 .lessons-without-module .module-header.active {
-  color: #8173DA;
+  color: var(--accent-soft);
 }
 
 .lessons-without-module .module-header svg {
@@ -296,7 +296,7 @@
 .teacher-courses-empty {
   text-align: center;
   padding: 40px;
-  background-color: #f9fafb;
+  background-color: var(--bg-surface-muted);
   border-radius: 12px;
-  color: #6b7280;
+  color: var(--text-secondary);
 }

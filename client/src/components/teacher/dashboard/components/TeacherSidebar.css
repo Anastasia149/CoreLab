@@ -1,6 +1,6 @@
 .teacher-sidebar {
-  background: #ffffff;
-  border-right: 1px solid #eef0f5;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-light);
   padding: 20px 16px;
 }
 
@@ -12,17 +12,19 @@
   background: transparent;
   border: none;
   cursor: pointer;
+  color: var(--text-primary);
 }
 
 .teacher-brand-icon {
   width: 26px;
   height: 26px;
-  color: #7b5cff;
+  color: var(--accent, #7b5cff);
 }
 
 .teacher-brand-text {
   font-weight: 800;
   font-size: 20px;
+  color: var(--text-primary);
 }
 
 .teacher-nav-section-title {
@@ -30,7 +32,7 @@
   font-size: 15px;
   text-transform: none;
   letter-spacing: normal;
-  color: #A0A0A0;
+  color: var(--text-muted);
 }
 
 .teacher-nav {
@@ -49,19 +51,19 @@
   border: none;
   background: transparent;
   cursor: pointer;
-  color: #A0A0A0;
+  color: var(--text-muted);
   text-align: left;
-  transition: color .15s ease;
+  transition: color 0.15s ease, background 0.15s ease;
 }
 
 .teacher-nav-item:hover,
 .teacher-nav-item:focus {
-  color: #8173DA;
+  color: var(--accent-soft);
 }
 
 .teacher-nav-item.active {
-  background: #F1EEFE;
-  color: #8173DA;
+  background: var(--bg-active);
+  color: var(--accent-soft);
 }
 
 .teacher-nav-item svg {

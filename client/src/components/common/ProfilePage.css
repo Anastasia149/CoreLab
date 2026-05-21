@@ -7,7 +7,7 @@
   margin: 0;
   box-sizing: border-box;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 .profile-hero {
@@ -34,8 +34,8 @@
 }
 
 .profile-card {
-  background: #ffffff;
-  border: 1px solid #eef0f5;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
   border-radius: 16px;
   padding: 22px 24px 24px;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
@@ -109,13 +109,13 @@
   gap: 8px;
   font-size: 13px;
   font-weight: 600;
-  color: #374151;
+  color: var(--text-primary);
 }
 
 .profile-label-icon {
   width: 18px;
   height: 18px;
-  color: #6b7280;
+  color: var(--text-secondary);
   flex-shrink: 0;
 }
 
@@ -130,21 +130,21 @@
   height: 46px;
   padding: 0 14px;
   border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
   font-size: 14px;
-  color: #111827;
+  color: var(--text-primary);
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
 .profile-input::placeholder {
-  color: #9ca3af;
+  color: var(--text-secondary);
 }
 
 .profile-input:focus {
   border-color: #7b5cff;
   box-shadow: 0 0 0 1px rgba(123, 92, 255, 0.18);
-  background: #f9fafb;
+  background: var(--bg-surface-muted);
 }
 
 .profile-field--textarea .profile-label {
@@ -155,8 +155,8 @@
   margin-left: auto;
   font-weight: 500;
   font-size: 11px;
-  color: #6b7280;
-  background: #f3f4f6;
+  color: var(--text-secondary);
+  background: var(--bg-surface-muted);
   padding: 3px 10px;
   border-radius: 999px;
 }
@@ -167,10 +167,10 @@
   min-height: 100px;
   padding: 12px 14px;
   border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
   font-size: 14px;
   line-height: 1.5;
-  color: #111827;
+  color: var(--text-primary);
   font-family: inherit;
   outline: none;
   resize: vertical;
@@ -178,13 +178,13 @@
 }
 
 .profile-textarea::placeholder {
-  color: #9ca3af;
+  color: var(--text-secondary);
 }
 
 .profile-textarea:focus {
   border-color: #7b5cff;
   box-shadow: 0 0 0 1px rgba(123, 92, 255, 0.18);
-  background: #f9fafb;
+  background: var(--bg-surface-muted);
 }
 
 .profile-avatar-upload-area {
@@ -197,8 +197,8 @@
   height: 100%;
   min-height: 280px;
   box-sizing: border-box;
-  background: #f9fafb;
-  border: 1px solid #eef0f5;
+  background: var(--bg-surface-muted);
+  border: 1px solid var(--border-light);
   border-radius: 14px;
 }
 
@@ -210,7 +210,7 @@
   box-shadow: 0 6px 20px rgba(15, 23, 42, 0.12);
   overflow: hidden;
   flex-shrink: 0;
-  background: #e5e7eb;
+  background: var(--border-color);
   display: grid;
   place-items: center;
 }
@@ -224,7 +224,7 @@
 .profile-avatar-placeholder-icon {
   width: 52px;
   height: 52px;
-  color: #9ca3af;
+  color: var(--text-secondary);
 }
 
 .profile-avatar-placeholder-icon svg {
@@ -243,7 +243,7 @@
 .profile-avatar-hint {
   margin: 0;
   font-size: 12px;
-  color: #6b7280;
+  color: var(--text-secondary);
   line-height: 1.45;
   max-width: 220px;
 }
@@ -260,18 +260,18 @@
   height: 40px;
   padding: 0 18px;
   border-radius: 999px;
-  border: 1px solid #e5e7eb;
-  background: #ffffff;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
   font-size: 14px;
   font-weight: 600;
-  color: #374151;
+  color: var(--text-primary);
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
 }
 
 .profile-upload-button:hover {
-  background: #f9fafb;
-  border-color: #d1d5db;
+  background: var(--bg-surface-muted);
+  border-color: var(--text-muted);
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
 }
 
@@ -310,10 +310,10 @@
   display: grid;
   place-items: center;
   padding: 48px 24px;
-  background: #ffffff;
-  border: 1px solid #eef0f5;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
   border-radius: 16px;
-  color: #6b7280;
+  color: var(--text-secondary);
   font-size: 15px;
   font-weight: 600;
 }

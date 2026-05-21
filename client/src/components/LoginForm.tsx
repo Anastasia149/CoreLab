@@ -3,7 +3,7 @@ import { Context } from '../index';
 import { observer } from 'mobx-react-lite';
 import { Icon } from '@iconify/react';
 import { useNavigate } from 'react-router-dom';
-import '../components/LoginForm.css';
+import './LoginForm.css';
 import { useFormFields } from '../hooks/useFormFields';
 
 import illustration from './home/pictures/Education-rafiki.svg';
