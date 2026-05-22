@@ -2,23 +2,27 @@ import React, { useMemo } from 'react';
 import { ICourse } from '../../models/ICourse';
 import { ScheduleEvent } from '../../types/scheduleEvent';
 import { getCourseColor } from '../../utils/scheduleCourseColors';
+import { toDateKey } from '../../utils/scheduleHours';
 import '../teacher/schedule/ScheduleCategoryList.css';
 
 type Props = {
   courses: ICourse[];
   events: ScheduleEvent[];
+  selectedDate: Date;
 };
 
-const ScheduleCategoryList: React.FC<Props> = ({ courses, events }) => {
+const ScheduleCategoryList: React.FC<Props> = ({ courses, events, selectedDate }) => {
   const countByCourse = useMemo(() => {
+    const selectedKey = toDateKey(selectedDate);
     const map = new Map<number, number>();
     for (const ev of events) {
+      if (ev.date !== selectedKey) continue;
       const courseId = Number(ev.courseId);
       if (!Number.isFinite(courseId)) continue;
       map.set(courseId, (map.get(courseId) ?? 0) + 1);
     }
     return map;
-  }, [events]);
+  }, [events, selectedDate]);
 
   return (
     <div className="schedule-category-list">

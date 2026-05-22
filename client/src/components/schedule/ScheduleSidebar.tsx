@@ -30,7 +30,7 @@ const ScheduleSidebar: React.FC<Props> = ({
       Добавить событие
     </button>
     <ScheduleCalendar selectedDate={selectedDate} onDateChange={onDateChange} />
-    <ScheduleCategoryList courses={courses} events={events} />
+    <ScheduleCategoryList courses={courses} events={events} selectedDate={selectedDate} />
   </div>
 );
 
