@@ -323,6 +323,49 @@ class CourseService {
         return { message: 'Enrollment successful', course, studentId };
     }
 
+    async getStudentTodayTasks(studentId) {
+        const dayStart = new Date();
+        dayStart.setHours(0, 0, 0, 0);
+        const dayEnd = new Date(dayStart);
+        dayEnd.setDate(dayEnd.getDate() + 1);
+
+        const { rows } = await pool.query(
+            `SELECT
+                l.id AS lesson_id,
+                l.title AS lesson_title,
+                l.type AS lesson_type,
+                l.deadline,
+                c.id AS course_id,
+                c.title AS course_title,
+                EXISTS (
+                    SELECT 1 FROM submissions s
+                    WHERE s.lesson_id = l.id
+                      AND s.student_id = $1
+                      AND s.review_status = 'passed'
+                ) AS is_completed
+             FROM student_courses sc
+             JOIN lessons l ON l.course_id = sc.course_id
+             JOIN courses c ON c.id = sc.course_id
+             WHERE sc.student_id = $1
+               AND l.type IN ('assignment', 'test')
+               AND l.deadline IS NOT NULL
+               AND l.deadline >= $2
+               AND l.deadline < $3
+             ORDER BY l.deadline ASC`,
+            [studentId, dayStart.toISOString(), dayEnd.toISOString()]
+        );
+
+        return rows.map((row) => ({
+            lessonId: row.lesson_id,
+            lessonTitle: row.lesson_title,
+            lessonType: row.lesson_type,
+            deadline: row.deadline,
+            courseId: row.course_id,
+            courseTitle: row.course_title,
+            isCompleted: Boolean(row.is_completed),
+        }));
+    }
+
     async getStudentEnrollments(studentId) {
         const query = `
             SELECT 

@@ -10,6 +10,7 @@ import { ICourseReview, ICourseReviewsResponse } from "../models/ICourseReview";
 import { ISearchDetails, Module, Material, Lesson } from "../models/ICourseDetail";
 import { ICourseStudent } from "../models/ICourseStudent";
 import { ICourseInstructor } from "../models/ICourseInstructor";
+import { IStudentTodayTask } from "../models/IStudentTodayTask";
 import { DEFAULT_COURSE_COVER } from "../constants/courseCover";
 
 export type AppTheme = 'light' | 'dark';
@@ -107,6 +108,17 @@ export default class Store {
             this.setUser({ ...this.user, courses: response.data });
         } catch (e) {
             console.log('FULL ERROR:', e);
+        }
+    }
+
+    async getStudentTodayTasks(): Promise<IStudentTodayTask[]> {
+        if (!this.isAuth || this.user?.role !== 'student') return [];
+        try {
+            const response = await $api.get<IStudentTodayTask[]>('/courses/my/today-tasks');
+            return response.data;
+        } catch (e) {
+            console.log('FULL ERROR:', e);
+            return [];
         }
     }
 

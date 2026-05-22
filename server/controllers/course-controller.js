@@ -105,6 +105,16 @@ class CourseController {
         }
     }
 
+    async getStudentTodayTasks(req, res, next) {
+        try {
+            const studentId = req.user.id;
+            const tasks = await courseService.getStudentTodayTasks(studentId);
+            return res.json(tasks);
+        } catch (e) {
+            next(e);
+        }
+    }
+
     async getCourseStudents(req, res, next) {
         try {
             const { courseId } = req.params;

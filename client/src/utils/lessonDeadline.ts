@@ -86,6 +86,21 @@ export function formatDeadline(iso: string | null | undefined): string {
   });
 }
 
+/** Срок сдачи попадает на календарный день `day` (локальное время браузера). */
+export function isDeadlineOnLocalDay(
+  deadline: string | null | undefined,
+  day: Date = new Date()
+): boolean {
+  if (!deadline) return false;
+  const due = new Date(deadline);
+  if (Number.isNaN(due.getTime())) return false;
+  const start = new Date(day.getFullYear(), day.getMonth(), day.getDate());
+  const end = new Date(start);
+  end.setDate(end.getDate() + 1);
+  const t = due.getTime();
+  return t >= start.getTime() && t < end.getTime();
+}
+
 export function isSubmissionOverdue(
   createdAt: string,
   deadline: string | null | undefined

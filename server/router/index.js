@@ -41,6 +41,7 @@ router.delete('/users/account', authMiddleware, userController.deleteAccount);
 router.post('/courses', authMiddleware, courseController.createCourse);
 router.get('/courses', courseController.getAllPublishedCourses);
 router.get('/courses/my', authMiddleware, courseController.getStudentEnrollments);
+router.get('/courses/my/today-tasks', authMiddleware, courseController.getStudentTodayTasks);
 router.get('/courses/:courseId/my-grades', authMiddleware, submissionController.getMyCourseGrades);
 router.get(
     '/courses/:courseId/instructor',

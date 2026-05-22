@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../teacher/courses/TeacherCourses.css';
 import '../../student/courses/StudentMyCourses.css';
@@ -10,13 +10,36 @@ import StudentSchedule from './components/StudentSchedule';
 import illustration from '../../home/pictures/Online learning-bro.svg';
 import { getCourseProgressTotals } from '../../../utils/courseProgress';
 import { getCourseCoverUrl } from '../../../constants/courseCover';
+import { IStudentTodayTask } from '../../../models/IStudentTodayTask';
+import { formatDeadline } from '../../../utils/lessonDeadline';
+
+function todayTaskIcon(type: IStudentTodayTask['lessonType']): string {
+  return type === 'test' ? 'mdi:clipboard-check-outline' : 'mdi:clipboard-text-outline';
+}
 
 const StudentHome: React.FC = () => {
   const { store } = useContext(Context);
   const navigate = useNavigate();
+  const [todayTasks, setTodayTasks] = useState<IStudentTodayTask[]>([]);
+  const [tasksLoading, setTasksLoading] = useState(true);
 
   useEffect(() => {
-    store.refreshMyCourses();
+    let cancelled = false;
+
+    const load = async () => {
+      setTasksLoading(true);
+      await store.refreshMyCourses();
+      const tasks = await store.getStudentTodayTasks();
+      if (!cancelled) {
+        setTodayTasks(tasks);
+        setTasksLoading(false);
+      }
+    };
+
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, [store]);
 
   return (
@@ -86,35 +109,55 @@ const StudentHome: React.FC = () => {
       <div className="student-tasks-group">
         <div className="student-section-title">Задачи на сегодня</div>
         <div className="student-tasks">
-          <div className="student-tasks-list">
-            <label className="student-task">
-              <div className="student-task-content">
-                <span className="student-task-icon-wrapper">
-                  <Icon icon="system-uicons:book-text" />
-                </span>
-                Пройти модуль по JSX
-              </div>
-              <input type="checkbox" />
-            </label>
-            <label className="student-task">
-              <div className="student-task-content">
-                <span className="student-task-icon-wrapper">
-                  <Icon icon="system-uicons:book-text" />
-                </span>
-                Сделать практику по массивам
-              </div>
-              <input type="checkbox" />
-            </label>
-            <label className="student-task">
-              <div className="student-task-content">
-                <span className="student-task-icon-wrapper">
-                  <Icon icon="system-uicons:book-text" />
-                </span>
-                Прочитать статью по Git
-              </div>
-              <input type="checkbox" />
-            </label>
-          </div>
+          {tasksLoading ? (
+            <p className="student-tasks-status">Загрузка…</p>
+          ) : todayTasks.length === 0 ? (
+            <p className="student-tasks-status">
+              На сегодня нет заданий и тестов с дедлайном
+            </p>
+          ) : (
+            <div className="student-tasks-list">
+              {todayTasks.map((task) => (
+                <div
+                  key={task.lessonId}
+                  className={`student-task${task.isCompleted ? ' student-task--done' : ''}`}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => navigate(`/student/lesson/${task.lessonId}`)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      navigate(`/student/lesson/${task.lessonId}`);
+                    }
+                  }}
+                >
+                  <div className="student-task-content">
+                    <span className="student-task-icon-wrapper">
+                      <Icon icon={todayTaskIcon(task.lessonType)} aria-hidden />
+                    </span>
+                    <span className="student-task-text">
+                      <span className="student-task-title">{task.lessonTitle}</span>
+                      <span className="student-task-meta">
+                        {task.courseTitle}
+                        {formatDeadline(task.deadline)
+                          ? ` · до ${formatDeadline(task.deadline)}`
+                          : ''}
+                      </span>
+                    </span>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={task.isCompleted}
+                    readOnly
+                    tabIndex={-1}
+                    aria-label={
+                      task.isCompleted ? 'Задание выполнено' : 'Задание не выполнено'
+                    }
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
