@@ -1,0 +1,115 @@
+.student-instructor-profile-page {
+  max-width: 720px;
+}
+
+.student-instructor-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.student-instructor-back:hover {
+  color: var(--btn-primary-hover);
+}
+
+.student-instructor-card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 28px;
+  margin-bottom: 20px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+}
+
+.student-instructor-avatar {
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface-muted);
+  border: 1px solid var(--border-color);
+}
+
+.student-instructor-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.student-instructor-avatar svg {
+  width: 56px;
+  height: 56px;
+  color: var(--accent-soft);
+}
+
+.student-instructor-info h1 {
+  margin: 0 0 10px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.student-instructor-role {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+.student-instructor-role svg {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.student-instructor-section {
+  margin-bottom: 16px;
+  padding: 20px 24px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+}
+
+.student-instructor-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.student-instructor-section-title svg {
+  font-size: 22px;
+  color: var(--accent);
+}
+
+.student-instructor-section-text {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+}
+
+.student-instructor-empty-details,
+.student-instructor-missing {
+  margin: 0 0 16px;
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}

@@ -42,6 +42,11 @@ router.post('/courses', authMiddleware, courseController.createCourse);
 router.get('/courses', courseController.getAllPublishedCourses);
 router.get('/courses/my', authMiddleware, courseController.getStudentEnrollments);
 router.get('/courses/:courseId/my-grades', authMiddleware, submissionController.getMyCourseGrades);
+router.get(
+    '/courses/:courseId/instructor',
+    authMiddleware,
+    courseController.getCourseInstructorProfile
+);
 router.get('/courses/:courseId/reviews', courseReviewController.getCourseReviews);
 router.get('/courses/:courseId/my-review', authMiddleware, courseReviewController.getMyReview);
 router.put(

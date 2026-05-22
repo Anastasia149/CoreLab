@@ -129,6 +129,19 @@ class CourseController {
         }
     }
 
+    async getCourseInstructorProfile(req, res, next) {
+        try {
+            const { courseId } = req.params;
+            const instructor = await courseService.getCourseInstructorProfile(
+                courseId,
+                req.user.id
+            );
+            return res.json(instructor);
+        } catch (e) {
+            next(e);
+        }
+    }
+
     async removeStudentFromCourse(req, res, next) {
         try {
             const { courseId, studentId } = req.params;

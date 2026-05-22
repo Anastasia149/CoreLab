@@ -418,6 +418,9 @@ const StudentCourseDetails: React.FC = () => {
                   authorName={course.author_name}
                   lessonsCount={countLessonsInCourse(course)}
                   studentsCount={Number(course.students_count) || 0}
+                  onAuthorClick={() =>
+                    navigate(`/student/my-courses/${id}/instructor`)
+                  }
                 />
               </div>
             </div>

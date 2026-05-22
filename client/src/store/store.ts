@@ -9,6 +9,7 @@ import { ICourseGrade } from "../models/ICourseGrade";
 import { ICourseReview, ICourseReviewsResponse } from "../models/ICourseReview";
 import { ISearchDetails, Module, Material, Lesson } from "../models/ICourseDetail";
 import { ICourseStudent } from "../models/ICourseStudent";
+import { ICourseInstructor } from "../models/ICourseInstructor";
 import { DEFAULT_COURSE_COVER } from "../constants/courseCover";
 
 export type AppTheme = 'light' | 'dark';
@@ -353,6 +354,15 @@ export default class Store {
             const response = await $api.get<ICourseStudent>(
                 `/teacher/course/${courseId}/students/${studentId}`
             );
+            return response.data;
+        } catch (e) {
+            console.log("FULL ERROR:", e);
+        }
+    }
+
+    async getCourseInstructorProfile(courseId: number): Promise<ICourseInstructor | undefined> {
+        try {
+            const response = await $api.get<ICourseInstructor>(`/courses/${courseId}/instructor`);
             return response.data;
         } catch (e) {
             console.log("FULL ERROR:", e);

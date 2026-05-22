@@ -73,6 +73,7 @@ class CourseService {
                 c.status,
                 c.price,
                 c.image_url,
+                u.id AS author_id,
                 u.name AS author_name,
                 u.avatar AS author_avatar,
                 COALESCE(c.students_count, 0)::int AS students_count,
@@ -213,6 +214,37 @@ class CourseService {
             throw new ApiError(404, 'Ученик не найден на этом курсе');
         }
         return rows[0];
+    }
+
+    async getCourseInstructorProfile(courseId, studentId) {
+        const enrollment = await pool.query(
+            `SELECT 1 FROM student_courses WHERE course_id = $1 AND student_id = $2`,
+            [courseId, studentId]
+        );
+        if (enrollment.rows.length === 0) {
+            throw new ApiError(403, 'Нет доступа к профилю преподавателя этого курса');
+        }
+
+        const { rows } = await pool.query(
+            `SELECT u.id, u.name, u.avatar, u.about_me, u.certificates, u.career
+             FROM courses c
+             JOIN users u ON u.id = c.author_id
+             WHERE c.id = $1`,
+            [courseId]
+        );
+        if (rows.length === 0) {
+            throw new ApiError(404, 'Курс не найден');
+        }
+
+        const instructor = rows[0];
+        return {
+            id: instructor.id,
+            name: instructor.name,
+            avatar: instructor.avatar,
+            aboutMe: instructor.about_me,
+            certificates: instructor.certificates,
+            career: instructor.career,
+        };
     }
 
     async removeStudentFromCourse(courseId, studentId, teacherId) {
