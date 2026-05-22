@@ -8,6 +8,7 @@ import { ISearchDetails, Lesson } from '../../../models/ICourseDetail';
 import { ICourseReview, ICourseReviewsResponse } from '../../../models/ICourseReview';
 import Loader from '../../common/Loader';
 import CourseMetaIcons from '../../common/CourseMetaIcons';
+import { getCourseCoverUrl } from '../../../constants/courseCover';
 
 type CourseTab = 'lessons' | 'rating';
 
@@ -403,7 +404,7 @@ const StudentCourseDetails: React.FC = () => {
           <div className="student-course-hero">
             <div className="student-course-cover-wrap">
               <img
-                src={course.image_url || 'https://via.placeholder.com/400x240'}
+                src={getCourseCoverUrl(course.image_url)}
                 alt={course.title}
                 className="student-course-cover"
               />

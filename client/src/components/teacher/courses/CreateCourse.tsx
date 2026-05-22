@@ -9,6 +9,7 @@ import './CreateCourse.css';
 
 import { useNavigate } from 'react-router-dom';
 import { parseCoursePrice, validateCoursePrice } from '../../../utils/coursePrice';
+import { DEFAULT_COURSE_COVER } from '../../../constants/courseCover';
 
 const CreateCourse: React.FC = () => {
   const { store } = useContext(Context);
@@ -143,7 +144,11 @@ const CreateCourse: React.FC = () => {
                 <span className="file-upload-name">
                   {fields.image ? fields.image.name : 'Файл не выбран'}
                 </span>
-                {imagePreview && <img src={imagePreview} alt="Превью" className="file-upload-preview" />}
+                <img
+                  src={imagePreview || DEFAULT_COURSE_COVER}
+                  alt="Превью обложки"
+                  className="file-upload-preview"
+                />
               </div>
             </div>
             <button type="submit" className="auth-submit-button full-width">Создать курс</button>

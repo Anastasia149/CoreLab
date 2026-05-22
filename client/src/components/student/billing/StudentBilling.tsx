@@ -8,6 +8,7 @@ import { isCourseInCart } from '../../../utils/courseCart';
 import { formatCoursePriceDisplay, parseCoursePrice } from '../../../utils/coursePrice';
 import Loader from '../../common/Loader';
 import './StudentBilling.css';
+import { getCourseCoverUrl } from '../../../constants/courseCover';
 
 const SERVICE_FEE_RATE = 0.03;
 
@@ -152,11 +153,7 @@ const StudentBilling: React.FC = () => {
 
           <div className="billing-order-item">
             <div className="billing-order-thumb">
-              {course.image_url ? (
-                <img src={course.image_url} alt="" />
-              ) : (
-                <Icon icon="mdi:book-open-page-variant" />
-              )}
+              <img src={getCourseCoverUrl(course.image_url)} alt="" />
             </div>
             <div className="billing-order-info">
               <div className="billing-order-title">{course.title}</div>

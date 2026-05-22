@@ -6,6 +6,7 @@ import { ICourse } from '../../models/ICourse';
 import { useNavigate } from 'react-router-dom';
 import './HomeTracks.css';
 import { formatCoursePriceDisplay } from '../../utils/coursePrice';
+import { getCourseCoverUrl } from '../../constants/courseCover';
 
 const HomeTracks: React.FC = () => {
   const { store } = useContext(Context);
@@ -59,7 +60,7 @@ const HomeTracks: React.FC = () => {
               onClick={() => navigate('/register')}
             >
               <div className="home-course-image-wrapper">
-                <img src={course.image_url || 'https://via.placeholder.com/300x180'} alt={course.title} className="home-course-image" />
+                <img src={getCourseCoverUrl(course.image_url)} alt={course.title} className="home-course-image" />
                 <button className="home-course-favorite">
                   <Icon icon="mdi:heart-outline" />
                 </button>
@@ -110,7 +111,7 @@ const HomeTracks: React.FC = () => {
               onClick={() => navigate('/register')}
             >
               <div className="home-course-image-wrapper">
-                <img src={course.image_url || 'https://via.placeholder.com/300x180'} alt={course.title} className="home-course-image" />
+                <img src={getCourseCoverUrl(course.image_url)} alt={course.title} className="home-course-image" />
                 <button className="home-course-favorite">
                   <Icon icon="mdi:heart-outline" />
                 </button>

@@ -10,6 +10,7 @@ import { Icon } from '@iconify/react';
 
 import { useNavigate } from 'react-router-dom';
 import { formatCoursePriceDisplay } from '../../../utils/coursePrice';
+import { getCourseCoverUrl } from '../../../constants/courseCover';
 
 const TeacherCourses: React.FC = () => {
   const { store } = useContext(Context);
@@ -36,7 +37,7 @@ const TeacherCourses: React.FC = () => {
             <div className="teacher-courses-grid">
               {store.courses.map((course: ICourse) => (
                 <div className="course-card" key={course.id} onClick={() => navigate(`/teacher/course/${course.id}`)}>
-                  <img src={course.image_url || 'https://via.placeholder.com/300x180'} alt={course.title} className="course-card-image" />
+                  <img src={getCourseCoverUrl(course.image_url)} alt={course.title} className="course-card-image" />
                   <div className="course-card-body">
                     <div className="course-card-title">{course.title}</div>
                     <div className="course-card-description">{course.description}</div>

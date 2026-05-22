@@ -9,6 +9,7 @@ import StudentCalendar from './components/StudentCalendar';
 import StudentSchedule from './components/StudentSchedule';
 import illustration from '../../home/pictures/Online learning-bro.svg';
 import { getCourseProgressTotals } from '../../../utils/courseProgress';
+import { getCourseCoverUrl } from '../../../constants/courseCover';
 
 const StudentHome: React.FC = () => {
   const { store } = useContext(Context);
@@ -52,7 +53,7 @@ const StudentHome: React.FC = () => {
                 return (
                   <Link to={`/student/my-courses/${course.id}`} key={course.id} className="student-course-card-link">
                     <div className="course-card">
-                      <img src={course.image_url || 'https://via.placeholder.com/300x180'} alt={course.title} className="course-card-image" />
+                      <img src={getCourseCoverUrl(course.image_url)} alt={course.title} className="course-card-image" />
                       <div className="course-card-body">
                         <div className="course-card-title">{course.title}</div>
                         <div className="course-card-description">{course.description}</div>

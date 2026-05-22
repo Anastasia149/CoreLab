@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { formatCoursePriceDisplay } from '../../../utils/coursePrice';
 import { loadFavoriteCourseIds, saveFavoriteCourseIds } from '../../../utils/courseFavorites';
 import { CourseSearchStars } from '../../../utils/courseRatingStars';
+import { getCourseCoverUrl } from '../../../constants/courseCover';
 
 type CourseListFilter = 'all' | 'free' | 'paid' | 'favorites';
 
@@ -197,7 +198,7 @@ const StudentCoursesSearch: React.FC = () => {
               <Link to={`/student/search/${course.id}`} key={course.id} className="student-course-card-link">
                 <div className="student-course-card">
                   <div className="student-course-card-header">
-                    <img src={course.image_url || 'https://via.placeholder.com/300x160'} alt={course.title} className="student-course-card-img" />
+                    <img src={getCourseCoverUrl(course.image_url)} alt={course.title} className="student-course-card-img" />
                     <button 
                       className={`card-favorite-button ${favoriteCourseIds.includes(course.id) ? 'active' : ''}`}
                       onClick={(e) => toggleFavorite(e, course.id)}

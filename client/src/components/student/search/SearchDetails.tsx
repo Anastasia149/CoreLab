@@ -8,6 +8,7 @@ import { ISearchDetails } from '../../../models/ICourseDetail';
 import Loader from '../../common/Loader';
 import { addCourseToCart, isCourseInCart, removeCourseFromCart } from '../../../utils/courseCart';
 import { isPaidCoursePrice } from '../../../utils/coursePrice';
+import { getCourseCoverUrl } from '../../../constants/courseCover';
 const SearchDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { store } = useContext(Context);
@@ -115,7 +116,7 @@ const SearchDetails: React.FC = () => {
       <div className="course-details-left-col">
         <div className="course-content-panel">
           <h2>{course.title}</h2>
-          <img src={course.image_url || 'https://via.placeholder.com/800x400'} alt={course.title} className="course-details-image" />
+          <img src={getCourseCoverUrl(course.image_url)} alt={course.title} className="course-details-image" />
           <div className="course-details-tabs">
               <button className={`tab-button ${activeTab === 'description' ? 'active' : ''}`} onClick={() => setActiveTab('description')}>Описание</button>
               <button className={`tab-button ${activeTab === 'reviews' ? 'active' : ''}`} onClick={() => setActiveTab('reviews')}>Отзывы</button>

@@ -7,6 +7,7 @@ import '../../teacher/courses/TeacherCourses.css';
 import './StudentMyCourses.css';
 import CourseMetaIcons from '../../common/CourseMetaIcons';
 import { getCourseProgressTotals } from '../../../utils/courseProgress';
+import { getCourseCoverUrl } from '../../../constants/courseCover';
 
 const StudentMyCourses: React.FC = () => {
   const { store } = useContext(Context);
@@ -31,7 +32,7 @@ const StudentMyCourses: React.FC = () => {
                   className="student-course-card-link"
                 >
                   <div className="course-card">
-                    <img src={course.image_url || 'https://via.placeholder.com/300x180'} alt={course.title} className="course-card-image" />
+                    <img src={getCourseCoverUrl(course.image_url)} alt={course.title} className="course-card-image" />
                     <div className="course-card-body">
                       <div className="course-card-title">{course.title}</div>
                       <div className="course-card-description">{course.description}</div>

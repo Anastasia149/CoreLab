@@ -7,6 +7,7 @@ import { loadCartCourseIds, removeCourseFromCart } from '../../../utils/courseCa
 import { formatCoursePriceDisplay } from '../../../utils/coursePrice';
 import '../courses/StudentMyCourses.css';
 import './StudentCart.css';
+import { getCourseCoverUrl } from '../../../constants/courseCover';
 
 const StudentCart: React.FC = () => {
   const { store } = useContext(Context);
@@ -74,7 +75,7 @@ const StudentCart: React.FC = () => {
                     <Icon icon="mdi:close" />
                   </button>
                   <img
-                    src={course.image_url || 'https://via.placeholder.com/300x180'}
+                    src={getCourseCoverUrl(course.image_url)}
                     alt={course.title}
                     className="course-card-image"
                   />

@@ -9,6 +9,7 @@ import { ICourseGrade } from "../models/ICourseGrade";
 import { ICourseReview, ICourseReviewsResponse } from "../models/ICourseReview";
 import { ISearchDetails, Module, Material, Lesson } from "../models/ICourseDetail";
 import { ICourseStudent } from "../models/ICourseStudent";
+import { DEFAULT_COURSE_COVER } from "../constants/courseCover";
 
 export type AppTheme = 'light' | 'dark';
 
@@ -370,7 +371,7 @@ export default class Store {
 
     async createCourse(title: string, description: string, status: string, image: File | null, price: number) {
         try {
-            let image_url = '';
+            let image_url: string = DEFAULT_COURSE_COVER;
             if (image) {
                 const formData = new FormData();
                 formData.append('file', image);

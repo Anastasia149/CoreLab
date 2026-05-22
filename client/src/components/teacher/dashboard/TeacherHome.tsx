@@ -13,6 +13,7 @@ import './TeacherHome.css';
 import './TeacherLayout.css';
 import illustration from '../../home/pictures/Online learning-bro.svg';
 import { formatCoursePriceDisplay } from '../../../utils/coursePrice';
+import { getCourseCoverUrl } from '../../../constants/courseCover';
 import { ThemeSettingsSection } from '../../common/ThemeSettingsSection';
 import '../../common/SettingsPage.css';
 
@@ -70,7 +71,7 @@ const TeacherHome: React.FC = () => {
                   <div className="teacher-courses-grid-home">
                     {store.courses.slice(0, 2).map((course: ICourse) => (
                       <div className="course-card" key={course.id} onClick={() => navigate('/teacher/courses')}>
-                        <img src={course.image_url || 'https://via.placeholder.com/300x180'} alt={course.title} className="course-card-image" />
+                        <img src={getCourseCoverUrl(course.image_url)} alt={course.title} className="course-card-image" />
                         <div className="course-card-body">
                           <div className="course-card-title">{course.title}</div>
                           <div className="course-card-description">{course.description}</div>

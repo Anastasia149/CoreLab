@@ -8,6 +8,7 @@ import { useFormFields } from '../../../hooks/useFormFields';
 import '../dashboard/TeacherLayout.css';
 import './CreateCourse.css';
 import { parseCoursePrice, validateCoursePrice } from '../../../utils/coursePrice';
+import { getCourseCoverUrl } from '../../../constants/courseCover';
 
 const EditCourse: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +23,7 @@ const EditCourse: React.FC = () => {
   });
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [savedImageUrl, setSavedImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -34,14 +36,15 @@ const EditCourse: React.FC = () => {
             price: data.price ?? 0,
             image: null,
           });
-          setImagePreview(data.image_url || null);
+          setSavedImageUrl(data.image_url);
+          setImagePreview(getCourseCoverUrl(data.image_url));
         }
       });
     }
   }, [id, store, setFields]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (imagePreview) {
+    if (imagePreview?.startsWith('blob:')) {
       URL.revokeObjectURL(imagePreview);
     }
 
@@ -53,7 +56,7 @@ const EditCourse: React.FC = () => {
         alert('Пожалуйста, выберите файл изображения.');
         e.target.value = '';
         setFieldValue('image', null);
-        setImagePreview(null);
+        setImagePreview(getCourseCoverUrl(savedImageUrl));
         return;
       }
 
@@ -61,7 +64,7 @@ const EditCourse: React.FC = () => {
       setImagePreview(URL.createObjectURL(file));
     } else {
       setFieldValue('image', null);
-      setImagePreview(null);
+      setImagePreview(getCourseCoverUrl(savedImageUrl));
     }
   };
 
@@ -85,7 +88,7 @@ const EditCourse: React.FC = () => {
     }
 
     const price = parseCoursePrice(fields.price);
-    await store.updateCourse(Number(id), fields.title, fields.description, fields.status, fields.image, price, imagePreview);
+    await store.updateCourse(Number(id), fields.title, fields.description, fields.status, fields.image, price, savedImageUrl);
     navigate(`/teacher/course/${id}`);
   };
 
