@@ -216,7 +216,7 @@ const StudentLessonDetail: React.FC = () => {
   const handleCancelSubmission = async () => {
     if (!lessonId || isCancelling) return;
     const confirmed = await showConfirm(
-      'Отозвать отправленную работу? После этого можно будет отправить решение снова.',
+      'Отозвать отправленную работу? После этого можно будет отправить решение снова.\n\nПрикрепленные файлы не будут доступны.',
       { title: 'Отозвать работу', confirmText: 'Отозвать', danger: true }
     );
     if (!confirmed) return;
