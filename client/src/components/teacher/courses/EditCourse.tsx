@@ -15,7 +15,7 @@ const EditCourse: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { store } = useContext(Context);
   const navigate = useNavigate();
-  const { showAlert } = useAppModal();
+  const { showModal } = useAppModal();
   const { fields, handleChange, setFieldValue, setFields } = useFormFields({
     title: '',
     description: '',
@@ -55,7 +55,7 @@ const EditCourse: React.FC = () => {
       const mainType = file.type.split('/')[0];
 
       if (mainType !== 'image') {
-        void showAlert('Пожалуйста, выберите файл изображения.');
+        void showModal('Пожалуйста, выберите файл изображения.');
         e.target.value = '';
         setFieldValue('image', null);
         setImagePreview(getCourseCoverUrl(savedImageUrl));
@@ -75,17 +75,17 @@ const EditCourse: React.FC = () => {
     if (!id) return;
 
     if (fields.title.charAt(0) !== fields.title.charAt(0).toUpperCase()) {
-      await showAlert('Название курса должно начинаться с большой буквы.');
+      await showModal('Название курса должно начинаться с большой буквы.');
       return;
     }
     if (fields.description && fields.description.charAt(0) !== fields.description.charAt(0).toUpperCase()) {
-      await showAlert('Описание курса должно начинаться с большой буквы.');
+      await showModal('Описание курса должно начинаться с большой буквы.');
       return;
     }
 
     const priceError = validateCoursePrice(fields.price);
     if (priceError) {
-      await showAlert(priceError);
+      await showModal(priceError);
       return;
     }
 

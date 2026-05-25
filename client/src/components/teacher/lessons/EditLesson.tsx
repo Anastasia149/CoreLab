@@ -44,7 +44,7 @@ const EditLesson: React.FC = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
   const { store } = useContext(Context);
   const navigate = useNavigate();
-  const { showAlert, showConfirm } = useAppModal();
+  const { showModal, showConfirm } = useAppModal();
   const { fields, handleChange, setFieldValue, setFields } = useFormFields({
     title: '',
     content: '',
@@ -154,14 +154,14 @@ const EditLesson: React.FC = () => {
       ];
 
       if (!allowedMainTypes.includes(mainType) && !allowedFullTypes.includes(fileType)) {
-        void showAlert('Недопустимый тип файла. Разрешены только изображения, видео и документы (pdf, doc, xls, ppt).');
+        void showModal('Недопустимый тип файла. Разрешены только изображения, видео и документы (pdf, doc, xls, ppt).');
         e.target.value = '';
         return;
       }
 
       const sizeError = getAssignmentFileSizeError(file);
       if (sizeError) {
-        void showAlert(sizeError);
+        void showModal(sizeError);
         e.target.value = '';
         return;
       }
@@ -177,7 +177,7 @@ const EditLesson: React.FC = () => {
   const handleCreateModule = async () => {
     if (newModuleName.trim() !== '' && courseId) {
       if (newModuleName.charAt(0) !== newModuleName.charAt(0).toUpperCase()) {
-        void showAlert('Название модуля должно начинаться с большой буквы.');
+        void showModal('Название модуля должно начинаться с большой буквы.');
         return;
       }
       const newModule = await store.createModule(courseId, newModuleName);
@@ -200,7 +200,7 @@ const EditLesson: React.FC = () => {
       const mainType = file.type.split('/')[0];
 
       if (mainType !== 'image') {
-        void showAlert('Пожалуйста, выберите файл изображения.');
+        void showModal('Пожалуйста, выберите файл изображения.');
         e.target.value = '';
         setFieldValue('image', null);
         setImagePreview(null);
@@ -303,7 +303,7 @@ const EditLesson: React.FC = () => {
     if (!file) return;
 
     if (file.type.split('/')[0] !== 'image') {
-      void showAlert('Пожалуйста, выберите файл изображения.');
+      void showModal('Пожалуйста, выберите файл изображения.');
       e.target.value = '';
       return;
     }
@@ -315,7 +315,7 @@ const EditLesson: React.FC = () => {
       updateQuestion(questionId, { imageUrl: response.data.url });
     } catch (error) {
       console.error('Failed to upload question image:', error);
-      await showAlert('Ошибка при загрузке изображения.', { title: 'Ошибка' });
+      await showModal('Ошибка при загрузке изображения.', { title: 'Ошибка' });
     }
   };
 
@@ -330,12 +330,12 @@ const EditLesson: React.FC = () => {
 
     if (fields.type === 'test') {
       if (testTitle.charAt(0) !== testTitle.charAt(0).toUpperCase()) {
-        await showAlert('Название теста должно начинаться с большой буквы.');
+        await showModal('Название теста должно начинаться с большой буквы.');
         return;
       }
       const isValid = testQuestions.every(q => q.text && q.options.some(o => o.isCorrect) && q.options.every(o => o.text));
       if (!isValid) {
-        await showAlert('Пожалуйста, заполните все вопросы теста и отметьте правильные ответы.');
+        await showModal('Пожалуйста, заполните все вопросы теста и отметьте правильные ответы.');
         return;
       }
       finalTitle = testTitle;
@@ -343,11 +343,11 @@ const EditLesson: React.FC = () => {
       finalImageUrl = null; // Tests don't have images
     } else {
       if (fields.title.charAt(0) !== fields.title.charAt(0).toUpperCase()) {
-        await showAlert('Название урока должно начинаться с большой буквы.');
+        await showModal('Название урока должно начинаться с большой буквы.');
         return;
       }
       if (fields.content && fields.content.charAt(0) !== fields.content.charAt(0).toUpperCase()) {
-        await showAlert('Описание урока должно начинаться с большой буквы.');
+        await showModal('Описание урока должно начинаться с большой буквы.');
         return;
       }
 
@@ -362,7 +362,7 @@ const EditLesson: React.FC = () => {
     if (lessonTypeHasDeadline(fields.type)) {
       const deadlineError = validateDeadlineLocal(fields.deadline, initialDeadlineLocal);
       if (deadlineError) {
-        await showAlert(deadlineError);
+        await showModal(deadlineError);
         return;
       }
     }
@@ -384,7 +384,7 @@ const EditLesson: React.FC = () => {
       (updated as { testSubmissionsReset?: number } | undefined)?.testSubmissionsReset ?? 0
     );
     if (fields.type === 'test' && resetCount > 0) {
-      await showAlert(
+      await showModal(
         `Тест изменён. Сброшено ответов студентов: ${resetCount}. Всем нужно пройти тест заново.`,
         { title: 'Ответы сброшены' }
       );

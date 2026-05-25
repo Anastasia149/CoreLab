@@ -8,8 +8,9 @@ import React, {
 } from 'react';
 import '../components/common/AppModal.css';
 
-type AlertOptions = {
+type MessageModalOptions = {
   title?: string;
+  confirmText?: string;
 };
 
 type ConfirmOptions = {
@@ -21,9 +22,10 @@ type ConfirmOptions = {
 
 type ModalState =
   | {
-      type: 'alert';
+      type: 'message';
       message: string;
       title: string;
+      confirmText: string;
       resolve: () => void;
     }
   | {
@@ -37,7 +39,7 @@ type ModalState =
     };
 
 type AppModalContextValue = {
-  showAlert: (message: string, options?: AlertOptions) => Promise<void>;
+  showModal: (message: string, options?: MessageModalOptions) => Promise<void>;
   showConfirm: (message: string, options?: ConfirmOptions) => Promise<boolean>;
 };
 
@@ -49,12 +51,13 @@ export const AppModalProvider: React.FC<{ children: React.ReactNode }> = ({
   const [modal, setModal] = useState<ModalState | null>(null);
   const confirmBtnRef = useRef<HTMLButtonElement>(null);
 
-  const showAlert = useCallback((message: string, options?: AlertOptions) => {
+  const showModal = useCallback((message: string, options?: MessageModalOptions) => {
     return new Promise<void>((resolve) => {
       setModal({
-        type: 'alert',
+        type: 'message',
         message,
-        title: options?.title ?? 'Уведомление',
+        title: options?.title ?? 'Сообщение',
+        confirmText: options?.confirmText ?? 'Понятно',
         resolve,
       });
     });
@@ -74,8 +77,8 @@ export const AppModalProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   }, []);
 
-  const closeAlert = () => {
-    if (modal?.type === 'alert') {
+  const closeMessage = () => {
+    if (modal?.type === 'message') {
       modal.resolve();
       setModal(null);
     }
@@ -97,7 +100,7 @@ export const AppModalProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!modal) return;
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        if (modal.type === 'alert') closeAlert();
+        if (modal.type === 'message') closeMessage();
         else closeConfirm(false);
       }
     };
@@ -106,14 +109,14 @@ export const AppModalProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [modal]);
 
   return (
-    <AppModalContext.Provider value={{ showAlert, showConfirm }}>
+    <AppModalContext.Provider value={{ showModal, showConfirm }}>
       {children}
       {modal && (
         <div
           className="app-modal-overlay"
           role="presentation"
           onClick={() =>
-            modal.type === 'alert' ? closeAlert() : closeConfirm(false)
+            modal.type === 'message' ? closeMessage() : closeConfirm(false)
           }
         >
           <div
@@ -146,10 +149,12 @@ export const AppModalProvider: React.FC<{ children: React.ReactNode }> = ({
                     : 'app-modal-btn--primary'
                 }`}
                 onClick={() =>
-                  modal.type === 'alert' ? closeAlert() : closeConfirm(true)
+                  modal.type === 'message'
+                    ? closeMessage()
+                    : closeConfirm(true)
                 }
               >
-                {modal.type === 'alert' ? 'ОК' : modal.confirmText}
+                {modal.type === 'message' ? modal.confirmText : modal.confirmText}
               </button>
             </div>
           </div>

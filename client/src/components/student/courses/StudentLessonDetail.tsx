@@ -54,7 +54,7 @@ type StudentSubmission = {
 const StudentLessonDetail: React.FC = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
   const { store } = useContext(Context);
-  const { showAlert, showConfirm } = useAppModal();
+  const { showModal, showConfirm } = useAppModal();
 
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [submission, setSubmission] = useState<StudentSubmission | null>(null);
@@ -85,7 +85,7 @@ const StudentLessonDetail: React.FC = () => {
 
     const sizeError = getAssignmentFileSizeError(selected);
     if (sizeError) {
-      await showAlert(sizeError);
+      await showModal(sizeError);
       input.value = '';
       return;
     }
@@ -106,7 +106,7 @@ const StudentLessonDetail: React.FC = () => {
 
     const sizeError = getAssignmentFileSizeError(file);
     if (sizeError) {
-      await showAlert(sizeError);
+      await showModal(sizeError);
       return;
     }
 
@@ -138,7 +138,7 @@ const StudentLessonDetail: React.FC = () => {
     const hasAttachments = draftItems.length > 0;
 
     if (!hasAttachments && submitMode !== 'completed') {
-      await showAlert('Добавьте хотя бы одну ссылку или файл, либо выберите «Отметить».');
+      await showModal('Добавьте хотя бы одну ссылку или файл, либо выберите «Отметить».');
       return;
     }
 
@@ -152,7 +152,7 @@ const StudentLessonDetail: React.FC = () => {
         );
         if (newSubmission) {
           setSubmission(newSubmission as StudentSubmission);
-          await showAlert('Работа успешно отправлена!', { title: 'Готово' });
+          await showModal('Работа успешно отправлена!', { title: 'Готово' });
         }
         return;
       }
@@ -164,7 +164,7 @@ const StudentLessonDetail: React.FC = () => {
         } else {
           const sizeError = getAssignmentFileSizeError(draft.file);
           if (sizeError) {
-            await showAlert(sizeError);
+            await showModal(sizeError);
             return;
           }
           const url = await uploadFile(draft.file);
@@ -189,11 +189,11 @@ const StudentLessonDetail: React.FC = () => {
       if (newSubmission) {
         setSubmission(newSubmission as StudentSubmission);
         setDraftItems([]);
-        await showAlert('Работа успешно отправлена!', { title: 'Готово' });
+        await showModal('Работа успешно отправлена!', { title: 'Готово' });
       }
     } catch (error) {
       console.error('Submission failed:', error);
-      await showAlert('Ошибка при отправке работы.', { title: 'Ошибка' });
+      await showModal('Ошибка при отправке работы.', { title: 'Ошибка' });
     } finally {
       setIsSubmitting(false);
     }
@@ -209,13 +209,13 @@ const StudentLessonDetail: React.FC = () => {
         setTakingTest(false);
         setViewingTestReview(false);
         setTestReview(null);
-        await showAlert('Тест успешно отправлен!', { title: 'Готово' });
+        await showModal('Тест успешно отправлен!', { title: 'Готово' });
       } else {
-        await showAlert('Не удалось отправить тест. Попробуйте позже.', { title: 'Ошибка' });
+        await showModal('Не удалось отправить тест. Попробуйте позже.', { title: 'Ошибка' });
       }
     } catch (error) {
       console.error('Test submission failed:', error);
-      await showAlert('Ошибка при отправке теста.', { title: 'Ошибка' });
+      await showModal('Ошибка при отправке теста.', { title: 'Ошибка' });
     } finally {
       setIsSubmitting(false);
     }
@@ -240,7 +240,7 @@ const StudentLessonDetail: React.FC = () => {
         setLink('');
         setFile(null);
       } else {
-        await showAlert('Не удалось отменить отправку. Попробуйте позже.', { title: 'Ошибка' });
+        await showModal('Не удалось отменить отправку. Попробуйте позже.', { title: 'Ошибка' });
       }
     } finally {
       setIsCancelling(false);
@@ -271,9 +271,9 @@ const StudentLessonDetail: React.FC = () => {
         setViewingTestReview(true);
         return;
       }
-      await showAlert('Не удалось загрузить результаты теста.', { title: 'Ошибка' });
+      await showModal('Не удалось загрузить результаты теста.', { title: 'Ошибка' });
     } catch {
-      await showAlert('Не удалось загрузить результаты теста.', { title: 'Ошибка' });
+      await showModal('Не удалось загрузить результаты теста.', { title: 'Ошибка' });
     } finally {
       setLoadingTestReview(false);
     }
@@ -361,7 +361,7 @@ const StudentLessonDetail: React.FC = () => {
                                 return;
                               }
                               if (testQuestions.length === 0) {
-                                void showAlert('Тест пока не содержит вопросов.');
+                                void showModal('Тест пока не содержит вопросов.');
                                 return;
                               }
                               setTakingTest(true);

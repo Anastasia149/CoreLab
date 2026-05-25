@@ -17,7 +17,7 @@ const CourseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { store } = useContext(Context);
-  const { showAlert, showConfirm } = useAppModal();
+  const { showModal, showConfirm } = useAppModal();
   const [course, setCourse] = useState<ISearchDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeModule, setActiveModule] = useState<number[]>([]);
@@ -77,7 +77,7 @@ const CourseDetail: React.FC = () => {
           : prev
       );
     } else {
-      await showAlert('Не удалось удалить ученика с курса. Попробуйте позже.', { title: 'Ошибка' });
+      await showModal('Не удалось удалить ученика с курса. Попробуйте позже.', { title: 'Ошибка' });
     }
   };
 

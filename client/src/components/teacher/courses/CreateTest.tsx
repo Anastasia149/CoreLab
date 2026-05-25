@@ -31,7 +31,7 @@ const CreateTest: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const { store } = useContext(Context);
   const navigate = useNavigate();
-  const { showAlert } = useAppModal();
+  const { showModal } = useAppModal();
 
   const [title, setTitle] = useState('');
   const [deadline, setDeadline] = useState('');
@@ -135,7 +135,7 @@ const CreateTest: React.FC = () => {
     if (!file) return;
 
     if (file.type.split('/')[0] !== 'image') {
-      void showAlert('Пожалуйста, выберите файл изображения.');
+      void showModal('Пожалуйста, выберите файл изображения.');
       e.target.value = '';
       return;
     }
@@ -147,7 +147,7 @@ const CreateTest: React.FC = () => {
       updateQuestion(questionId, { imageUrl: response.data.url });
     } catch (error) {
       console.error('Failed to upload question image:', error);
-      await showAlert('Ошибка при загрузке изображения.', { title: 'Ошибка' });
+      await showModal('Ошибка при загрузке изображения.', { title: 'Ошибка' });
     }
   };
 
@@ -158,13 +158,13 @@ const CreateTest: React.FC = () => {
     // Валидация
     const isValid = questions.every(q => q.text && q.options.some(o => o.isCorrect) && q.options.every(o => o.text));
     if (!isValid) {
-      await showAlert('Пожалуйста, заполните все вопросы и отметьте правильные ответы.');
+      await showModal('Пожалуйста, заполните все вопросы и отметьте правильные ответы.');
       return;
     }
 
     const deadlineError = validateDeadlineLocal(deadline);
     if (deadlineError) {
-      await showAlert(deadlineError);
+      await showModal(deadlineError);
       return;
     }
 

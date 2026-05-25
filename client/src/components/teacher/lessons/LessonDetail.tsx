@@ -24,7 +24,7 @@ const LessonDetail: React.FC = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
   const { store } = useContext(Context);
   const navigate = useNavigate();
-  const { showAlert, showConfirm } = useAppModal();
+  const { showModal, showConfirm } = useAppModal();
 
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [submissions, setSubmissions] = useState<LessonSubmissionRow[]>([]);
@@ -86,10 +86,10 @@ const LessonDetail: React.FC = () => {
         setTestReview(review);
         setTestReviewTitle(s.student_name?.trim() || 'Ученик');
       } else {
-        await showAlert('Не удалось загрузить ответы теста.', { title: 'Ошибка' });
+        await showModal('Не удалось загрузить ответы теста.', { title: 'Ошибка' });
       }
     } catch {
-      await showAlert('Не удалось загрузить ответы теста.', { title: 'Ошибка' });
+      await showModal('Не удалось загрузить ответы теста.', { title: 'Ошибка' });
     } finally {
       setLoadingTestReviewId(null);
     }
@@ -101,7 +101,7 @@ const LessonDetail: React.FC = () => {
   ): Promise<boolean> => {
     const updated = await store.updateSubmissionReview(submissionId, status);
     if (!updated) {
-      await showAlert('Не удалось сохранить оценку. Попробуйте позже.', { title: 'Ошибка' });
+      await showModal('Не удалось сохранить оценку. Попробуйте позже.', { title: 'Ошибка' });
       return false;
     }
     setSubmissions((prev) =>

@@ -29,7 +29,7 @@ const CreateLesson: React.FC = () => {
   
   const { store } = useContext(Context);
   const navigate = useNavigate();
-  const { showAlert } = useAppModal();
+  const { showModal } = useAppModal();
   const { fields, handleChange, setFieldValue } = useFormFields({
     title: '',
     content: '',
@@ -61,7 +61,7 @@ const CreateLesson: React.FC = () => {
   const handleCreateModule = async () => {
     if (newModuleName.trim() !== '' && courseId) {
       if (newModuleName.charAt(0) !== newModuleName.charAt(0).toUpperCase()) {
-        void showAlert('Название модуля должно начинаться с большой буквы.');
+        void showModal('Название модуля должно начинаться с большой буквы.');
         return;
       }
       const newModule = await store.createModule(courseId, newModuleName);
@@ -84,7 +84,7 @@ const CreateLesson: React.FC = () => {
       const mainType = file.type.split('/')[0];
 
       if (mainType !== 'image') {
-        void showAlert('Пожалуйста, выберите файл изображения.');
+        void showModal('Пожалуйста, выберите файл изображения.');
         e.target.value = '';
         setFieldValue('image', null);
         setImagePreview(null);
@@ -118,7 +118,7 @@ const CreateLesson: React.FC = () => {
       ];
 
       if (!allowedMainTypes.includes(mainType) && !allowedFullTypes.includes(fileType)) {
-        void showAlert('Недопустимый тип файла. Разрешены только изображения, видео и документы (pdf, doc, xls, ppt).');
+        void showModal('Недопустимый тип файла. Разрешены только изображения, видео и документы (pdf, doc, xls, ppt).');
         e.target.value = '';
         setFieldValue('file', null);
         setFilePreview(null);
@@ -127,7 +127,7 @@ const CreateLesson: React.FC = () => {
 
       const sizeError = getAssignmentFileSizeError(file);
       if (sizeError) {
-        void showAlert(sizeError);
+        void showModal(sizeError);
         e.target.value = '';
         setFieldValue('file', null);
         setFilePreview(null);
@@ -147,11 +147,11 @@ const CreateLesson: React.FC = () => {
     if (!courseId) return;
 
     if (fields.title.charAt(0) !== fields.title.charAt(0).toUpperCase()) {
-      await showAlert('Название урока должно начинаться с большой буквы.');
+      await showModal('Название урока должно начинаться с большой буквы.');
       return;
     }
     if (fields.content && fields.content.charAt(0) !== fields.content.charAt(0).toUpperCase()) {
-      await showAlert('Описание урока должно начинаться с большой буквы.');
+      await showModal('Описание урока должно начинаться с большой буквы.');
       return;
     }
 
@@ -166,7 +166,7 @@ const CreateLesson: React.FC = () => {
     if (lessonTypeHasDeadline(fields.type)) {
       const deadlineError = validateDeadlineLocal(fields.deadline);
       if (deadlineError) {
-        await showAlert(deadlineError);
+        await showModal(deadlineError);
         return;
       }
     }
@@ -189,7 +189,7 @@ const CreateLesson: React.FC = () => {
     if (newLesson && fields.file) {
       const sizeError = getAssignmentFileSizeError(fields.file);
       if (sizeError) {
-        await showAlert(sizeError);
+        await showModal(sizeError);
         return;
       }
       await store.uploadLessonMaterial(newLesson.id, fields.file);

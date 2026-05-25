@@ -17,7 +17,7 @@ export const StudentTestPanel: React.FC<Props> = ({
   onCancel,
   isSubmitting,
 }) => {
-  const { showAlert } = useAppModal();
+  const { showModal } = useAppModal();
   const [answers, setAnswers] = useState<Record<string, string[]>>({});
 
   const toggleOption = (question: TestQuestion, optionId: string, checked: boolean) => {
@@ -40,7 +40,7 @@ export const StudentTestPanel: React.FC<Props> = ({
     e.preventDefault();
     for (const q of questions) {
       if (q.isRequired && !(answers[q.id]?.length > 0)) {
-        await showAlert('Ответьте на все обязательные вопросы.');
+        await showModal('Ответьте на все обязательные вопросы.');
         return;
       }
     }
