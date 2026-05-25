@@ -46,6 +46,10 @@
   grid-area: 2 / 1 / 3 / 2;
 }
 
+.student-courses-group .teacher-courses-grid-home .student-course-progress {
+  margin-top: 12px;
+}
+
 .student-section-title {
   font-weight: 700;
   margin-bottom: 10px;
