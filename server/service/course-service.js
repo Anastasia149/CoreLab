@@ -320,6 +320,15 @@ class CourseService {
             await mailService.sendEnrollmentNotificationMail(teacher.email, studentName, course.title);
         }
 
+        if (teacher && course.author_id) {
+            const notificationService = require('./notification-service');
+            await notificationService.createEnrollmentNotification(course.author_id, {
+                studentName,
+                courseTitle: course.title,
+                courseId: Number(courseId),
+            });
+        }
+
         return { message: 'Enrollment successful', course, studentId };
     }
 

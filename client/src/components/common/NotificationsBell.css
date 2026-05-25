@@ -2,6 +2,28 @@
   position: relative;
 }
 
+.notifications-bell > button {
+  position: relative;
+}
+
+.notifications-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #e53935;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  pointer-events: none;
+  box-shadow: 0 0 0 2px var(--bg-surface, #fff);
+}
+
 .notifications-bell-btn--active {
   color: var(--accent-soft);
 }
@@ -52,15 +74,32 @@
 
 .notifications-panel-item {
   display: grid;
-  grid-template-columns: 40px 1fr 28px;
+  grid-template-columns: 40px 1fr;
   gap: 10px;
   align-items: start;
+  width: 100%;
   padding: 12px 8px;
+  border: none;
   border-radius: 12px;
+  background: transparent;
+  text-align: left;
+  cursor: default;
 }
 
-.notifications-panel-item:hover {
+.notifications-panel-item--clickable {
+  cursor: pointer;
+}
+
+.notifications-panel-item--clickable:hover {
   background: var(--bg-surface-muted);
+}
+
+.notifications-panel-item--unread {
+  background: var(--accent-bg);
+}
+
+.notifications-panel-item--unread.notifications-panel-item--clickable:hover {
+  background: var(--hint-bg-hover, var(--bg-surface-muted));
 }
 
 .notifications-panel-icon {
@@ -97,26 +136,3 @@
   color: var(--text-muted);
 }
 
-.notifications-panel-menu {
-  width: 28px;
-  height: 28px;
-  margin-top: 2px;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-muted);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  opacity: 0.7;
-}
-
-.notifications-panel-menu:hover {
-  opacity: 1;
-  background: var(--bg-surface-muted);
-}
-
-.notifications-panel-menu svg {
-  width: 18px;
-  height: 18px;
-}

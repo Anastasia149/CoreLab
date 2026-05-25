@@ -1,6 +1,8 @@
 const pool = require('../db');
 const ApiError = require('../exceptions/api-error');
 const { gradeTest, parseQuestions } = require('../utils/test-grading');
+const UserModel = require('../models/user-model');
+const mailService = require('./mail-service');
 
 class SubmissionService {
     async submitTest(lessonId, studentId, answers) {
@@ -74,7 +76,42 @@ class SubmissionService {
             `INSERT INTO submissions (lesson_id, student_id, type, content) VALUES ($1, $2, $3, $4) RETURNING *`,
             [lessonId, studentId, storedType, storedContent]
         );
-        return this._attachOverdue(newSubmission.rows[0], lessonId);
+
+        const submission = await this._attachOverdue(newSubmission.rows[0], lessonId);
+        await this._notifyTeacherAboutAssignmentSubmission(lessonId, studentId);
+        return submission;
+    }
+
+    async _notifyTeacherAboutAssignmentSubmission(lessonId, studentId) {
+        try {
+            const lessonResult = await pool.query(
+                `SELECT l.title, l.type, l.course_id, c.author_id
+                 FROM lessons l
+                 JOIN courses c ON c.id = l.course_id
+                 WHERE l.id = $1`,
+                [lessonId]
+            );
+            const lesson = lessonResult.rows[0];
+            if (!lesson || lesson.type !== 'assignment' || !lesson.author_id) {
+                return;
+            }
+
+            const student = await UserModel.findById(studentId);
+            const studentName =
+                (student?.name && String(student.name).trim()) ||
+                student?.email ||
+                'Студент';
+
+            const notificationService = require('./notification-service');
+            await notificationService.createAssignmentSubmittedNotification(lesson.author_id, {
+                studentName,
+                lessonTitle: lesson.title,
+                courseId: lesson.course_id,
+                lessonId: Number(lessonId),
+            });
+        } catch (e) {
+            console.error('Failed to create assignment submission notification:', e);
+        }
     }
 
     async _attachOverdue(submission, lessonId) {
@@ -185,7 +222,39 @@ class SubmissionService {
             throw new ApiError(404, 'Работа не найдена или нет доступа');
         }
 
-        return result.rows[0];
+        const submission = result.rows[0];
+        const lessonResult = await pool.query(
+            `SELECT title, course_id FROM lessons WHERE id = $1`,
+            [submission.lesson_id]
+        );
+        const lesson = lessonResult.rows[0];
+        if (lesson) {
+            const statusLabel = status === 'passed' ? 'Сдал' : 'Не сдал';
+            const notificationService = require('./notification-service');
+            await notificationService.createSubmissionReviewNotification(submission.student_id, {
+                lessonId: submission.lesson_id,
+                lessonTitle: lesson.title,
+                status,
+                courseId: lesson.course_id,
+            });
+
+            try {
+                const student = await UserModel.findById(submission.student_id);
+                if (student?.email) {
+                    const clientBase = (process.env.CLIENT_URL || 'http://localhost:3000').replace(/\/$/, '');
+                    const lessonUrl = `${clientBase}/student/lesson/${submission.lesson_id}`;
+                    await mailService.sendSubmissionReviewMail(student.email, {
+                        lessonTitle: lesson.title,
+                        statusLabel,
+                        lessonUrl,
+                    });
+                }
+            } catch (e) {
+                console.error('Failed to send submission review email:', e);
+            }
+        }
+
+        return submission;
     }
 }
 

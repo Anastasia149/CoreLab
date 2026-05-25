@@ -46,6 +46,23 @@ class MailService{
                 `
         })
     }
+
+    async sendSubmissionReviewMail(to, { lessonTitle, statusLabel, lessonUrl }) {
+        await this.transporter.sendMail({
+            from: process.env.SMTP_USER,
+            to,
+            subject: `Работа проверена: ${lessonTitle}`,
+            text: `Ваша работа по уроку «${lessonTitle}» проверена: ${statusLabel}. Открыть урок: ${lessonUrl}`,
+            html:
+                `
+                    <div>
+                        <h1>Работа проверена</h1>
+                        <p>Ваша работа по уроку «${lessonTitle}» проверена: <strong>${statusLabel}</strong>.</p>
+                        <p><a href="${lessonUrl}">Перейти к уроку</a></p>
+                    </div>
+                `
+        })
+    }
 }
 
 module.exports = new MailService();

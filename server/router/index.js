@@ -11,6 +11,7 @@ const lessonController = require('../controllers/lesson-controller');
 const submissionController = require('../controllers/submission-controller');
 const courseReviewController = require('../controllers/course-review-controller');
 const scheduleEventController = require('../controllers/schedule-event-controller');
+const notificationController = require('../controllers/notification-controller');
 
 router.post('/registration', 
     body('name').isLength({min: 1, max: 20}),
@@ -92,5 +93,9 @@ router.patch('/submissions/:submissionId/review', authMiddleware, submissionCont
 router.get('/schedule/events', authMiddleware, scheduleEventController.listMine);
 router.post('/schedule/events', authMiddleware, scheduleEventController.create);
 router.post('/schedule/events/import', authMiddleware, scheduleEventController.importLocal);
+
+router.get('/notifications', authMiddleware, notificationController.listMine);
+router.delete('/notifications', authMiddleware, notificationController.deleteAll);
+router.delete('/notifications/:id', authMiddleware, notificationController.deleteOne);
 
 module.exports = router;

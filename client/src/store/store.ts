@@ -12,6 +12,9 @@ import { ICourseStudent } from "../models/ICourseStudent";
 import { ICourseInstructor } from "../models/ICourseInstructor";
 import { IStudentTodayTask } from "../models/IStudentTodayTask";
 import { DEFAULT_COURSE_COVER } from "../constants/courseCover";
+import { NotificationDto, NotificationsResponse } from "../models/INotification";
+import { NotificationItem } from "../types/notification";
+import { formatTimeAgo } from "../utils/formatTimeAgo";
 
 export type AppTheme = 'light' | 'dark';
 
@@ -23,6 +26,8 @@ export default class Store {
     isLoading = false;
     courses = [] as ICourse[];
     theme: AppTheme = 'light';
+    notifications = [] as NotificationItem[];
+    unreadNotificationsCount = 0;
 
     constructor() {
         makeAutoObservable(this);
@@ -67,12 +72,70 @@ export default class Store {
         this.courses = courses;
     }
 
+    private mapNotification(dto: NotificationDto): NotificationItem {
+        return {
+            id: String(dto.id),
+            icon: dto.icon,
+            message: dto.message,
+            timeAgo: formatTimeAgo(dto.createdAt),
+            courseId: dto.courseId,
+            lessonId: dto.lessonId,
+            isRead: dto.isRead,
+        };
+    }
+
+    setNotifications(items: NotificationDto[], unreadCount: number) {
+        this.notifications = items.map((dto) => this.mapNotification(dto));
+        this.unreadNotificationsCount = unreadCount;
+    }
+
+    clearNotifications() {
+        this.notifications = [];
+        this.unreadNotificationsCount = 0;
+    }
+
+    async fetchNotifications(): Promise<void> {
+        if (!this.isAuth) return;
+        try {
+            const response = await $api.get<NotificationsResponse>('/notifications');
+            this.setNotifications(response.data.items, response.data.unreadCount);
+        } catch (e) {
+            console.log('FULL ERROR:', e);
+        }
+    }
+
+    async deleteAllNotifications(): Promise<void> {
+        if (!this.isAuth || this.notifications.length === 0) return;
+        try {
+            await $api.delete('/notifications');
+            this.clearNotifications();
+        } catch (e) {
+            console.log('FULL ERROR:', e);
+        }
+    }
+
+    async deleteNotification(notificationId: string): Promise<void> {
+        if (!this.isAuth) return;
+        try {
+            await $api.delete(`/notifications/${notificationId}`);
+            const wasUnread =
+                this.notifications.find((n) => n.id === notificationId)?.isRead === false;
+            this.notifications = this.notifications.filter((n) => n.id !== notificationId);
+            if (wasUnread && this.unreadNotificationsCount > 0) {
+                this.unreadNotificationsCount -= 1;
+            }
+        } catch (e) {
+            console.log('FULL ERROR:', e);
+        }
+    }
+
     async login(email: string, password: string) {
         try {
             const response = await AuthService.login(email, password);
             localStorage.setItem('token', response.data.accessToken);
             this.setAuth(true);
             this.setUser(response.data.user);
+            void this.fetchNotifications();
         } catch (e) {
             console.log("FULL ERROR:", e);
             throw e;
@@ -455,6 +518,7 @@ export default class Store {
             localStorage.removeItem('token');
             this.setAuth(false);
             this.setUser({} as IUser);
+            this.clearNotifications();
         } catch (e) {
             console.log("FULL ERROR:", e);
         }
@@ -465,6 +529,7 @@ export default class Store {
         localStorage.removeItem('token');
         this.setAuth(false);
         this.setUser({} as IUser);
+        this.clearNotifications();
     }
 
     async checkAuth(){
@@ -474,8 +539,10 @@ export default class Store {
             localStorage.setItem('token', response.data.accessToken);
             this.setAuth(true);
             this.setUser(response.data.user);
+            void this.fetchNotifications();
         } catch(e){
             console.log("FULL ERROR:", e);
+            this.clearNotifications();
         } finally{
             this.setLoading(false);
         }

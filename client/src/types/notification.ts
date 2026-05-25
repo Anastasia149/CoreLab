@@ -3,4 +3,7 @@ export type NotificationItem = {
   icon: string;
   message: string;
   timeAgo: string;
+  courseId?: number | null;
+  lessonId?: number | null;
+  isRead?: boolean;
 };
