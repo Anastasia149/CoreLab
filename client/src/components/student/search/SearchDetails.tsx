@@ -48,17 +48,21 @@ const SearchDetails: React.FC = () => {
     return <div>Курс не найден</div>;
   }
 
-  // Mock data for mentor for now
-  const mentor = {
-      name: 'Нина Ким',
-      role: 'Веб/мобильный разработчик',
-      avatar: null, // или 'https://via.placeholder.com/50'
-      description: 'Ваш эксперт-наставник в области веб- и мобильной разработки. Обладая богатым опытом, Анастасия помогает начинающим разработчикам пройти сложный путь создания динамичных и отзывчивых приложений.',
-      rating: 4.9,
-      reviewsCount: 120
-  };
-
   const courseIdNum = Number(id);
+
+  const authorAbout = course.author_about_me?.trim() || '';
+  const authorReviewsCount = Number(course.author_reviews_count) || 0;
+  const authorAverageRating =
+    authorReviewsCount > 0
+      ? Number(course.author_average_rating ?? 0).toFixed(1)
+      : '5.0';
+
+  const reviewsCountLabel =
+    authorReviewsCount === 1
+      ? '1 отзыв'
+      : authorReviewsCount > 1 && authorReviewsCount < 5
+        ? `${authorReviewsCount} отзыва`
+        : `${authorReviewsCount} отзывов`;
 
   const isPaidCourse = isPaidCoursePrice(course.price);
   const isFreeCourse = !isPaidCourse;
@@ -168,13 +172,22 @@ const SearchDetails: React.FC = () => {
                 </div>
                 <div>
                     <h5>{course.author_name}</h5>
-                    <p className="mentor-role">{mentor.role}</p>
                 </div>
             </div>
-            <p className="mentor-description">{mentor.description}</p>
+            {authorAbout ? (
+              <p className="mentor-description">{authorAbout}</p>
+            ) : (
+              <p className="mentor-description mentor-description--empty">
+                Преподаватель пока не заполнил раздел «О себе» в профиле.
+              </p>
+            )}
             <div className="mentor-rating">
-                <Icon icon="mdi:star" />
-                <span>{mentor.rating}/5 ({mentor.reviewsCount} отзывов)</span>
+                <div className="mentor-rating-score">
+                  <Icon icon="mdi:star" aria-hidden />
+                  <span className="mentor-rating-value">{authorAverageRating}</span>
+                  <span className="mentor-rating-max">из 5</span>
+                </div>
+                <span className="mentor-rating-count">({reviewsCountLabel})</span>
             </div>
         </div>
       </div>

@@ -76,6 +76,19 @@ class CourseService {
                 u.id AS author_id,
                 u.name AS author_name,
                 u.avatar AS author_avatar,
+                u.about_me AS author_about_me,
+                (
+                    SELECT COUNT(*)::int
+                    FROM course_reviews r
+                    JOIN courses c2 ON c2.id = r.course_id
+                    WHERE c2.author_id = c.author_id
+                ) AS author_reviews_count,
+                (
+                    SELECT COALESCE(ROUND(AVG(r.rating)::numeric, 1), 0)::float
+                    FROM course_reviews r
+                    JOIN courses c2 ON c2.id = r.course_id
+                    WHERE c2.author_id = c.author_id
+                ) AS author_average_rating,
                 COALESCE(c.students_count, 0)::int AS students_count,
                 (
                     SELECT COUNT(*)::int FROM lessons lcnt WHERE lcnt.course_id = c.id
@@ -147,7 +160,8 @@ class CourseService {
                 c.students_count,
                 u.id,
                 u.name,
-                u.avatar;
+                u.avatar,
+                u.about_me;
         `;
         const { rows } = await pool.query(query, [courseId]);
         return rows[0];

@@ -232,26 +232,56 @@
     color: var(--text-secondary);
 }
 
-.mentor-role {
-    font-size: 14px;
-    color: var(--text-secondary);
-    margin: 0;
-}
-
 .mentor-description {
     font-size: 14px;
     color: var(--text-primary);
     margin: 12px 0;
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+.mentor-description--empty {
+    color: var(--text-secondary);
+    font-style: italic;
 }
 
 .mentor-rating {
     margin-top: auto;
-    align-self: flex-start;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+}
+
+.mentor-rating-score {
+    display: flex;
+    align-items: baseline;
     gap: 4px;
-    font-size: 14px;
     color: #f59e0b;
+}
+
+.mentor-rating-score svg {
+    font-size: 18px;
+    align-self: center;
+}
+
+.mentor-rating-value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.mentor-rating-max {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.mentor-rating-count {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
 }
 
 .mentor-card h4 {
