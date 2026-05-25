@@ -168,6 +168,13 @@
   color: var(--text-secondary);
 }
 
+.student-test-review-subtitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
 .student-test-review-question-head {
   display: flex;
   align-items: flex-start;

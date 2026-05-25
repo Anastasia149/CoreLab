@@ -312,6 +312,13 @@ export default class Store {
         return response.data;
     }
 
+    async getSubmissionTestReview(submissionId: number): Promise<TestReview> {
+        const response = await $api.get<TestReview>(
+            `/submissions/${submissionId}/test-review`
+        );
+        return response.data;
+    }
+
     async getMyCourseGrades(courseId: number): Promise<ICourseGrade[]> {
         try {
             const response = await $api.get<ICourseGrade[]>(`/courses/${courseId}/my-grades`);

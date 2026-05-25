@@ -50,31 +50,17 @@ class SubmissionService {
         return this._attachOverdue(newSubmission.rows[0], lessonId);
     }
 
-    async getTestReviewForStudent(lessonId, studentId) {
-        const submission = await this.getStudentSubmission(lessonId, studentId);
-        if (!submission || submission.type !== 'test') {
-            throw ApiError.BadRequest('Тест ещё не сдан');
-        }
-
-        const lessonResult = await pool.query(
-            `SELECT type, content FROM lessons WHERE id = $1`,
-            [lessonId]
-        );
-        const lesson = lessonResult.rows[0];
-        if (!lesson || lesson.type !== 'test') {
-            throw ApiError.BadRequest('Урок не является тестом');
-        }
-
+    _buildTestReview(lessonContent, submissionContent) {
         let questions;
         try {
-            questions = parseQuestions(lesson.content);
+            questions = parseQuestions(lessonContent);
         } catch {
             throw ApiError.BadRequest('Некорректное содержимое теста');
         }
 
         let parsed;
         try {
-            parsed = JSON.parse(submission.content);
+            parsed = JSON.parse(submissionContent);
         } catch {
             throw ApiError.BadRequest('Некорректные данные отправки теста');
         }
@@ -123,6 +109,45 @@ class SubmissionService {
             totalCount: Number(parsed.totalCount) || questions.length,
             questions: reviewQuestions,
         };
+    }
+
+    async getTestReviewForStudent(lessonId, studentId) {
+        const submission = await this.getStudentSubmission(lessonId, studentId);
+        if (!submission || submission.type !== 'test') {
+            throw ApiError.BadRequest('Тест ещё не сдан');
+        }
+
+        const lessonResult = await pool.query(
+            `SELECT type, content FROM lessons WHERE id = $1`,
+            [lessonId]
+        );
+        const lesson = lessonResult.rows[0];
+        if (!lesson || lesson.type !== 'test') {
+            throw ApiError.BadRequest('Урок не является тестом');
+        }
+
+        return this._buildTestReview(lesson.content, submission.content);
+    }
+
+    async getTestReviewForTeacher(submissionId, teacherId) {
+        const result = await pool.query(
+            `SELECT s.type, s.content AS submission_content, l.type AS lesson_type, l.content AS lesson_content
+             FROM submissions s
+             JOIN lessons l ON l.id = s.lesson_id
+             JOIN courses c ON c.id = l.course_id
+             WHERE s.id = $1 AND c.author_id = $2`,
+            [submissionId, teacherId]
+        );
+
+        const row = result.rows[0];
+        if (!row) {
+            throw new ApiError(404, 'Работа не найдена или нет доступа');
+        }
+        if (row.type !== 'test' || row.lesson_type !== 'test') {
+            throw ApiError.BadRequest('Это не тестовая работа');
+        }
+
+        return this._buildTestReview(row.lesson_content, row.submission_content);
     }
 
     async submitAssignment(lessonId, studentId, type, content, items) {

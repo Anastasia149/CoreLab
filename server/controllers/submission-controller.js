@@ -88,6 +88,20 @@ class SubmissionController {
         }
     }
 
+    async getSubmissionTestReview(req, res, next) {
+        try {
+            const { submissionId } = req.params;
+            const teacherId = req.user.id;
+            const review = await submissionService.getTestReviewForTeacher(
+                submissionId,
+                teacherId
+            );
+            return res.json(review);
+        } catch (e) {
+            next(e);
+        }
+    }
+
     async updateReviewStatus(req, res, next) {
         try {
             const { submissionId } = req.params;

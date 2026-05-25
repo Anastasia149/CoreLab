@@ -16,6 +16,9 @@ import { LessonDeadlineInfo } from '../../common/LessonDeadlineInfo';
 import { LessonMaterialCard } from '../../common/LessonMaterialCard';
 import { ICourseStudent } from '../../../models/ICourseStudent';
 import { useAppModal } from '../../../context/AppModalContext';
+import { TestReviewModal } from '../../common/TestReviewPanel';
+import type { TestReview } from '../../../utils/testContent';
+import { isTestSubmissionType } from '../../../utils/testContent';
 
 const LessonDetail: React.FC = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
@@ -27,6 +30,9 @@ const LessonDetail: React.FC = () => {
   const [submissions, setSubmissions] = useState<LessonSubmissionRow[]>([]);
   const [courseStudents, setCourseStudents] = useState<ICourseStudent[]>([]);
   const [activeTab, setActiveTab] = useState('materials');
+  const [testReview, setTestReview] = useState<TestReview | null>(null);
+  const [testReviewTitle, setTestReviewTitle] = useState('');
+  const [loadingTestReviewId, setLoadingTestReviewId] = useState<number | null>(null);
 
   useEffect(() => {
     if (!lessonId) return;
@@ -68,6 +74,24 @@ const LessonDetail: React.FC = () => {
     if (confirmed && lessonId) {
       await store.deleteLesson(lessonId);
       navigate(`/teacher/course/${lesson?.course_id}`);
+    }
+  };
+
+  const handleOpenTestReview = async (s: LessonSubmissionRow) => {
+    if (!isTestSubmissionType(s.type)) return;
+    setLoadingTestReviewId(s.id);
+    try {
+      const review = await store.getSubmissionTestReview(s.id);
+      if (review.questions.length > 0) {
+        setTestReview(review);
+        setTestReviewTitle(s.student_name?.trim() || 'Ученик');
+      } else {
+        await showAlert('Не удалось загрузить ответы теста.', { title: 'Ошибка' });
+      }
+    } catch {
+      await showAlert('Не удалось загрузить ответы теста.', { title: 'Ошибка' });
+    } finally {
+      setLoadingTestReviewId(null);
     }
   };
 
@@ -127,6 +151,16 @@ const LessonDetail: React.FC = () => {
           </div>
         </div>
         <TeacherSubmissionMaterial s={s} />
+        {isTestLesson && isTestSubmissionType(s.type) && (
+          <button
+            type="button"
+            className="submission-view-test-btn"
+            onClick={() => void handleOpenTestReview(s)}
+            disabled={loadingTestReviewId === s.id}
+          >
+            {loadingTestReviewId === s.id ? 'Загрузка…' : 'Просмотреть ответы'}
+          </button>
+        )}
         {lesson?.type === 'assignment' && (
           <SubmissionReviewControls
             submissionId={s.id}
@@ -324,6 +358,18 @@ const LessonDetail: React.FC = () => {
           )}
         </div>
       </main>
+
+      {testReview && (
+        <TestReviewModal
+          review={testReview}
+          title="Ответы на тест"
+          subtitle={testReviewTitle}
+          onClose={() => {
+            setTestReview(null);
+            setTestReviewTitle('');
+          }}
+        />
+      )}
     </div>
   );
 };
