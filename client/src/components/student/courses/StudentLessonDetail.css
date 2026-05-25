@@ -83,7 +83,7 @@
 
 .lesson-footer-plank .lesson-after-row {
   gap: 28px;
-  margin-top: -14px;
+  margin-top: 0;
 }
 
 .lesson-after-row {
@@ -96,8 +96,15 @@
 }
 
 .lesson-after-row--with-sidebar {
+  display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
-  align-items: center;
+  align-items: start;
+  column-gap: 28px;
+  row-gap: 16px;
+}
+
+.lesson-plank-section-title--sidebar {
+  margin: 0 0 16px;
 }
 
 .lesson-after-row--with-sidebar .lesson-sidebar {
@@ -107,7 +114,7 @@
 }
 
 .lesson-footer-plank .lesson-after-row--with-sidebar .lesson-sidebar {
-  margin-top: 12px;
+  margin-top: 0;
 }
 
 .lesson-after-main {

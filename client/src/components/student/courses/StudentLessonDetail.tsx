@@ -299,7 +299,7 @@ const StudentLessonDetail: React.FC = () => {
                 }
               >
                 <div className="lesson-after-main">
-                  {showsDeadlineInfo && !isAssignment && (
+                  {showsDeadlineInfo && !isAssignment && !isTest && (
                     <LessonDeadlineInfo
                       deadline={lesson.deadline}
                       lessonType={lesson.type}
@@ -348,7 +348,9 @@ const StudentLessonDetail: React.FC = () => {
                 {(isAssignment || isTest) && (
                   <aside className="lesson-sidebar">
                     <div className="submission-card">
-                      <h3 className="lesson-plank-section-title">Ваше решение</h3>
+                      <h3 className="lesson-plank-section-title lesson-plank-section-title--sidebar">
+                        Ваше решение
+                      </h3>
 
                       {showsDeadlineInfo && (
                         <LessonDeadlineInfo
