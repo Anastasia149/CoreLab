@@ -9,6 +9,7 @@ import Loader from '../../common/Loader';
 import { addCourseToCart, isCourseInCart, removeCourseFromCart } from '../../../utils/courseCart';
 import { isPaidCoursePrice } from '../../../utils/coursePrice';
 import { getCourseCoverUrl } from '../../../constants/courseCover';
+import { CourseReviewsPanel } from '../../common/CourseReviewsPanel';
 const SearchDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { store } = useContext(Context);
@@ -123,6 +124,9 @@ const SearchDetails: React.FC = () => {
           </div>
           <div className="course-details-tab-content">
               {activeTab === 'description' && <p>{course.description}</p>}
+              {activeTab === 'reviews' && (
+                <CourseReviewsPanel courseId={courseIdNum} active readOnly />
+              )}
           </div>
         </div>
       </div>
