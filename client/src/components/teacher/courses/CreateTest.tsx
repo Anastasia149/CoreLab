@@ -10,6 +10,7 @@ import $api from '../../../http';
 import './CreateTest.css';
 import { LessonDeadlineField } from './LessonDeadlineField';
 import { deadlineLocalToIso, validateDeadlineLocal } from '../../../utils/lessonDeadline';
+import { useAppModal } from '../../../context/AppModalContext';
 
 interface Option {
   id: string;
@@ -30,6 +31,7 @@ const CreateTest: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const { store } = useContext(Context);
   const navigate = useNavigate();
+  const { showAlert } = useAppModal();
 
   const [title, setTitle] = useState('');
   const [deadline, setDeadline] = useState('');
@@ -133,7 +135,7 @@ const CreateTest: React.FC = () => {
     if (!file) return;
 
     if (file.type.split('/')[0] !== 'image') {
-      alert('Пожалуйста, выберите файл изображения.');
+      void showAlert('Пожалуйста, выберите файл изображения.');
       e.target.value = '';
       return;
     }
@@ -145,7 +147,7 @@ const CreateTest: React.FC = () => {
       updateQuestion(questionId, { imageUrl: response.data.url });
     } catch (error) {
       console.error('Failed to upload question image:', error);
-      alert('Ошибка при загрузке изображения.');
+      await showAlert('Ошибка при загрузке изображения.', { title: 'Ошибка' });
     }
   };
 
@@ -156,13 +158,13 @@ const CreateTest: React.FC = () => {
     // Валидация
     const isValid = questions.every(q => q.text && q.options.some(o => o.isCorrect) && q.options.every(o => o.text));
     if (!isValid) {
-      alert('Пожалуйста, заполните все вопросы и отметьте правильные ответы.');
+      await showAlert('Пожалуйста, заполните все вопросы и отметьте правильные ответы.');
       return;
     }
 
     const deadlineError = validateDeadlineLocal(deadline);
     if (deadlineError) {
-      alert(deadlineError);
+      await showAlert(deadlineError);
       return;
     }
 

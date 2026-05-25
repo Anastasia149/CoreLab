@@ -11,11 +11,13 @@ import './CourseDetail.css';
 import { ISearchDetails, Module, Lesson } from '../../../models/ICourseDetail';
 import { ICourseStudent } from '../../../models/ICourseStudent';
 import Loader from '../../common/Loader';
+import { useAppModal } from '../../../context/AppModalContext';
 
 const CourseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { store } = useContext(Context);
+  const { showAlert, showConfirm } = useAppModal();
   const [course, setCourse] = useState<ISearchDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeModule, setActiveModule] = useState<number[]>([]);
@@ -56,13 +58,11 @@ const CourseDetail: React.FC = () => {
 
   const handleRemoveStudent = async (student: ICourseStudent) => {
     const label = student.name?.trim() || student.email;
-    if (
-      !window.confirm(
-        `Удалить ${label} с курса? Ученик потеряет доступ к материалам и работам этого курса.`
-      )
-    ) {
-      return;
-    }
+    const confirmed = await showConfirm(
+      `Удалить ${label} с курса? Ученик потеряет доступ к материалам и работам этого курса.`,
+      { title: 'Удалить ученика', confirmText: 'Удалить', danger: true }
+    );
+    if (!confirmed) return;
     setRemovingStudentId(student.id);
     const ok = await store.removeStudentFromCourse(Number(id), student.id);
     setRemovingStudentId(null);
@@ -77,7 +77,7 @@ const CourseDetail: React.FC = () => {
           : prev
       );
     } else {
-      alert('Не удалось удалить ученика с курса. Попробуйте позже.');
+      await showAlert('Не удалось удалить ученика с курса. Попробуйте позже.', { title: 'Ошибка' });
     }
   };
 
@@ -96,11 +96,13 @@ const CourseDetail: React.FC = () => {
   const [isOrphanLessonsOpen, setIsOrphanLessonsOpen] = useState(true);
 
   const handleDelete = async () => {
-    if (window.confirm('Вы уверены, что хотите удалить этот курс? Все уроки и материалы будут удалены безвозвратно.')) {
-      if (id) {
-        await store.deleteCourse(Number(id));
-        navigate('/teacher/courses');
-      }
+    const confirmed = await showConfirm(
+      'Вы уверены, что хотите удалить этот курс? Все уроки и материалы будут удалены безвозвратно.',
+      { title: 'Удаление курса', confirmText: 'Удалить', danger: true }
+    );
+    if (confirmed && id) {
+      await store.deleteCourse(Number(id));
+      navigate('/teacher/courses');
     }
   };
 

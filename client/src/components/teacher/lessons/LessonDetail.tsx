@@ -14,11 +14,13 @@ import { partitionSubmissionsByReview } from '../../../utils/submissionReview';
 import { SubmissionOverdueBadge } from '../../common/SubmissionOverdueBadge';
 import { LessonDeadlineInfo } from '../../common/LessonDeadlineInfo';
 import { ICourseStudent } from '../../../models/ICourseStudent';
+import { useAppModal } from '../../../context/AppModalContext';
 
 const LessonDetail: React.FC = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
   const { store } = useContext(Context);
   const navigate = useNavigate();
+  const { showAlert, showConfirm } = useAppModal();
 
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [submissions, setSubmissions] = useState<LessonSubmissionRow[]>([]);
@@ -57,11 +59,14 @@ const LessonDetail: React.FC = () => {
   }, [lesson, store]);
 
   const handleDelete = async () => {
-    if (window.confirm('Вы уверены, что хотите удалить этот урок?')) {
-      if (lessonId) {
-        await store.deleteLesson(lessonId);
-        navigate(`/teacher/course/${lesson?.course_id}`);
-      }
+    const confirmed = await showConfirm('Вы уверены, что хотите удалить этот урок?', {
+      title: 'Удаление урока',
+      confirmText: 'Удалить',
+      danger: true,
+    });
+    if (confirmed && lessonId) {
+      await store.deleteLesson(lessonId);
+      navigate(`/teacher/course/${lesson?.course_id}`);
     }
   };
 
@@ -71,7 +76,7 @@ const LessonDetail: React.FC = () => {
   ): Promise<boolean> => {
     const updated = await store.updateSubmissionReview(submissionId, status);
     if (!updated) {
-      alert('Не удалось сохранить оценку. Попробуйте позже.');
+      await showAlert('Не удалось сохранить оценку. Попробуйте позже.', { title: 'Ошибка' });
       return false;
     }
     setSubmissions((prev) =>

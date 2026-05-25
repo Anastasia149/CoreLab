@@ -28,6 +28,7 @@ import {
 import { lessonTypeHasDeadline } from '../../../utils/lessonDeadline';
 import { LessonDeadlineInfo } from '../../common/LessonDeadlineInfo';
 import { SubmissionOverdueBadge } from '../../common/SubmissionOverdueBadge';
+import { useAppModal } from '../../../context/AppModalContext';
 
 type DraftLink = { id: string; kind: 'link'; url: string };
 type DraftFile = { id: string; kind: 'file'; file: File };
@@ -45,6 +46,7 @@ type StudentSubmission = {
 const StudentLessonDetail: React.FC = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
   const { store } = useContext(Context);
+  const { showAlert, showConfirm } = useAppModal();
 
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [submission, setSubmission] = useState<StudentSubmission | null>(null);
@@ -109,7 +111,7 @@ const StudentLessonDetail: React.FC = () => {
     const hasAttachments = draftItems.length > 0;
 
     if (!hasAttachments && submitMode !== 'completed') {
-      alert('Добавьте хотя бы одну ссылку или файл, либо выберите «Отметить».');
+      await showAlert('Добавьте хотя бы одну ссылку или файл, либо выберите «Отметить».');
       return;
     }
 
@@ -123,7 +125,7 @@ const StudentLessonDetail: React.FC = () => {
         );
         if (newSubmission) {
           setSubmission(newSubmission as StudentSubmission);
-          alert('Работа успешно отправлена!');
+          await showAlert('Работа успешно отправлена!', { title: 'Готово' });
         }
         return;
       }
@@ -155,11 +157,11 @@ const StudentLessonDetail: React.FC = () => {
       if (newSubmission) {
         setSubmission(newSubmission as StudentSubmission);
         setDraftItems([]);
-        alert('Работа успешно отправлена!');
+        await showAlert('Работа успешно отправлена!', { title: 'Готово' });
       }
     } catch (error) {
       console.error('Submission failed:', error);
-      alert('Ошибка при отправке работы.');
+      await showAlert('Ошибка при отправке работы.', { title: 'Ошибка' });
     } finally {
       setIsSubmitting(false);
     }
@@ -173,13 +175,13 @@ const StudentLessonDetail: React.FC = () => {
       if (newSubmission) {
         setSubmission(newSubmission as StudentSubmission);
         setTakingTest(false);
-        alert('Тест успешно отправлен!');
+        await showAlert('Тест успешно отправлен!', { title: 'Готово' });
       } else {
-        alert('Не удалось отправить тест. Попробуйте позже.');
+        await showAlert('Не удалось отправить тест. Попробуйте позже.', { title: 'Ошибка' });
       }
     } catch (error) {
       console.error('Test submission failed:', error);
-      alert('Ошибка при отправке теста.');
+      await showAlert('Ошибка при отправке теста.', { title: 'Ошибка' });
     } finally {
       setIsSubmitting(false);
     }
@@ -187,13 +189,11 @@ const StudentLessonDetail: React.FC = () => {
 
   const handleCancelSubmission = async () => {
     if (!lessonId || isCancelling) return;
-    if (
-      !window.confirm(
-        'Отозвать отправленную работу? После этого можно будет отправить решение снова.'
-      )
-    ) {
-      return;
-    }
+    const confirmed = await showConfirm(
+      'Отозвать отправленную работу? После этого можно будет отправить решение снова.',
+      { title: 'Отозвать работу', confirmText: 'Отозвать', danger: true }
+    );
+    if (!confirmed) return;
     setIsCancelling(true);
     try {
       const ok = await store.deleteMySubmission(lessonId);
@@ -204,7 +204,7 @@ const StudentLessonDetail: React.FC = () => {
         setLink('');
         setFile(null);
       } else {
-        alert('Не удалось отменить отправку. Попробуйте позже.');
+        await showAlert('Не удалось отменить отправку. Попробуйте позже.', { title: 'Ошибка' });
       }
     } finally {
       setIsCancelling(false);
@@ -303,7 +303,7 @@ const StudentLessonDetail: React.FC = () => {
                             onClick={() => {
                               if (submission) return;
                               if (testQuestions.length === 0) {
-                                alert('Тест пока не содержит вопросов.');
+                                void showAlert('Тест пока не содержит вопросов.');
                                 return;
                               }
                               setTakingTest(true);

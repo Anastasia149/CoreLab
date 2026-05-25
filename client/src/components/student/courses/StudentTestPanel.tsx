@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
 import { TestQuestion } from '../../../utils/testContent';
+import { useAppModal } from '../../../context/AppModalContext';
 import './StudentTestPanel.css';
 
 type Props = {
@@ -16,6 +17,7 @@ export const StudentTestPanel: React.FC<Props> = ({
   onCancel,
   isSubmitting,
 }) => {
+  const { showAlert } = useAppModal();
   const [answers, setAnswers] = useState<Record<string, string[]>>({});
 
   const toggleOption = (question: TestQuestion, optionId: string, checked: boolean) => {
@@ -38,7 +40,7 @@ export const StudentTestPanel: React.FC<Props> = ({
     e.preventDefault();
     for (const q of questions) {
       if (q.isRequired && !(answers[q.id]?.length > 0)) {
-        alert('Ответьте на все обязательные вопросы.');
+        await showAlert('Ответьте на все обязательные вопросы.');
         return;
       }
     }

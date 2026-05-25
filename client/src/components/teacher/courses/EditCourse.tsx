@@ -9,11 +9,13 @@ import '../dashboard/TeacherLayout.css';
 import './CreateCourse.css';
 import { parseCoursePrice, validateCoursePrice } from '../../../utils/coursePrice';
 import { getCourseCoverUrl } from '../../../constants/courseCover';
+import { useAppModal } from '../../../context/AppModalContext';
 
 const EditCourse: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { store } = useContext(Context);
   const navigate = useNavigate();
+  const { showAlert } = useAppModal();
   const { fields, handleChange, setFieldValue, setFields } = useFormFields({
     title: '',
     description: '',
@@ -53,7 +55,7 @@ const EditCourse: React.FC = () => {
       const mainType = file.type.split('/')[0];
 
       if (mainType !== 'image') {
-        alert('Пожалуйста, выберите файл изображения.');
+        void showAlert('Пожалуйста, выберите файл изображения.');
         e.target.value = '';
         setFieldValue('image', null);
         setImagePreview(getCourseCoverUrl(savedImageUrl));
@@ -73,17 +75,17 @@ const EditCourse: React.FC = () => {
     if (!id) return;
 
     if (fields.title.charAt(0) !== fields.title.charAt(0).toUpperCase()) {
-      alert('Название курса должно начинаться с большой буквы.');
+      await showAlert('Название курса должно начинаться с большой буквы.');
       return;
     }
     if (fields.description && fields.description.charAt(0) !== fields.description.charAt(0).toUpperCase()) {
-      alert('Описание курса должно начинаться с большой буквы.');
+      await showAlert('Описание курса должно начинаться с большой буквы.');
       return;
     }
 
     const priceError = validateCoursePrice(fields.price);
     if (priceError) {
-      alert(priceError);
+      await showAlert(priceError);
       return;
     }
 

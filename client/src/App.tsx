@@ -7,6 +7,7 @@ import { Context } from './index';
 import { observer } from "mobx-react-lite";
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { SidebarDrawerProvider } from './context/SidebarDrawerContext';
+import { AppModalProvider } from './context/AppModalContext';
 
 import TeacherHome from './components/teacher/dashboard/TeacherHome';
 import TeacherCourses from './components/teacher/courses/TeacherCourses';
@@ -51,6 +52,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <AppModalProvider>
       <SidebarDrawerProvider>
       <Routes>
           <Route path="/" element={store.isAuth ? <Navigate to={isStudent ? "/student" : "/teacher"} replace /> : <HomePage />} />
@@ -90,6 +92,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </SidebarDrawerProvider>
+      </AppModalProvider>
     </BrowserRouter>
   );
 }

@@ -18,6 +18,7 @@ import {
   toDatetimeLocalValue,
   validateDeadlineLocal,
 } from '../../../utils/lessonDeadline';
+import { useAppModal } from '../../../context/AppModalContext';
 
 interface Option {
   id: string;
@@ -38,6 +39,7 @@ const EditLesson: React.FC = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
   const { store } = useContext(Context);
   const navigate = useNavigate();
+  const { showAlert, showConfirm } = useAppModal();
   const { fields, handleChange, setFieldValue, setFields } = useFormFields({
     title: '',
     content: '',
@@ -147,7 +149,7 @@ const EditLesson: React.FC = () => {
       ];
 
       if (!allowedMainTypes.includes(mainType) && !allowedFullTypes.includes(fileType)) {
-        alert('Недопустимый тип файла. Разрешены только изображения, видео и документы (pdf, doc, xls, ppt).');
+        void showAlert('Недопустимый тип файла. Разрешены только изображения, видео и документы (pdf, doc, xls, ppt).');
         e.target.value = '';
         return;
       }
@@ -163,7 +165,7 @@ const EditLesson: React.FC = () => {
   const handleCreateModule = async () => {
     if (newModuleName.trim() !== '' && courseId) {
       if (newModuleName.charAt(0) !== newModuleName.charAt(0).toUpperCase()) {
-        alert('Название модуля должно начинаться с большой буквы.');
+        void showAlert('Название модуля должно начинаться с большой буквы.');
         return;
       }
       const newModule = await store.createModule(courseId, newModuleName);
@@ -186,7 +188,7 @@ const EditLesson: React.FC = () => {
       const mainType = file.type.split('/')[0];
 
       if (mainType !== 'image') {
-        alert('Пожалуйста, выберите файл изображения.');
+        void showAlert('Пожалуйста, выберите файл изображения.');
         e.target.value = '';
         setFieldValue('image', null);
         setImagePreview(null);
@@ -202,7 +204,12 @@ const EditLesson: React.FC = () => {
   };
 
   const handleDeleteMaterial = async (materialId: number) => {
-    if (window.confirm('Вы уверены, что хотите удалить этот материал?')) {
+    const confirmed = await showConfirm('Вы уверены, что хотите удалить этот материал?', {
+      title: 'Удаление материала',
+      confirmText: 'Удалить',
+      danger: true,
+    });
+    if (confirmed) {
       await store.deleteLessonMaterial(materialId);
       setMaterials(materials.filter(m => m.id !== materialId));
     }
@@ -284,7 +291,7 @@ const EditLesson: React.FC = () => {
     if (!file) return;
 
     if (file.type.split('/')[0] !== 'image') {
-      alert('Пожалуйста, выберите файл изображения.');
+      void showAlert('Пожалуйста, выберите файл изображения.');
       e.target.value = '';
       return;
     }
@@ -296,7 +303,7 @@ const EditLesson: React.FC = () => {
       updateQuestion(questionId, { imageUrl: response.data.url });
     } catch (error) {
       console.error('Failed to upload question image:', error);
-      alert('Ошибка при загрузке изображения.');
+      await showAlert('Ошибка при загрузке изображения.', { title: 'Ошибка' });
     }
   };
 
@@ -311,12 +318,12 @@ const EditLesson: React.FC = () => {
 
     if (fields.type === 'test') {
       if (testTitle.charAt(0) !== testTitle.charAt(0).toUpperCase()) {
-        alert('Название теста должно начинаться с большой буквы.');
+        await showAlert('Название теста должно начинаться с большой буквы.');
         return;
       }
       const isValid = testQuestions.every(q => q.text && q.options.some(o => o.isCorrect) && q.options.every(o => o.text));
       if (!isValid) {
-        alert('Пожалуйста, заполните все вопросы теста и отметьте правильные ответы.');
+        await showAlert('Пожалуйста, заполните все вопросы теста и отметьте правильные ответы.');
         return;
       }
       finalTitle = testTitle;
@@ -324,11 +331,11 @@ const EditLesson: React.FC = () => {
       finalImageUrl = null; // Tests don't have images
     } else {
       if (fields.title.charAt(0) !== fields.title.charAt(0).toUpperCase()) {
-        alert('Название урока должно начинаться с большой буквы.');
+        await showAlert('Название урока должно начинаться с большой буквы.');
         return;
       }
       if (fields.content && fields.content.charAt(0) !== fields.content.charAt(0).toUpperCase()) {
-        alert('Описание урока должно начинаться с большой буквы.');
+        await showAlert('Описание урока должно начинаться с большой буквы.');
         return;
       }
 
@@ -343,7 +350,7 @@ const EditLesson: React.FC = () => {
     if (lessonTypeHasDeadline(fields.type)) {
       const deadlineError = validateDeadlineLocal(fields.deadline, initialDeadlineLocal);
       if (deadlineError) {
-        alert(deadlineError);
+        await showAlert(deadlineError);
         return;
       }
     }

@@ -10,10 +10,12 @@ import './CreateCourse.css';
 import { useNavigate } from 'react-router-dom';
 import { parseCoursePrice, validateCoursePrice } from '../../../utils/coursePrice';
 import { DEFAULT_COURSE_COVER } from '../../../constants/courseCover';
+import { useAppModal } from '../../../context/AppModalContext';
 
 const CreateCourse: React.FC = () => {
   const { store } = useContext(Context);
   const navigate = useNavigate();
+  const { showAlert } = useAppModal();
   const { fields, handleChange, setFieldValue } = useFormFields({
     title: '',
     description: '',
@@ -43,7 +45,7 @@ const CreateCourse: React.FC = () => {
       const mainType = file.type.split('/')[0];
 
       if (mainType !== 'image') {
-        alert('Пожалуйста, выберите файл изображения.');
+        void showAlert('Пожалуйста, выберите файл изображения.');
         e.target.value = '';
         setFieldValue('image', null);
         setImagePreview(null);
@@ -62,17 +64,17 @@ const CreateCourse: React.FC = () => {
     e.preventDefault();
 
     if (fields.title.charAt(0) !== fields.title.charAt(0).toUpperCase()) {
-      alert('Название курса должно начинаться с большой буквы.');
+      await showAlert('Название курса должно начинаться с большой буквы.');
       return;
     }
     if (fields.description && fields.description.charAt(0) !== fields.description.charAt(0).toUpperCase()) {
-      alert('Описание курса должно начинаться с большой буквы.');
+      await showAlert('Описание курса должно начинаться с большой буквы.');
       return;
     }
 
     const priceError = validateCoursePrice(fields.price);
     if (priceError) {
-      alert(priceError);
+      await showAlert(priceError);
       return;
     }
 
