@@ -18,7 +18,6 @@ const StudentMyCourses: React.FC = () => {
 
   return (
     <div className="student-my-courses-page">
-      <h1>Мои курсы</h1>
       <div className="my-courses-content">
         {Array.isArray((store.user as any)?.courses) && (store.user as any).courses.length > 0 ? (
           <div className="student-courses-grid">

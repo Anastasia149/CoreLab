@@ -22,6 +22,13 @@ const TeacherHeader = observer(({ name }: Props) => {
   const getTitle = () => {
     const tab = searchParams.get('tab');
     const path = location.pathname;
+    const isTeacherHome = path === '/teacher' || path === '/teacher/';
+
+    if (isTeacherHome) {
+      if (tab === 'schedule') return 'Расписание';
+      if (tab === 'settings') return 'Настройки';
+      return 'Главная';
+    }
 
     if (path.startsWith('/teacher/courses')) return 'Мои курсы';
     if (path.includes('/student/')) return name || 'Профиль ученика';
@@ -30,10 +37,7 @@ const TeacherHeader = observer(({ name }: Props) => {
     if (path.startsWith('/teacher/lesson/')) return name || 'Урок';
     
     if (path.startsWith('/teacher/profile')) return 'Профиль';
-    if (tab === 'schedule') return 'Расписание';
-    if (tab === 'settings') return 'Настройки';
-    if (tab === 'courses') return 'Мои курсы';
-    
+
     return 'Главная';
   };
 
@@ -71,9 +75,6 @@ const TeacherHeader = observer(({ name }: Props) => {
         </div>
       </div>
       <div className="teacher-header-actions">
-        <button className="teacher-icon-btn" aria-label="Поиск">
-          <Icon icon="si:search-line" />
-        </button>
         <NotificationsBell iconButtonClassName="teacher-icon-btn" />
         <div
           className="teacher-avatar"

@@ -7,7 +7,6 @@ import { useSidebarDrawer } from '../../../../context/SidebarDrawerContext';
 const primary = [
   { icon: 'hugeicons:menu-square', label: 'Главная', path: '/student' },
   { icon: 'mdi:calendar-outline', label: 'Расписание', path: '/student/schedule' },
-  { icon: 'mdi:forum-outline', label: 'Форум', path: '/student/forum' },
   { icon: 'mdi:credit-card-outline', label: 'Оплата', path: '/student/billing' },
 ];
 

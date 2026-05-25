@@ -57,6 +57,9 @@ const StudentHeader: React.FC<Props> = observer(({ name }) => {
     if (path.startsWith('/student/schedule')) {
       return 'Расписание';
     }
+    if (path.startsWith('/student/settings')) {
+      return 'Настройки';
+    }
     if (path.startsWith('/student/profile')) {
       return 'Профиль';
     }
@@ -106,9 +109,6 @@ const StudentHeader: React.FC<Props> = observer(({ name }) => {
         </div>
       </div>
       <div className="student-header-actions">
-        <button className="student-icon-btn" aria-label="Поиск">
-          <Icon icon="si:search-line" />
-        </button>
         <NotificationsBell iconButtonClassName="student-icon-btn" />
         <button type="button" className="student-icon-btn" aria-label="Корзина" onClick={openCart}>
           <Icon icon="streamline-ultimate:shopping-basket-1" />
