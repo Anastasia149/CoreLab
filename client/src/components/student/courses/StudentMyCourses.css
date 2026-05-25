@@ -49,9 +49,12 @@
   margin: 0 0 16px;
 }
 
-/* Метаданные под описанием: в один ряд, узкие прямоугольники (не квадраты) */
+.student-my-courses-page .course-card-body .course-card-title {
+  min-height: 0;
+}
+
 .student-my-courses-page .course-card-body .course-card-description {
-  margin-bottom: 1px;
+  margin: 6px 0 12px;
 }
 
 .student-my-courses-page .my-courses-card-meta .course-meta-icons--compact {
