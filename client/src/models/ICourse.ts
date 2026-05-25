@@ -2,6 +2,7 @@ export interface ICourse {
     id: number;
     title: string;
     description: string;
+    category?: string | null;
     image_url?: string;
     status: 'draft' | 'published';
     price: number;

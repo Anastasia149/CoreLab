@@ -467,7 +467,14 @@ export default class Store {
         }
     }
 
-    async createCourse(title: string, description: string, status: string, image: File | null, price: number) {
+    async createCourse(
+        title: string,
+        description: string,
+        status: string,
+        image: File | null,
+        price: number,
+        category: string
+    ) {
         try {
             let image_url: string = DEFAULT_COURSE_COVER;
             if (image) {
@@ -476,14 +483,30 @@ export default class Store {
                 const response = await $api.post<{ url: string }>('/upload', formData);
                 image_url = response.data.url;
             }
-            const response = await $api.post<ICourse>('/courses', { title, description, status, image_url, price });
+            const response = await $api.post<ICourse>('/courses', {
+                title,
+                description,
+                status,
+                image_url,
+                price,
+                category,
+            });
             this.courses.push(response.data);
         } catch (e) {
             console.log("FULL ERROR:", e);
         }
     }
 
-    async updateCourse(id: number, title: string, description: string, status: string, image: File | null, price: number, existingImageUrl: string | null) {
+    async updateCourse(
+        id: number,
+        title: string,
+        description: string,
+        status: string,
+        image: File | null,
+        price: number,
+        existingImageUrl: string | null,
+        category: string
+    ) {
         try {
             let image_url = existingImageUrl;
             if (image) {
@@ -492,7 +515,14 @@ export default class Store {
                 const response = await $api.post<{ url: string }>('/upload', formData);
                 image_url = response.data.url;
             }
-            await $api.put(`/courses/${id}`, { title, description, status, image_url, price });
+            await $api.put(`/courses/${id}`, {
+                title,
+                description,
+                status,
+                image_url,
+                price,
+                category,
+            });
         } catch (e) {
             console.log("FULL ERROR:", e);
         }

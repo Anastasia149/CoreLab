@@ -3,9 +3,17 @@ const courseService = require('../service/course-service');
 class CourseController {
     async createCourse(req, res, next) {
         try {
-            const { title, description, status, image_url, price } = req.body;
+            const { title, description, status, image_url, price, category } = req.body;
             const author_id = req.user.id;
-            const courseData = await courseService.createCourse(title, description, author_id, status, image_url, price);
+            const courseData = await courseService.createCourse(
+                title,
+                description,
+                author_id,
+                status,
+                image_url,
+                price,
+                category
+            );
             return res.json(courseData);
         } catch (e) {
             next(e);
@@ -65,8 +73,16 @@ class CourseController {
     async updateCourse(req, res, next) {
         try {
             const { id } = req.params;
-            const { title, description, status, image_url, price } = req.body;
-            const courseData = await courseService.updateCourse(id, title, description, status, image_url, price);
+            const { title, description, status, image_url, price, category } = req.body;
+            const courseData = await courseService.updateCourse(
+                id,
+                title,
+                description,
+                status,
+                image_url,
+                price,
+                category
+            );
             return res.json(courseData);
         } catch (e) {
             next(e);

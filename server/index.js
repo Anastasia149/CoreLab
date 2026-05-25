@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const pool = require('./db');
+const { ensureSchema } = require('./db-migrations');
 const router = require('./router/index');
 const errorMiddleware = require('./middlewares/error-middleware')
 
@@ -43,6 +44,7 @@ app.use(errorMiddleware);
 const start = async () => {
     try {
         await pool.query('SELECT 1');
+        await ensureSchema();
         app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
         
     } catch (e) {

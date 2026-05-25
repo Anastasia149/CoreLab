@@ -2,6 +2,7 @@ const pool = require('../db');
 const mailService = require('./mail-service');
 const UserModel = require('../models/user-model');
 const ApiError = require('../exceptions/api-error');
+const { normalizeCourseCategory } = require('../constants/course-categories');
 
 function normalizeCoursePrice(price) {
     const n = Number(price);
@@ -15,14 +16,15 @@ function normalizeCoursePrice(price) {
 }
 
 class CourseService {
-    async createCourse(title, description, author_id, status, image_url, price) {
+    async createCourse(title, description, author_id, status, image_url, price, category) {
         const safePrice = normalizeCoursePrice(price ?? 0);
+        const safeCategory = normalizeCourseCategory(category);
 
         const newCourse = await pool.query(
-            `INSERT INTO courses (title, description, author_id, status, image_url, price) 
-             VALUES ($1, $2, $3, $4, $5, $6) 
+            `INSERT INTO courses (title, description, author_id, status, image_url, price, category) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7) 
              RETURNING *`,
-            [title, description, author_id, status, image_url, safePrice]
+            [title, description, author_id, status, image_url, safePrice, safeCategory]
         );
         return newCourse.rows[0];
     }
@@ -73,6 +75,7 @@ class CourseService {
                 c.status,
                 c.price,
                 c.image_url,
+                c.category,
                 u.id AS author_id,
                 u.name AS author_name,
                 u.avatar AS author_avatar,
@@ -156,6 +159,7 @@ class CourseService {
                 c.status,
                 c.price,
                 c.image_url,
+                c.category,
                 c.author_id,
                 c.students_count,
                 u.id,
@@ -175,12 +179,13 @@ class CourseService {
         return newModule.rows[0];
     }
 
-    async updateCourse(id, title, description, status, image_url, price) {
+    async updateCourse(id, title, description, status, image_url, price, category) {
         const safePrice = normalizeCoursePrice(price ?? 0);
+        const safeCategory = normalizeCourseCategory(category);
 
         const updatedCourse = await pool.query(
-            `UPDATE courses SET title = $1, description = $2, status = $3, image_url = $4, price = $5 WHERE id = $6 RETURNING *`,
-            [title, description, status, image_url, safePrice, id]
+            `UPDATE courses SET title = $1, description = $2, status = $3, image_url = $4, price = $5, category = $6 WHERE id = $7 RETURNING *`,
+            [title, description, status, image_url, safePrice, safeCategory, id]
         );
         return updatedCourse.rows[0];
     }

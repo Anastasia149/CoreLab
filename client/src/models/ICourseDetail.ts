@@ -30,6 +30,7 @@ export interface ISearchDetails {
   id: number;
   title: string;
   description: string;
+  category?: string | null;
   author_id?: number | null;
   author_name?: string | null;
   author_avatar?: string | null;

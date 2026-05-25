@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { parseCoursePrice, validateCoursePrice } from '../../../utils/coursePrice';
 import { DEFAULT_COURSE_COVER } from '../../../constants/courseCover';
 import { useAppModal } from '../../../context/AppModalContext';
+import { COURSE_CATEGORIES } from '../../../constants/courseCategories';
 
 const CreateCourse: React.FC = () => {
   const { store } = useContext(Context);
@@ -20,6 +21,7 @@ const CreateCourse: React.FC = () => {
     title: '',
     description: '',
     status: 'draft' as 'draft' | 'published',
+    category: '',
     image: null as File | null,
     price: 0,
   });
@@ -72,6 +74,11 @@ const CreateCourse: React.FC = () => {
       return;
     }
 
+    if (!fields.category) {
+      await showModal('Выберите категорию курса.');
+      return;
+    }
+
     const priceError = validateCoursePrice(fields.price);
     if (priceError) {
       await showModal(priceError);
@@ -79,7 +86,14 @@ const CreateCourse: React.FC = () => {
     }
 
     const price = parseCoursePrice(fields.price);
-    await store.createCourse(fields.title, fields.description, fields.status, fields.image, price);
+    await store.createCourse(
+      fields.title,
+      fields.description,
+      fields.status,
+      fields.image,
+      price,
+      fields.category
+    );
     navigate('/teacher/courses');
   };
 
@@ -107,6 +121,24 @@ const CreateCourse: React.FC = () => {
                 value={fields.description}
                 onChange={handleChange('description')}
               />
+            </div>
+            <div className="form-group full-width">
+              <label htmlFor="category">Категория</label>
+              <select
+                id="category"
+                value={fields.category}
+                onChange={handleChange('category')}
+                required
+              >
+                <option value="" disabled>
+                  Выберите категорию
+                </option>
+                {COURSE_CATEGORIES.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="form-group">
               <label htmlFor="price">Цена (Б)</label>

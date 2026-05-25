@@ -10,19 +10,9 @@ import { formatCoursePriceDisplay } from '../../../utils/coursePrice';
 import { loadFavoriteCourseIds, saveFavoriteCourseIds } from '../../../utils/courseFavorites';
 import { CourseSearchStars } from '../../../utils/courseRatingStars';
 import { getCourseCoverUrl } from '../../../constants/courseCover';
+import { COURSE_SEARCH_CATEGORIES } from '../../../constants/courseCategories';
 
 type CourseListFilter = 'all' | 'free' | 'paid' | 'favorites';
-
-const categories = [
-  'Все',
-  'IT и ПО',
-  'Дизайн',
-  'Маркетинг',
-  'Наука',
-  'Право',
-  'Тесты',
-  'Интенсивы'
-];
 
 const StudentCoursesSearch: React.FC = () => {
   const { store } = useContext(Context);
@@ -71,10 +61,8 @@ const StudentCoursesSearch: React.FC = () => {
   const filteredAndSortedCourses = useMemo(() => {
     let result = [...store.courses];
 
-    // Фильтрация по категории (имитация, так как в модели ICourse может не быть категории)
     if (activeCategory !== 'Все') {
-      // Здесь должна быть реальная фильтрация по категории, если она есть в модели
-      // result = result.filter(course => course.category === activeCategory);
+      result = result.filter((course) => course.category === activeCategory);
     }
 
     if (listFilter === 'favorites') {
@@ -123,7 +111,7 @@ const StudentCoursesSearch: React.FC = () => {
         {/* Панель фильтров категорий */}
         <div className="courses-filter-row">
           <div className="courses-filter-panel">
-            {categories.map(cat => (
+            {COURSE_SEARCH_CATEGORIES.map(cat => (
               <button 
                 key={cat} 
                 className={`filter-button ${activeCategory === cat ? 'active' : ''}`}

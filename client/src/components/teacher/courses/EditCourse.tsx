@@ -10,6 +10,7 @@ import './CreateCourse.css';
 import { parseCoursePrice, validateCoursePrice } from '../../../utils/coursePrice';
 import { getCourseCoverUrl } from '../../../constants/courseCover';
 import { useAppModal } from '../../../context/AppModalContext';
+import { COURSE_CATEGORIES } from '../../../constants/courseCategories';
 
 const EditCourse: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +21,7 @@ const EditCourse: React.FC = () => {
     title: '',
     description: '',
     status: 'draft' as 'draft' | 'published',
+    category: '',
     image: null as File | null,
     price: 0,
   });
@@ -35,6 +37,7 @@ const EditCourse: React.FC = () => {
             title: data.title,
             description: data.description,
             status: data.status,
+            category: data.category ?? '',
             price: data.price ?? 0,
             image: null,
           });
@@ -83,6 +86,11 @@ const EditCourse: React.FC = () => {
       return;
     }
 
+    if (!fields.category) {
+      await showModal('Выберите категорию курса.');
+      return;
+    }
+
     const priceError = validateCoursePrice(fields.price);
     if (priceError) {
       await showModal(priceError);
@@ -90,7 +98,16 @@ const EditCourse: React.FC = () => {
     }
 
     const price = parseCoursePrice(fields.price);
-    await store.updateCourse(Number(id), fields.title, fields.description, fields.status, fields.image, price, savedImageUrl);
+    await store.updateCourse(
+      Number(id),
+      fields.title,
+      fields.description,
+      fields.status,
+      fields.image,
+      price,
+      savedImageUrl,
+      fields.category
+    );
     navigate(`/teacher/course/${id}`);
   };
 
@@ -118,6 +135,24 @@ const EditCourse: React.FC = () => {
                 value={fields.description}
                 onChange={handleChange('description')}
               />
+            </div>
+            <div className="form-group full-width">
+              <label htmlFor="category">Категория</label>
+              <select
+                id="category"
+                value={fields.category}
+                onChange={handleChange('category')}
+                required
+              >
+                <option value="" disabled>
+                  Выберите категорию
+                </option>
+                {COURSE_CATEGORIES.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="form-group">
               <label htmlFor="price">Цена (Б)</label>
