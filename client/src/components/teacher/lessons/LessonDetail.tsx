@@ -13,6 +13,7 @@ import { SubmissionReviewControls } from './SubmissionReviewControls';
 import { partitionSubmissionsByReview } from '../../../utils/submissionReview';
 import { SubmissionOverdueBadge } from '../../common/SubmissionOverdueBadge';
 import { LessonDeadlineInfo } from '../../common/LessonDeadlineInfo';
+import { LessonMaterialCard } from '../../common/LessonMaterialCard';
 import { ICourseStudent } from '../../../models/ICourseStudent';
 import { useAppModal } from '../../../context/AppModalContext';
 
@@ -297,16 +298,7 @@ const LessonDetail: React.FC = () => {
                     ) : (
                       <div className="materials-grid">
                         {lesson.materials.map((m) => (
-                          <a
-                            key={m.id}
-                            href={m.file_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="material-card"
-                          >
-                            <Icon icon="mdi:file-document-outline" />
-                            <span>{m.title}</span>
-                          </a>
+                          <LessonMaterialCard key={m.id} material={m} />
                         ))}
                       </div>
                     )}

@@ -136,35 +136,6 @@
   color: var(--text-primary);
 }
 
-.materials-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
-}
-
-.material-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  text-decoration: none;
-  color: var(--text-primary);
-  transition: all 0.2s;
-}
-
-.material-card:hover {
-  border-color: var(--accent);
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.08);
-}
-
-.material-card svg {
-  font-size: 24px;
-  color: var(--accent);
-}
-
 .submission-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);

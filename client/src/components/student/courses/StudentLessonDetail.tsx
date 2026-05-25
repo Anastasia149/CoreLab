@@ -27,6 +27,7 @@ import {
 } from '../../../utils/submissionReview';
 import { lessonTypeHasDeadline } from '../../../utils/lessonDeadline';
 import { LessonDeadlineInfo } from '../../common/LessonDeadlineInfo';
+import { LessonMaterialCard } from '../../common/LessonMaterialCard';
 import { SubmissionOverdueBadge } from '../../common/SubmissionOverdueBadge';
 import { useAppModal } from '../../../context/AppModalContext';
 import {
@@ -311,16 +312,7 @@ const StudentLessonDetail: React.FC = () => {
                       <h3 className="lesson-plank-section-title">Материалы</h3>
                       <div className="materials-grid">
                         {lesson.materials.map((m) => (
-                          <a
-                            key={m.id}
-                            href={m.file_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="material-card"
-                          >
-                            <Icon icon="mdi:file-document-outline" />
-                            <span>{m.title}</span>
-                          </a>
+                          <LessonMaterialCard key={m.id} material={m} />
                         ))}
                         {isTest && (
                           <button

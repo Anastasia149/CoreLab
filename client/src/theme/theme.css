@@ -175,7 +175,7 @@ body,
 .teacher-card,
 .lesson-footer-plank,
 .submission-card,
-.materials-tab .material-card,
+.materials-tab button.material-card,
 .student-lesson-container .submission-card {
   background: var(--bg-surface);
   color: var(--text-primary);
@@ -435,7 +435,7 @@ body,
   color: var(--accent-soft);
 }
 
-[data-theme='dark'] .material-card,
+[data-theme='dark'] button.material-card,
 [data-theme='dark'] .file-label {
   background: var(--bg-surface-muted);
   border-color: var(--border-color);
