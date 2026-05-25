@@ -19,6 +19,11 @@ import {
   validateDeadlineLocal,
 } from '../../../utils/lessonDeadline';
 import { useAppModal } from '../../../context/AppModalContext';
+import {
+  ASSIGNMENT_FILE_MAX_BYTES,
+  formatFileSize,
+  getAssignmentFileSizeError,
+} from '../../../constants/fileLimits';
 
 interface Option {
   id: string;
@@ -150,6 +155,13 @@ const EditLesson: React.FC = () => {
 
       if (!allowedMainTypes.includes(mainType) && !allowedFullTypes.includes(fileType)) {
         void showAlert('Недопустимый тип файла. Разрешены только изображения, видео и документы (pdf, doc, xls, ppt).');
+        e.target.value = '';
+        return;
+      }
+
+      const sizeError = getAssignmentFileSizeError(file);
+      if (sizeError) {
+        void showAlert(sizeError);
         e.target.value = '';
         return;
       }
@@ -575,9 +587,9 @@ const EditLesson: React.FC = () => {
                     onChange={handleFileChange}
                     accept="image/*,video/*,application/pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
                   />
-                  <span className="file-upload-name">
-                    {fields.file ? fields.file.name : 'Файл не выбран'}
-                  </span>
+                  <p className="file-size-hint">
+                    Максимальный размер файла — {formatFileSize(ASSIGNMENT_FILE_MAX_BYTES)}
+                  </p>
                 </div>
                 <div className="materials-list">
                   {materials.map(material => (

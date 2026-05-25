@@ -16,6 +16,11 @@ import {
   validateDeadlineLocal,
 } from '../../../utils/lessonDeadline';
 import { useAppModal } from '../../../context/AppModalContext';
+import {
+  ASSIGNMENT_FILE_MAX_BYTES,
+  formatFileSize,
+  getAssignmentFileSizeError,
+} from '../../../constants/fileLimits';
 
 const CreateLesson: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -120,6 +125,15 @@ const CreateLesson: React.FC = () => {
         return;
       }
 
+      const sizeError = getAssignmentFileSizeError(file);
+      if (sizeError) {
+        void showAlert(sizeError);
+        e.target.value = '';
+        setFieldValue('file', null);
+        setFilePreview(null);
+        return;
+      }
+
       setFieldValue('file', file);
       setFilePreview(file.name);
     } else {
@@ -173,6 +187,11 @@ const CreateLesson: React.FC = () => {
     );
 
     if (newLesson && fields.file) {
+      const sizeError = getAssignmentFileSizeError(fields.file);
+      if (sizeError) {
+        await showAlert(sizeError);
+        return;
+      }
       await store.uploadLessonMaterial(newLesson.id, fields.file);
     }
 
@@ -244,6 +263,9 @@ const CreateLesson: React.FC = () => {
                 <span className="file-upload-name">
                   {fields.file ? fields.file.name : 'Файл не выбран'}
                 </span>
+                <p className="file-size-hint">
+                  Максимальный размер файла — {formatFileSize(ASSIGNMENT_FILE_MAX_BYTES)}
+                </p>
               </div>
             </div>
             <div className="form-group full-width">

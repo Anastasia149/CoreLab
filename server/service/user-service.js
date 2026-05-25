@@ -137,9 +137,30 @@ class UserService{
         if (!/^data:image\/(jpe?g|png);(?:charset=[^;]+;)?base64,/i.test(head)) {
           throw ApiError.BadRequest('Аватар: допустимы только JPG или PNG.');
         }
+        this.assertAvatarSize(s);
         return;
       }
       throw ApiError.BadRequest('Аватар: допустимы только JPG или PNG.');
+    }
+
+    assertAvatarSize(avatarValue) {
+      const { AVATAR_MAX_BYTES, formatFileSizeRu } = require('../constants/file-limits');
+      const s = String(avatarValue).trim();
+      if (!s.startsWith('data:')) {
+        return;
+      }
+      const comma = s.indexOf(',');
+      if (comma === -1) {
+        throw ApiError.BadRequest('Некорректное изображение профиля.');
+      }
+      const base64 = s.slice(comma + 1);
+      const padding = (base64.match(/=+$/) || [''])[0].length;
+      const bytes = Math.floor((base64.length * 3) / 4) - padding;
+      if (bytes > AVATAR_MAX_BYTES) {
+        throw ApiError.BadRequest(
+          `Фото слишком большое. Максимальный размер — ${formatFileSizeRu(AVATAR_MAX_BYTES)}.`
+        );
+      }
     }
 
     async updateProfile(userId, { name, email, avatar, aboutMe, certificates, career }) {

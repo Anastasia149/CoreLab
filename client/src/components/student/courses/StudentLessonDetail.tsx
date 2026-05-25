@@ -29,6 +29,11 @@ import { lessonTypeHasDeadline } from '../../../utils/lessonDeadline';
 import { LessonDeadlineInfo } from '../../common/LessonDeadlineInfo';
 import { SubmissionOverdueBadge } from '../../common/SubmissionOverdueBadge';
 import { useAppModal } from '../../../context/AppModalContext';
+import {
+  ASSIGNMENT_FILE_MAX_BYTES,
+  formatFileSize,
+  getAssignmentFileSizeError,
+} from '../../../constants/fileLimits';
 
 type DraftLink = { id: string; kind: 'link'; url: string };
 type DraftFile = { id: string; kind: 'file'; file: File };
@@ -67,10 +72,19 @@ const StudentLessonDetail: React.FC = () => {
     }
   }, [lessonId, store]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target;
+    const selected = input.files?.[0];
+    if (!selected) return;
+
+    const sizeError = getAssignmentFileSizeError(selected);
+    if (sizeError) {
+      await showAlert(sizeError);
+      input.value = '';
+      return;
     }
+
+    setFile(selected);
   };
 
   const addDraftLink = () => {
@@ -81,8 +95,15 @@ const StudentLessonDetail: React.FC = () => {
     setSubmitMode('link');
   };
 
-  const addDraftFile = () => {
+  const addDraftFile = async () => {
     if (!file) return;
+
+    const sizeError = getAssignmentFileSizeError(file);
+    if (sizeError) {
+      await showAlert(sizeError);
+      return;
+    }
+
     setDraftItems((prev) => [
       ...prev,
       { id: `file-${Date.now()}`, kind: 'file', file },
@@ -135,6 +156,11 @@ const StudentLessonDetail: React.FC = () => {
         if (draft.kind === 'link') {
           items.push({ type: 'link', content: draft.url, label: draft.url });
         } else {
+          const sizeError = getAssignmentFileSizeError(draft.file);
+          if (sizeError) {
+            await showAlert(sizeError);
+            return;
+          }
           const url = await uploadFile(draft.file);
           items.push({
             type: 'file',
@@ -455,6 +481,9 @@ const StudentLessonDetail: React.FC = () => {
                                   <Icon icon="mdi:cloud-upload-outline" />
                                   {file ? file.name : 'Выберите файл'}
                                 </label>
+                                <p className="submission-file-hint">
+                                  Максимальный размер файла — {formatFileSize(ASSIGNMENT_FILE_MAX_BYTES)}
+                                </p>
                               </div>
                               <button
                                 type="button"

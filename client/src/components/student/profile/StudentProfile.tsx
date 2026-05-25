@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { Icon } from '@iconify/react';
 import '../../common/ProfilePage.css';
 import { ProfileAccountSection } from '../../common/ProfileAccountSection';
-import { getAvatarFileTypeError } from '../../../utils/avatarFile';
+import { getAvatarFileError, getAvatarMaxSizeLabel } from '../../../utils/avatarFile';
 import {
   isEmailValid,
   isNameLengthValid,
@@ -53,9 +53,9 @@ const StudentProfile: React.FC = observer(() => {
     const input = e.target;
     const file = input.files?.[0];
     if (!file) return;
-    const typeError = getAvatarFileTypeError(file);
-    if (typeError) {
-      setMessage(`Ошибка: ${typeError}`);
+    const fileError = getAvatarFileError(file);
+    if (fileError) {
+      setMessage(`Ошибка: ${fileError}`);
       input.value = '';
       return;
     }
@@ -119,7 +119,9 @@ const StudentProfile: React.FC = observer(() => {
                 >
                   Выбрать фото
                 </button>
-                <p className="profile-avatar-hint">Только JPG или PNG</p>
+                <p className="profile-avatar-hint">
+                  JPG или PNG, не более {getAvatarMaxSizeLabel()}
+                </p>
               </div>
             </div>
           </aside>
