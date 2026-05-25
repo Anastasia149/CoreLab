@@ -15,6 +15,7 @@ import { DEFAULT_COURSE_COVER } from "../constants/courseCover";
 import { NotificationDto, NotificationsResponse } from "../models/INotification";
 import { NotificationItem } from "../types/notification";
 import { formatTimeAgo } from "../utils/formatTimeAgo";
+import { TestReview } from "../utils/testContent";
 
 export type AppTheme = 'light' | 'dark';
 
@@ -304,6 +305,11 @@ export default class Store {
         } catch (e) {
             console.log("FULL ERROR:", e);
         }
+    }
+
+    async getMyTestReview(lessonId: string): Promise<TestReview> {
+        const response = await $api.get<TestReview>(`/lessons/${lessonId}/my-test-review`);
+        return response.data;
     }
 
     async getMyCourseGrades(courseId: number): Promise<ICourseGrade[]> {

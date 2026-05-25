@@ -371,7 +371,7 @@ const EditLesson: React.FC = () => {
       ? deadlineLocalToIso(fields.deadline)
       : null;
 
-    await store.updateLesson(
+    const updated = await store.updateLesson(
       lessonId,
       finalTitle,
       finalContent,
@@ -380,6 +380,15 @@ const EditLesson: React.FC = () => {
       fields.type,
       deadline
     );
+    const resetCount = Number(
+      (updated as { testSubmissionsReset?: number } | undefined)?.testSubmissionsReset ?? 0
+    );
+    if (fields.type === 'test' && resetCount > 0) {
+      await showAlert(
+        `Тест изменён. Сброшено ответов студентов: ${resetCount}. Всем нужно пройти тест заново.`,
+        { title: 'Ответы сброшены' }
+      );
+    }
     navigate(`/teacher/lesson/${lessonId}`);
   };
 

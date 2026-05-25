@@ -160,3 +160,116 @@
   font-weight: 600;
   color: var(--status-warning-text);
 }
+
+.student-test-review-score {
+  margin: 6px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.student-test-review-question-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.student-test-review-question-head .student-test-question-text {
+  margin: 0;
+  flex: 1;
+}
+
+.student-test-review-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.student-test-review-badge svg {
+  font-size: 18px;
+}
+
+.student-test-review-badge--correct {
+  color: var(--status-published-text);
+  background: var(--status-published-bg);
+}
+
+.student-test-review-badge--wrong {
+  color: var(--status-error-text);
+  background: var(--status-error-bg-soft);
+}
+
+.student-test-review-question--correct {
+  border-color: #86efac;
+}
+
+.student-test-review-question--wrong {
+  border-color: #fca5a5;
+}
+
+.student-test-review-options {
+  pointer-events: none;
+}
+
+.student-test-review-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-surface-muted);
+}
+
+.student-test-review-option-icon {
+  flex-shrink: 0;
+  font-size: 20px;
+  margin-top: 1px;
+}
+
+.student-test-review-option span {
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.student-test-review-option--correct-selected {
+  border-color: #22c55e;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.student-test-review-option--correct-selected .student-test-review-option-icon {
+  color: #16a34a;
+}
+
+.student-test-review-option--wrong-selected {
+  border-color: #ef4444;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.student-test-review-option--wrong-selected .student-test-review-option-icon {
+  color: #dc2626;
+}
+
+.student-test-correct-answer {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--hint-bg);
+  border: 1px solid var(--hint-border);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.student-test-correct-answer strong {
+  font-weight: 700;
+}

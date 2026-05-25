@@ -1,7 +1,37 @@
 const pool = require('../db');
 const fileService = require('./file-service');
 const { decodeMultipartFilename } = require('../utils/multipart-text');
+const { normalizeTestContentForCompare } = require('../utils/test-grading');
 const ApiError = require('../exceptions/api-error');
+
+function deadlineValue(deadline) {
+    if (deadline == null || deadline === '') return '';
+    return String(new Date(deadline).getTime());
+}
+
+function testLessonFieldsChanged(existing, update) {
+    if (existing.title !== update.title) return true;
+    if (String(existing.module_id ?? '') !== String(update.moduleId ?? '')) {
+        return true;
+    }
+    if ((existing.image_url || null) !== (update.imageUrl || null)) return true;
+    if (existing.type !== update.type) return true;
+    if (deadlineValue(existing.deadline) !== deadlineValue(update.deadline)) {
+        return true;
+    }
+    return (
+        normalizeTestContentForCompare(existing.content) !==
+        normalizeTestContentForCompare(update.content)
+    );
+}
+
+async function resetTestSubmissions(lessonId) {
+    const result = await pool.query(
+        `DELETE FROM submissions WHERE lesson_id = $1`,
+        [lessonId]
+    );
+    return result.rowCount;
+}
 
 function assertDeadlineNotInPast(deadline, existingDeadline = null) {
     if (deadline == null || deadline === '') return;
@@ -35,18 +65,52 @@ class LessonService {
     async updateLesson(lessonId, title, content, moduleId, imageUrl, type = 'lecture', deadline = null) {
         console.log("lesson-service.updateLesson called with:", { lessonId, title, content, moduleId, imageUrl, type, deadline });
 
-        const existing = await pool.query(`SELECT deadline FROM lessons WHERE id = $1`, [lessonId]);
-        assertDeadlineNotInPast(deadline, existing.rows[0]?.deadline);
+        const existingResult = await pool.query(
+            `SELECT type, title, content, module_id, image_url, deadline FROM lessons WHERE id = $1`,
+            [lessonId]
+        );
+        const existing = existingResult.rows[0];
+        if (!existing) {
+            throw ApiError.BadRequest('Урок не найден');
+        }
+
+        assertDeadlineNotInPast(deadline, existing.deadline);
+
+        const shouldResetTestSubmissions =
+            existing.type === 'test' &&
+            testLessonFieldsChanged(existing, {
+                title,
+                content,
+                moduleId,
+                imageUrl,
+                type,
+                deadline,
+            });
 
         const updatedLesson = await pool.query(
             `UPDATE lessons SET title = $1, content = $2, module_id = $3, image_url = $4, type = $5, deadline = $6 WHERE id = $7 RETURNING *`,
             [title, content, moduleId, imageUrl, type, deadline, lessonId]
         );
         console.log("Updated lesson from DB:", updatedLesson.rows[0]);
-        return updatedLesson.rows[0];
+
+        let testSubmissionsReset = 0;
+        if (shouldResetTestSubmissions) {
+            testSubmissionsReset = await resetTestSubmissions(lessonId);
+        }
+
+        return {
+            ...updatedLesson.rows[0],
+            testSubmissionsReset,
+        };
     }
 
     async createLessonMaterial(lessonId, file) {
+        const lessonRow = await pool.query(
+            `SELECT type FROM lessons WHERE id = $1`,
+            [lessonId]
+        );
+        const lessonType = lessonRow.rows[0]?.type;
+
         const fileName = fileService.saveFile(file);
         const fileUrl = `${process.env.API_URL}/${fileName}`;
         
@@ -72,7 +136,16 @@ class LessonService {
             `INSERT INTO lesson_materials (lesson_id, type, title, file_url) VALUES ($1, $2, $3, $4) RETURNING *`,
             [lessonId, type, decodeMultipartFilename(file.name), fileUrl]
         );
-        return newMaterial.rows[0];
+
+        let testSubmissionsReset = 0;
+        if (lessonType === 'test') {
+            testSubmissionsReset = await resetTestSubmissions(lessonId);
+        }
+
+        return {
+            ...newMaterial.rows[0],
+            testSubmissionsReset,
+        };
     }
 
     async getLessonById(lessonId) {
@@ -103,7 +176,26 @@ class LessonService {
     }
 
     async deleteLessonMaterial(materialId) {
+        const materialRow = await pool.query(
+            `SELECT lesson_id FROM lesson_materials WHERE id = $1`,
+            [materialId]
+        );
+        const lessonId = materialRow.rows[0]?.lesson_id;
+
         await pool.query(`DELETE FROM lesson_materials WHERE id = $1`, [materialId]);
+
+        if (!lessonId) return { testSubmissionsReset: 0 };
+
+        const lessonRow = await pool.query(
+            `SELECT type FROM lessons WHERE id = $1`,
+            [lessonId]
+        );
+        if (lessonRow.rows[0]?.type !== 'test') {
+            return { testSubmissionsReset: 0 };
+        }
+
+        const testSubmissionsReset = await resetTestSubmissions(lessonId);
+        return { testSubmissionsReset };
     }
 
     async deleteLesson(lessonId) {

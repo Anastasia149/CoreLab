@@ -66,6 +66,38 @@ function gradeTest(questions, rawAnswers) {
     return { correctCount, totalCount, storedContent };
 }
 
+/** Стабильное сравнение содержимого теста при сохранении урока. */
+function normalizeTestContentForCompare(rawContent) {
+    if (!rawContent || typeof rawContent !== 'string') {
+        return '[]';
+    }
+    try {
+        const parsed = JSON.parse(rawContent);
+        if (!Array.isArray(parsed)) {
+            return rawContent.trim();
+        }
+        const normalized = parsed
+            .map((q) => ({
+                id: String(q.id),
+                text: String(q.text || ''),
+                type: q.type === 'multiple' ? 'multiple' : 'single',
+                isRequired: q.isRequired !== false,
+                imageUrl: q.imageUrl || null,
+                options: (q.options || [])
+                    .map((o) => ({
+                        id: String(o.id),
+                        text: String(o.text || ''),
+                        isCorrect: !!o.isCorrect,
+                    }))
+                    .sort((a, b) => a.id.localeCompare(b.id)),
+            }))
+            .sort((a, b) => a.id.localeCompare(b.id));
+        return JSON.stringify(normalized);
+    } catch {
+        return rawContent.trim();
+    }
+}
+
 function sanitizeTestContentForStudent(rawContent) {
     const questions = parseQuestions(rawContent);
     const safe = questions.map((q) => ({
@@ -86,5 +118,6 @@ module.exports = {
     gradeTest,
     parseQuestions,
     sanitizeTestContentForStudent,
+    normalizeTestContentForCompare,
     isQuestionCorrect,
 };

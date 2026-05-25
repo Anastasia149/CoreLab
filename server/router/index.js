@@ -87,6 +87,7 @@ router.delete('/lessons/:lessonId', authMiddleware, lessonController.deleteLesso
 router.post('/submissions', authMiddleware, submissionController.submitAssignment);
 router.get('/lessons/:lessonId/submissions', authMiddleware, submissionController.getSubmissionsByLesson);
 router.get('/lessons/:lessonId/my-submission', authMiddleware, submissionController.getStudentSubmission);
+router.get('/lessons/:lessonId/my-test-review', authMiddleware, submissionController.getMyTestReview);
 router.delete('/lessons/:lessonId/my-submission', authMiddleware, submissionController.deleteMySubmission);
 router.patch('/submissions/:submissionId/review', authMiddleware, submissionController.updateReviewStatus);
 

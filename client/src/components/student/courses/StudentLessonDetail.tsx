@@ -14,7 +14,9 @@ import {
   isTestSubmissionType,
 } from '../../../utils/testContent';
 import { StudentTestPanel } from './StudentTestPanel';
+import { StudentTestReviewPanel } from './StudentTestReviewPanel';
 import './StudentTestPanel.css';
+import type { TestReview } from '../../../utils/testContent';
 import {
   parseSubmissionItems,
   isSubmissionCompletedOnly,
@@ -63,6 +65,9 @@ const StudentLessonDetail: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
   const [takingTest, setTakingTest] = useState(false);
+  const [viewingTestReview, setViewingTestReview] = useState(false);
+  const [testReview, setTestReview] = useState<TestReview | null>(null);
+  const [loadingTestReview, setLoadingTestReview] = useState(false);
 
   useEffect(() => {
     if (lessonId) {
@@ -202,6 +207,8 @@ const StudentLessonDetail: React.FC = () => {
       if (newSubmission) {
         setSubmission(newSubmission as StudentSubmission);
         setTakingTest(false);
+        setViewingTestReview(false);
+        setTestReview(null);
         await showAlert('Тест успешно отправлен!', { title: 'Готово' });
       } else {
         await showAlert('Не удалось отправить тест. Попробуйте позже.', { title: 'Ошибка' });
@@ -227,6 +234,8 @@ const StudentLessonDetail: React.FC = () => {
       if (ok) {
         setSubmission(null);
         setTakingTest(false);
+        setViewingTestReview(false);
+        setTestReview(null);
         setDraftItems([]);
         setLink('');
         setFile(null);
@@ -249,6 +258,26 @@ const StudentLessonDetail: React.FC = () => {
   const hasMaterials = lesson.materials.length > 0;
   const testQuestions = isTest ? parseTestQuestions(lesson.content) : [];
   const showAfterDescription = hasMaterials || isAssignment || isTest || showsDeadlineInfo;
+  const showFooterPlank =
+    showAfterDescription && !(isTest && (takingTest || viewingTestReview));
+
+  const handleOpenTestReview = async () => {
+    if (!lessonId || !submission) return;
+    setLoadingTestReview(true);
+    try {
+      const review = await store.getMyTestReview(lessonId);
+      if (review.questions.length > 0) {
+        setTestReview(review);
+        setViewingTestReview(true);
+        return;
+      }
+      await showAlert('Не удалось загрузить результаты теста.', { title: 'Ошибка' });
+    } catch {
+      await showAlert('Не удалось загрузить результаты теста.', { title: 'Ошибка' });
+    } finally {
+      setLoadingTestReview(false);
+    }
+  };
   const submittedItems = submission ? parseSubmissionItems(submission) : [];
   const submittedCompletedOnly =
     submission && isSubmissionCompletedOnly(submission);
@@ -273,7 +302,15 @@ const StudentLessonDetail: React.FC = () => {
         </header>
 
         <div className="lesson-main-content">
-          {isTest && takingTest && !submission ? (
+          {isTest && viewingTestReview && testReview ? (
+            <StudentTestReviewPanel
+              review={testReview}
+              onClose={() => {
+                setViewingTestReview(false);
+                setTestReview(null);
+              }}
+            />
+          ) : isTest && takingTest && !submission ? (
             <StudentTestPanel
               questions={testQuestions}
               onSubmit={handleSubmitTest}
@@ -288,7 +325,7 @@ const StudentLessonDetail: React.FC = () => {
           ) : null}
         </div>
 
-        {showAfterDescription && (
+        {showFooterPlank && (
           <>
             <hr className="lesson-divider" />
             <div className="lesson-footer-plank">
@@ -319,17 +356,29 @@ const StudentLessonDetail: React.FC = () => {
                             type="button"
                             className="material-card test-material-card"
                             onClick={() => {
-                              if (submission) return;
+                              if (submission) {
+                                void handleOpenTestReview();
+                                return;
+                              }
                               if (testQuestions.length === 0) {
                                 void showAlert('Тест пока не содержит вопросов.');
                                 return;
                               }
                               setTakingTest(true);
                             }}
-                            disabled={!!submission || testQuestions.length === 0}
+                            disabled={
+                              loadingTestReview ||
+                              (!submission && testQuestions.length === 0)
+                            }
                           >
                             <Icon icon={getLessonTypeIcon('test')} />
-                            <span>тест</span>
+                            <span>
+                              {loadingTestReview
+                                ? 'Загрузка…'
+                                : submission
+                                  ? 'просмотр теста'
+                                  : 'тест'}
+                            </span>
                           </button>
                         )}
                       </div>
@@ -412,9 +461,13 @@ const StudentLessonDetail: React.FC = () => {
                         </div>
                       ) : isTest ? (
                         <p className="submission-hint">
-                          {takingTest
-                            ? 'Заполните тест слева и нажмите «Отправить».'
-                            : 'Нажмите «тест» в материалах, чтобы начать.'}
+                          {viewingTestReview
+                            ? 'Просмотр результатов теста.'
+                            : takingTest
+                              ? 'Заполните тест слева и нажмите «Отправить».'
+                              : submission
+                                ? 'Нажмите «просмотр теста», чтобы увидеть ответы.'
+                                : 'Нажмите «тест» в материалах, чтобы начать.'}
                         </p>
                       ) : (
                         <form onSubmit={handleSubmit} className="submission-form">

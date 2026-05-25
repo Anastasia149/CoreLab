@@ -49,6 +49,20 @@ class SubmissionController {
         }
     }
 
+    async getMyTestReview(req, res, next) {
+        try {
+            const { lessonId } = req.params;
+            const studentId = req.user.id;
+            const review = await submissionService.getTestReviewForStudent(
+                lessonId,
+                studentId
+            );
+            return res.json(review);
+        } catch (e) {
+            next(e);
+        }
+    }
+
     async getMyCourseGrades(req, res, next) {
         try {
             const { courseId } = req.params;

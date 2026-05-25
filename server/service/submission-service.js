@@ -1,6 +1,10 @@
 const pool = require('../db');
 const ApiError = require('../exceptions/api-error');
-const { gradeTest, parseQuestions } = require('../utils/test-grading');
+const {
+    gradeTest,
+    parseQuestions,
+    isQuestionCorrect,
+} = require('../utils/test-grading');
 const UserModel = require('../models/user-model');
 const mailService = require('./mail-service');
 
@@ -44,6 +48,81 @@ class SubmissionService {
             [lessonId, studentId, graded.storedContent]
         );
         return this._attachOverdue(newSubmission.rows[0], lessonId);
+    }
+
+    async getTestReviewForStudent(lessonId, studentId) {
+        const submission = await this.getStudentSubmission(lessonId, studentId);
+        if (!submission || submission.type !== 'test') {
+            throw ApiError.BadRequest('Тест ещё не сдан');
+        }
+
+        const lessonResult = await pool.query(
+            `SELECT type, content FROM lessons WHERE id = $1`,
+            [lessonId]
+        );
+        const lesson = lessonResult.rows[0];
+        if (!lesson || lesson.type !== 'test') {
+            throw ApiError.BadRequest('Урок не является тестом');
+        }
+
+        let questions;
+        try {
+            questions = parseQuestions(lesson.content);
+        } catch {
+            throw ApiError.BadRequest('Некорректное содержимое теста');
+        }
+
+        let parsed;
+        try {
+            parsed = JSON.parse(submission.content);
+        } catch {
+            throw ApiError.BadRequest('Некорректные данные отправки теста');
+        }
+
+        if (parsed.kind != null && parsed.kind !== 'test') {
+            throw ApiError.BadRequest('Некорректные данные отправки теста');
+        }
+
+        const answers = parsed.answers || {};
+        const reviewQuestions = questions.map((question) => {
+            const qid = String(question.id);
+            const selected = (answers[qid] || answers[question.id] || []).map(String);
+            const correctOptionIds = (question.options || [])
+                .filter(
+                    (o) =>
+                        o &&
+                        (o.isCorrect === true ||
+                            o.isCorrect === 'true' ||
+                            o.correct === true)
+                )
+                .map((o) => String(o.id));
+            const correct = isQuestionCorrect(question, selected);
+
+            return {
+                id: qid,
+                text: question.text || '',
+                type: question.type === 'multiple' ? 'multiple' : 'single',
+                imageUrl: question.imageUrl || null,
+                isCorrect: correct,
+                selectedOptionIds: selected,
+                correctOptionIds,
+                options: (question.options || []).map((o) => {
+                    const oid = String(o.id);
+                    return {
+                        id: oid,
+                        text: o.text || '',
+                        isCorrect: correctOptionIds.includes(oid),
+                        wasSelected: selected.includes(oid),
+                    };
+                }),
+            };
+        });
+
+        return {
+            correctCount: Number(parsed.correctCount) || 0,
+            totalCount: Number(parsed.totalCount) || questions.length,
+            questions: reviewQuestions,
+        };
     }
 
     async submitAssignment(lessonId, studentId, type, content, items) {

@@ -73,3 +73,57 @@ export function isTestSubmissionType(type: string | null | undefined): boolean {
 export function formatTestScoreLabel(correct: number, total: number): string {
   return `${correct} из ${total} правильных`;
 }
+
+export type TestReviewOption = {
+  id: string;
+  text: string;
+  isCorrect: boolean;
+  wasSelected: boolean;
+};
+
+export type TestReviewQuestion = {
+  id: string;
+  text: string;
+  type: 'single' | 'multiple';
+  imageUrl: string | null;
+  isCorrect: boolean;
+  selectedOptionIds: string[];
+  correctOptionIds: string[];
+  options: TestReviewOption[];
+};
+
+export type TestReview = {
+  correctCount: number;
+  totalCount: number;
+  questions: TestReviewQuestion[];
+};
+
+export function isReviewOptionCorrect(
+  question: TestReviewQuestion,
+  optionId: string
+): boolean {
+  const id = String(optionId);
+  return (
+    question.correctOptionIds.includes(id) ||
+    question.options.some((o) => String(o.id) === id && o.isCorrect)
+  );
+}
+
+export function isReviewOptionSelected(
+  question: TestReviewQuestion,
+  optionId: string
+): boolean {
+  const id = String(optionId);
+  return (
+    question.selectedOptionIds.includes(id) ||
+    question.options.some((o) => String(o.id) === id && o.wasSelected)
+  );
+}
+
+export function getCorrectAnswerLabel(question: TestReviewQuestion): string {
+  const labels = question.options
+    .filter((o) => isReviewOptionCorrect(question, o.id))
+    .map((o) => o.text)
+    .filter(Boolean);
+  return labels.length > 0 ? labels.join(', ') : '—';
+}
