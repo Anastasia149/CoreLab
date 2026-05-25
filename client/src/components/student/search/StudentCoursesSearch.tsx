@@ -31,6 +31,7 @@ const StudentCoursesSearch: React.FC = () => {
   const [listFilter, setListFilter] = useState<CourseListFilter>(DEFAULT_FILTERS.listFilter);
   const [priceMin, setPriceMin] = useState(DEFAULT_FILTERS.priceMin);
   const [priceMax, setPriceMax] = useState(DEFAULT_FILTERS.priceMax);
+  const [searchQuery, setSearchQuery] = useState('');
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [favoriteCourseIds, setFavoriteCourseIds] = useState<number[]>(() => loadFavoriteCourseIds());
   const navigate = useNavigate();
@@ -88,8 +89,16 @@ const StudentCoursesSearch: React.FC = () => {
   const parsedPriceMin = priceMin === '' ? null : parseCoursePrice(priceMin);
   const parsedPriceMax = priceMax === '' ? null : parseCoursePrice(priceMax);
 
+  const normalizedSearch = searchQuery.trim().toLowerCase();
+
   const filteredAndSortedCourses = useMemo(() => {
     let result = [...store.courses];
+
+    if (normalizedSearch) {
+      result = result.filter((course) =>
+        course.title.toLowerCase().includes(normalizedSearch)
+      );
+    }
 
     if (activeCategory !== 'Все') {
       result = result.filter((course) => course.category === activeCategory);
@@ -113,6 +122,7 @@ const StudentCoursesSearch: React.FC = () => {
     return result;
   }, [
     store.courses,
+    normalizedSearch,
     activeCategory,
     listFilter,
     favoriteCourseIds,
@@ -266,14 +276,39 @@ const StudentCoursesSearch: React.FC = () => {
         </div>
       </aside>
 
-      <div className="courses-main-layout">
+      <div className="courses-list-section">
+        <label className="courses-search-field">
+          <Icon icon="mdi:magnify" className="courses-search-icon" aria-hidden />
+          <input
+            type="search"
+            className="courses-search-input"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Поиск по названию курса"
+            aria-label="Поиск по названию курса"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              className="courses-search-clear"
+              onClick={() => setSearchQuery('')}
+              aria-label="Очистить поиск"
+            >
+              <Icon icon="mdi:close" />
+            </button>
+          )}
+        </label>
+
+        <div className="courses-main-layout">
         <div className="courses-main-content">
           {filteredAndSortedCourses.length === 0 ? (
             <div className="teacher-courses-empty">
               <h2>
                 {listFilter === 'favorites'
                   ? 'У вас пока нет понравившихся курсов. Нажмите на сердечко у карточки курса.'
-                  : 'По выбранным фильтрам ничего не найдено.'}
+                  : normalizedSearch
+                    ? `По запросу «${searchQuery.trim()}» ничего не найдено.`
+                    : 'По выбранным фильтрам ничего не найдено.'}
               </h2>
             </div>
           ) : (
@@ -354,6 +389,7 @@ const StudentCoursesSearch: React.FC = () => {
             <Icon icon="solar:settings-linear" />
             {hasActiveFilters && <span className="courses-settings-badge" aria-hidden />}
           </button>
+        </div>
         </div>
       </div>
     </div>
