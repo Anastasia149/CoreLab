@@ -60,11 +60,6 @@
   font-size: 28px;
 }
 
-.billing-paypal-logo {
-  margin-left: auto;
-  font-size: 28px;
-}
-
 .billing-card-form {
   display: flex;
   flex-direction: column;
@@ -87,6 +82,16 @@
   background: var(--input-bg);
   color: var(--text-primary);
   font-size: 1rem;
+}
+
+.billing-card-form input.billing-input--error {
+  border-color: #e53935;
+}
+
+.billing-field-error {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #e53935;
 }
 
 .billing-card-row {
@@ -198,6 +203,10 @@
 .billing-pay-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.billing-payment-error {
+  margin-bottom: 12px;
 }
 
 .student-billing-empty {
