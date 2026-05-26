@@ -27,6 +27,7 @@ const TeacherHeader = observer(({ name }: Props) => {
     if (isTeacherHome) {
       if (tab === 'schedule') return 'Расписание';
       if (tab === 'settings') return 'Настройки';
+      if (tab === 'support') return 'Поддержка';
       return 'Главная';
     }
 

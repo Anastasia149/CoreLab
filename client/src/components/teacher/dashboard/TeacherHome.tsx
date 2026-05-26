@@ -15,6 +15,7 @@ import illustration from '../../home/pictures/Online learning-bro.svg';
 import { formatCoursePriceDisplay } from '../../../utils/coursePrice';
 import { getCourseCoverUrl } from '../../../constants/courseCover';
 import { ThemeSettingsSection } from '../../common/ThemeSettingsSection';
+import SupportPage from '../../common/SupportPage';
 import '../../common/SettingsPage.css';
 
 const TeacherHome: React.FC = () => {
@@ -33,6 +34,8 @@ const TeacherHome: React.FC = () => {
         <TeacherHeader />
         {tab === 'schedule' ? (
           <ScheduleHome />
+        ) : tab === 'support' ? (
+          <SupportPage role="teacher" />
         ) : tab === 'settings' ? (
           <section className="teacher-settings-panel">
             <div className="teacher-section-title">Настройки</div>

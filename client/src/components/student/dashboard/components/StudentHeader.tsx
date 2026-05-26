@@ -60,6 +60,9 @@ const StudentHeader: React.FC<Props> = observer(({ name }) => {
     if (path.startsWith('/student/settings')) {
       return 'Настройки';
     }
+    if (path.startsWith('/student/support')) {
+      return 'Поддержка';
+    }
     if (path.startsWith('/student/profile')) {
       return 'Профиль';
     }

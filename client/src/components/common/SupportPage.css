@@ -1,0 +1,143 @@
+.support-page {
+  width: 100%;
+}
+
+.support-page-title {
+  margin: 0 0 8px;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.support-page-intro {
+  margin: 0 0 20px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.support-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 20px 22px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.support-section-title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.support-faq-list {
+  display: grid;
+  gap: 10px;
+}
+
+.support-faq-item {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-surface-muted);
+}
+
+.support-faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.support-faq-question svg {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  color: var(--text-secondary);
+  transition: transform 0.2s ease;
+}
+
+.support-faq-question.active svg {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+.support-faq-answer {
+  padding: 0 16px 14px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.support-contacts-desc {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.support-contacts-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.support-contact-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  background: var(--bg-surface-muted);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.support-contact-link:hover {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.support-contact-link svg {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  color: var(--accent);
+}
+
+.support-contact-link > span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.support-contact-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+
+.support-contact-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  word-break: break-all;
+}

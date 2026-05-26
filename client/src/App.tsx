@@ -35,6 +35,7 @@ import StudentProfile from './components/student/profile/StudentProfile';
 import StudentCart from './components/student/cart/StudentCart';
 import StudentBilling from './components/student/billing/StudentBilling';
 import TeacherProfilePage from './components/teacher/profile/TeacherProfilePage';
+import SupportPage from './components/common/SupportPage';
 
 function App() {
   const {store} = useContext(Context);
@@ -71,6 +72,7 @@ function App() {
             <Route path="profile" element={<StudentProfile />} />
             <Route path="cart" element={<StudentCart />} />
             <Route path="billing" element={<StudentBilling />} />
+            <Route path="support" element={<SupportPage role="student" />} />
           </Route>
 
           <Route path="/teacher" element={isTeacher ? <TeacherHome /> : <Navigate to="/" replace />} />
