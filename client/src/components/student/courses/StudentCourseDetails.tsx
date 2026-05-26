@@ -9,8 +9,9 @@ import Loader from '../../common/Loader';
 import { CourseReviewsPanel } from '../../common/CourseReviewsPanel';
 import CourseMetaIcons from '../../common/CourseMetaIcons';
 import { getCourseCoverUrl } from '../../../constants/courseCover';
+import { useAppModal } from '../../../context/AppModalContext';
 
-type CourseTab = 'lessons' | 'rating';
+type CourseTab = 'lessons' | 'rating' | 'settings';
 
 function countLessonsInCourse(course: ISearchDetails): number {
   if (course.lessons_count != null && course.lessons_count >= 0) {
@@ -51,10 +52,12 @@ const StudentCourseDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { store } = useContext(Context);
   const navigate = useNavigate();
+  const { showModal, showConfirm } = useAppModal();
   const [course, setCourse] = useState<ISearchDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<CourseTab>('lessons');
   const [openModuleKeys, setOpenModuleKeys] = useState<Set<string>>(() => new Set());
+  const [isLeaving, setIsLeaving] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -87,6 +90,31 @@ const StudentCourseDetails: React.FC = () => {
     // Intentionally only when navigating to another course — keep user toggles on refetch.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [course?.id]);
+
+  const handleLeaveCourse = async () => {
+    if (!id) return;
+
+    const confirmed = await showConfirm(
+      'Вы уверены, что хотите покинуть курс? Прогресс и отзыв по этому курсу будут удалены.',
+      {
+        title: 'Покинуть курс',
+        confirmText: 'Покинуть',
+        cancelText: 'Отмена',
+        danger: true,
+      }
+    );
+    if (!confirmed) return;
+
+    setIsLeaving(true);
+    try {
+      await store.leaveCourse(Number(id));
+      navigate('/student/my-courses', { replace: true });
+    } catch {
+      await showModal('Не удалось покинуть курс. Попробуйте ещё раз.');
+    } finally {
+      setIsLeaving(false);
+    }
+  };
 
   const toggleModuleOpen = useCallback((key: string) => {
     setOpenModuleKeys((prev) => {
@@ -192,6 +220,25 @@ const StudentCourseDetails: React.FC = () => {
     </div>
   );
 
+  const renderSettings = () => (
+    <div className="student-course-settings">
+      <section className="student-course-settings-block">
+        <h3 className="student-course-settings-title">Покинуть курс</h3>
+        <p className="student-course-settings-hint">
+          Вы перестанете видеть этот курс в «Мои курсы». Прогресс по урокам и ваш отзыв будут удалены.
+        </p>
+        <button
+          type="button"
+          className="student-course-settings-btn student-course-settings-btn--danger"
+          onClick={() => void handleLeaveCourse()}
+          disabled={isLeaving}
+        >
+          {isLeaving ? 'Выход…' : 'Покинуть курс'}
+        </button>
+      </section>
+    </div>
+  );
+
   return (
     <div className="student-course-details-page">
       <div className="student-course-details-main">
@@ -240,6 +287,15 @@ const StudentCourseDetails: React.FC = () => {
             >
               Оценка курса
             </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'settings'}
+              className={`student-course-tab ${activeTab === 'settings' ? 'active' : ''}`}
+              onClick={() => setActiveTab('settings')}
+            >
+              Настройки
+            </button>
           </div>
 
           <div
@@ -257,6 +313,13 @@ const StudentCourseDetails: React.FC = () => {
             {activeTab === 'rating' && id && (
               <CourseReviewsPanel courseId={Number(id)} active />
             )}
+          </div>
+          <div
+            className="student-course-tab-panel"
+            role="tabpanel"
+            hidden={activeTab !== 'settings'}
+          >
+            {activeTab === 'settings' && renderSettings()}
           </div>
         </div>
       </div>

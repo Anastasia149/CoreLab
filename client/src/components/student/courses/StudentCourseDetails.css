@@ -264,6 +264,58 @@
   box-sizing: border-box;
 }
 
+.student-course-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  width: 100%;
+}
+
+.student-course-settings-block {
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface-muted);
+}
+
+.student-course-settings-title {
+  margin: 0 0 8px;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.student-course-settings-hint {
+  margin: 0 0 16px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.student-course-settings-btn {
+  align-self: flex-start;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.15s ease;
+}
+
+.student-course-settings-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.student-course-settings-btn--danger {
+  background: #ef4444;
+  color: #fff;
+}
+
+.student-course-settings-btn--danger:hover:not(:disabled) {
+  background: #dc2626;
+}
+
 .student-course-rating {
   display: flex;
   flex-direction: column;

@@ -165,6 +165,16 @@ export default class Store {
         }
     }
 
+    async leaveCourse(courseId: number): Promise<void> {
+        try {
+            await $api.delete(`/courses/${courseId}/enroll`);
+            await this.refreshMyCourses();
+        } catch (e) {
+            console.log("FULL ERROR:", e);
+            throw e;
+        }
+    }
+
     async refreshMyCourses(): Promise<void> {
         if (!this.isAuth || this.user?.role !== 'student') return;
         try {

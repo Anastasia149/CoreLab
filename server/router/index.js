@@ -75,6 +75,13 @@ router.delete(
     courseController.removeStudentFromCourse
 );
 router.post('/courses/:courseId/enroll', authMiddleware, courseController.enrollStudentInCourse);
+router.delete('/courses/:courseId/enroll', authMiddleware, courseController.leaveStudentFromCourse);
+router.post(
+    '/courses/:courseId/report',
+    authMiddleware,
+    body('reason').isString().trim().isLength({ min: 1, max: 2000 }),
+    courseController.reportCourse
+);
 router.post('/courses/:courseId/modules', authMiddleware, courseController.createModule);
 router.post('/upload', authMiddleware, fileController.uploadFile);
 router.post('/lessons', authMiddleware, lessonController.createLesson);

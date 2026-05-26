@@ -111,6 +111,29 @@ class CourseController {
         }
     }
 
+    async leaveStudentFromCourse(req, res, next) {
+        try {
+            const { courseId } = req.params;
+            const studentId = req.user.id;
+            const result = await courseService.leaveStudentFromCourse(courseId, studentId);
+            return res.json(result);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async reportCourse(req, res, next) {
+        try {
+            const { courseId } = req.params;
+            const studentId = req.user.id;
+            const { reason } = req.body;
+            const result = await courseService.reportCourse(courseId, studentId, reason);
+            return res.json(result);
+        } catch (e) {
+            next(e);
+        }
+    }
+
     async getStudentEnrollments(req, res, next) {
         try {
             const studentId = req.user.id;

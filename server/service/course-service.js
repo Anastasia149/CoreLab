@@ -266,8 +266,7 @@ class CourseService {
         };
     }
 
-    async removeStudentFromCourse(courseId, studentId, teacherId) {
-        await this.assertTeacherOwnsCourse(courseId, teacherId);
+    async unlinkStudentFromCourse(courseId, studentId) {
         const client = await pool.connect();
         try {
             await client.query('BEGIN');
@@ -290,7 +289,7 @@ class CourseService {
                 [courseId, studentId]
             );
             if (removed.rowCount === 0) {
-                throw new ApiError(404, 'Ученик не записан на этот курс');
+                throw ApiError.BadRequest('Вы не записаны на этот курс');
             }
             await client.query(
                 `UPDATE courses
@@ -299,13 +298,53 @@ class CourseService {
                 [courseId]
             );
             await client.query('COMMIT');
-            return { message: 'Ученик удалён с курса' };
+            return { message: 'Вы покинули курс' };
         } catch (e) {
             await client.query('ROLLBACK');
             throw e;
         } finally {
             client.release();
         }
+    }
+
+    async removeStudentFromCourse(courseId, studentId, teacherId) {
+        await this.assertTeacherOwnsCourse(courseId, teacherId);
+        const result = await this.unlinkStudentFromCourse(courseId, studentId);
+        return { message: 'Ученик удалён с курса' };
+    }
+
+    async leaveStudentFromCourse(courseId, studentId) {
+        return this.unlinkStudentFromCourse(courseId, studentId);
+    }
+
+    async reportCourse(courseId, studentId, reason) {
+        const enrollment = await pool.query(
+            `SELECT 1 FROM student_courses WHERE course_id = $1 AND student_id = $2`,
+            [courseId, studentId]
+        );
+        if (enrollment.rowCount === 0) {
+            throw ApiError.BadRequest('Жалобу можно отправить только по курсу, на который вы записаны');
+        }
+
+        const safeReason = String(reason ?? '').trim();
+        if (!safeReason) {
+            throw ApiError.BadRequest('Опишите причину жалобы');
+        }
+        if (safeReason.length > 2000) {
+            throw ApiError.BadRequest('Текст жалобы не должен превышать 2000 символов');
+        }
+
+        const courseExists = await pool.query(`SELECT id FROM courses WHERE id = $1`, [courseId]);
+        if (courseExists.rowCount === 0) {
+            throw new ApiError(404, 'Курс не найден');
+        }
+
+        await pool.query(
+            `INSERT INTO course_reports (course_id, student_id, reason) VALUES ($1, $2, $3)`,
+            [courseId, studentId, safeReason]
+        );
+
+        return { message: 'Жалоба отправлена. Мы рассмотрим её в ближайшее время.' };
     }
 
     async enrollStudentInCourse(courseId, studentId, studentName) {
