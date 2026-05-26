@@ -1,3 +1,5 @@
+import { Material } from '../models/ICourseDetail';
+
 export type SubmissionItem = {
   type: 'link' | 'file';
   content: string;
@@ -65,4 +67,18 @@ export function parseSubmissionItems(submission: SubmissionLike): SubmissionItem
 
 export function isSubmissionCompletedOnly(submission: SubmissionLike): boolean {
   return submission.type === 'completed' && parseSubmissionItems(submission).length === 0;
+}
+
+export function submissionItemLabel(item: SubmissionItem): string {
+  if (item.label?.trim()) return item.label.trim();
+  return item.content;
+}
+
+export function submissionFileToMaterial(item: SubmissionItem, index: number): Material {
+  return {
+    id: -(index + 1),
+    type: 'file',
+    title: submissionItemLabel(item),
+    file_url: item.content,
+  };
 }

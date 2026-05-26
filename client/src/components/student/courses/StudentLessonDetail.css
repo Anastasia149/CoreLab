@@ -283,8 +283,23 @@
 
 .submission-draft-label {
   flex: 1;
+  min-width: 0;
   word-break: break-all;
   line-height: 1.4;
+}
+
+.submission-draft-preview-btn {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  font-size: 0;
+}
+
+.submission-draft-preview-btn span {
+  display: none;
+}
+
+.submission-draft-preview-btn svg {
+  font-size: 18px;
 }
 
 .submission-draft-remove {

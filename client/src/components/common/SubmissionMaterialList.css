@@ -33,33 +33,54 @@
   text-decoration: underline;
 }
 
-.submission-material-file {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+.submission-material-file-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.submission-material-file-name {
   font-size: 14px;
   font-weight: 600;
-  color: var(--accent);
-  text-decoration: none;
+  color: var(--text-primary);
+  word-break: break-all;
 }
 
-.submission-material-file:hover {
-  text-decoration: underline;
+.submission-material-file-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
 }
 
-.submission-material-image-wrap {
-  display: block;
-  margin-top: 10px;
-  border-radius: 12px;
-  overflow: hidden;
+.submission-file-preview-btn,
+.submission-material-file-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
   border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
 }
 
-.submission-material-image {
-  display: block;
-  max-width: 100%;
-  max-height: 200px;
-  object-fit: contain;
+.submission-file-preview-btn:hover,
+.submission-material-file-download:hover {
+  background: var(--bg-hover, rgba(0, 0, 0, 0.04));
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.submission-file-preview-btn svg,
+.submission-material-file-download svg {
+  font-size: 18px;
+  flex-shrink: 0;
 }
 
 .submission-material-text {

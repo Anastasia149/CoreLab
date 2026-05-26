@@ -5,17 +5,31 @@ import '@cyntler/react-doc-viewer/dist/index.css';
 import { Icon } from '@iconify/react';
 import { Material } from '../../models/ICourseDetail';
 import { getMaterialCardIcon, resolveMaterialFileUrl } from '../../utils/materialPreview';
-import { useMaterialPreviewContent } from '../../hooks/useMaterialPreviewContent';
+import { usePreviewContent } from '../../hooks/useMaterialPreviewContent';
 import './MaterialPreviewModal.css';
 
 type Props = {
   material: Material;
   onClose: () => void;
+  /** Локальный файл (черновик до отправки) — без запроса на сервер */
+  localFile?: File;
 };
 
-export const MaterialPreviewModal: React.FC<Props> = ({ material, onClose }) => {
-  const viewUrl = resolveMaterialFileUrl(material.file_url);
-  const preview = useMaterialPreviewContent(material);
+export const MaterialPreviewModal: React.FC<Props> = ({ material, onClose, localFile }) => {
+  const preview = usePreviewContent(material, localFile);
+  const [localBlobUrl, setLocalBlobUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!localFile) {
+      setLocalBlobUrl(null);
+      return undefined;
+    }
+    const url = URL.createObjectURL(localFile);
+    setLocalBlobUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [localFile]);
+
+  const viewUrl = localBlobUrl ?? resolveMaterialFileUrl(material.file_url);
   const [downloading, setDownloading] = useState(false);
 
   const handleDownload = useCallback(
@@ -25,6 +39,16 @@ export const MaterialPreviewModal: React.FC<Props> = ({ material, onClose }) => 
       if (downloading) return;
       setDownloading(true);
       try {
+        if (localFile) {
+          const blobUrl = URL.createObjectURL(localFile);
+          const anchor = document.createElement('a');
+          anchor.href = blobUrl;
+          anchor.download = material.title;
+          anchor.rel = 'noopener noreferrer';
+          anchor.click();
+          URL.revokeObjectURL(blobUrl);
+          return;
+        }
         const res = await fetch(viewUrl);
         if (!res.ok) throw new Error('fetch failed');
         const blob = await res.blob();
@@ -46,7 +70,7 @@ export const MaterialPreviewModal: React.FC<Props> = ({ material, onClose }) => 
         setDownloading(false);
       }
     },
-    [viewUrl, material.title, downloading]
+    [viewUrl, material.title, downloading, localFile]
   );
 
   const handleOpenInNewTab = useCallback(

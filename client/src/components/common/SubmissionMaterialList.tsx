@@ -1,16 +1,12 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
-import { SubmissionItem } from '../../utils/submissionContent';
+import {
+  SubmissionItem,
+  submissionFileToMaterial,
+  submissionItemLabel,
+} from '../../utils/submissionContent';
+import { SubmissionFilePreviewButton } from './SubmissionFilePreviewButton';
 import './SubmissionMaterialList.css';
-
-function isLikelyImageUrl(url: string): boolean {
-  return /\.(jpe?g|png|gif|webp)(\?|#|$)/i.test(url);
-}
-
-function displayLabel(item: SubmissionItem): string {
-  if (item.label?.trim()) return item.label.trim();
-  return item.content;
-}
 
 export function SubmissionMaterialList({ items }: { items: SubmissionItem[] }) {
   if (items.length === 0) return null;
@@ -28,31 +24,33 @@ export function SubmissionMaterialList({ items }: { items: SubmissionItem[] }) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {displayLabel(item)}
+                {submissionItemLabel(item)}
               </a>
             </>
           ) : (
             <>
               <p className="submission-material-label">Файл</p>
-              <a
-                className="submission-material-file"
-                href={item.content}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Icon icon="mdi:tray-arrow-down" />
-                {displayLabel(item)}
-              </a>
-              {isLikelyImageUrl(item.content) && (
-                <a
-                  href={item.content}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="submission-material-image-wrap"
-                >
-                  <img src={item.content} alt={displayLabel(item)} className="submission-material-image" />
-                </a>
-              )}
+              <div className="submission-material-file-row">
+                <span className="submission-material-file-name">
+                  {submissionItemLabel(item)}
+                </span>
+                <div className="submission-material-file-actions">
+                  <SubmissionFilePreviewButton
+                    fileUrl={item.content}
+                    fileName={submissionItemLabel(item)}
+                  />
+                  <a
+                    className="submission-material-file-download"
+                    href={item.content}
+                    download={submissionFileToMaterial(item, index).title}
+                    rel="noopener noreferrer"
+                    title="Скачать"
+                  >
+                    <Icon icon="mdi:tray-arrow-down" aria-hidden />
+                    <span>Скачать</span>
+                  </a>
+                </div>
+              </div>
             </>
           )}
         </li>

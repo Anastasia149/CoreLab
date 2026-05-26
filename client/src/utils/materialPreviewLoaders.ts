@@ -52,20 +52,15 @@ async function tryReadAsText(buffer: ArrayBuffer): Promise<string | null> {
   }
 }
 
-export async function loadMaterialPreview(
-  material: Material
+async function loadPreviewFromBuffer(
+  fileName: string,
+  fileUrl: string,
+  materialType: string | undefined,
+  blob: Blob,
+  buffer: ArrayBuffer
 ): Promise<MaterialPreviewResult> {
-  const viewUrl = resolveMaterialFileUrl(material.file_url);
-  const fileName = material.title?.trim() || 'material';
-  const ext = getFileExtension(fileName, material.file_url);
-  const variant = classifyMaterialFile(fileName, material.file_url, material.type);
-
-  const response = await fetch(viewUrl);
-  if (!response.ok) {
-    throw new Error('fetch failed');
-  }
-  const blob = await response.blob();
-  const buffer = await blob.arrayBuffer();
+  const ext = getFileExtension(fileName, fileUrl);
+  const variant = classifyMaterialFile(fileName, fileUrl, materialType);
 
   if (variant === 'html' && ext === 'docx') {
     const { value } = await mammoth.convertToHtml({ arrayBuffer: buffer });
@@ -77,7 +72,7 @@ export async function loadMaterialPreview(
   }
 
   if (variant === 'iframe') {
-    const absolute = toAbsoluteMaterialUrl(material.file_url);
+    const absolute = toAbsoluteMaterialUrl(fileUrl);
     return { variant: 'iframe', src: getOfficeEmbedUrl(absolute) };
   }
 
@@ -110,4 +105,31 @@ export async function loadMaterialPreview(
     uri: URL.createObjectURL(blob),
     fileName: ensureFileNameWithExtension(fileName, ext),
   };
+}
+
+export async function loadMaterialPreview(
+  material: Material
+): Promise<MaterialPreviewResult> {
+  const viewUrl = resolveMaterialFileUrl(material.file_url);
+  const fileName = material.title?.trim() || 'material';
+
+  const response = await fetch(viewUrl);
+  if (!response.ok) {
+    throw new Error('fetch failed');
+  }
+  const blob = await response.blob();
+  const buffer = await blob.arrayBuffer();
+
+  return loadPreviewFromBuffer(
+    fileName,
+    material.file_url,
+    material.type,
+    blob,
+    buffer
+  );
+}
+
+export async function loadLocalFilePreview(file: File): Promise<MaterialPreviewResult> {
+  const buffer = await file.arrayBuffer();
+  return loadPreviewFromBuffer(file.name, file.name, 'file', file, buffer);
 }

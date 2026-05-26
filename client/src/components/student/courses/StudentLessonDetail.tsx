@@ -23,6 +23,7 @@ import {
   SubmissionItem,
 } from '../../../utils/submissionContent';
 import { SubmissionMaterialList } from '../../common/SubmissionMaterialList';
+import { SubmissionFilePreviewButton } from '../../common/SubmissionFilePreviewButton';
 import {
   getReviewStatusLabel,
   normalizeReviewStatus,
@@ -557,6 +558,12 @@ const StudentLessonDetail: React.FC = () => {
                                   <span className="submission-draft-label">
                                     {item.kind === 'link' ? item.url : item.file.name}
                                   </span>
+                                  {item.kind === 'file' && (
+                                    <SubmissionFilePreviewButton
+                                      file={item.file}
+                                      className="submission-draft-preview-btn"
+                                    />
+                                  )}
                                   <button
                                     type="button"
                                     className="submission-draft-remove"
