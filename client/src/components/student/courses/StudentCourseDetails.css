@@ -174,7 +174,7 @@
 
 .curriculum-lesson:hover {
   border-color: var(--accent);
-  background: #eef2ff;
+  background: var(--accent-bg);
 }
 
 .lesson-left {
