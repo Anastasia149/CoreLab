@@ -57,7 +57,16 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="auth-page">
+    <div className="auth-page login-page">
+      <button
+        type="button"
+        className="auth-back-home"
+        onClick={() => navigate('/')}
+        aria-label="На главную"
+      >
+        <Icon icon="mdi:arrow-left" aria-hidden />
+        <span>На главную</span>
+      </button>
       <div className="auth-wrapper">
         <div className="auth-panel auth-panel-left">
           <div className="auth-logo-block">
