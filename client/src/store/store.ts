@@ -81,6 +81,7 @@ export default class Store {
     private mapNotification(dto: NotificationDto): NotificationItem {
         return {
             id: String(dto.id),
+            type: dto.type,
             icon: dto.icon,
             message: dto.message,
             timeAgo: formatTimeAgo(dto.createdAt),

@@ -1,18 +1,20 @@
 const pool = require('../db');
-const fs = require('fs');
-const path = require('path');
 
 let tableReady = false;
 
+/** Таблица notifications уже в БД — только добиваем колонки, если их не было в старой схеме. */
 async function ensureNotificationsTable() {
     if (tableReady) return;
-    const sqlPath = path.join(__dirname, '../sql/create_notifications.sql');
-    const sql = fs.readFileSync(sqlPath, 'utf8');
-    await pool.query(sql);
+
+    await pool.query(`
+        ALTER TABLE notifications
+        ADD COLUMN IF NOT EXISTS course_id INTEGER REFERENCES courses(id) ON DELETE SET NULL
+    `);
     await pool.query(`
         ALTER TABLE notifications
         ADD COLUMN IF NOT EXISTS lesson_id INTEGER REFERENCES lessons(id) ON DELETE SET NULL
     `);
+
     tableReady = true;
 }
 

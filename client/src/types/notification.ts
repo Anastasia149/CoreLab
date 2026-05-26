@@ -1,5 +1,6 @@
 export type NotificationItem = {
   id: string;
+  type: string;
   icon: string;
   message: string;
   timeAgo: string;

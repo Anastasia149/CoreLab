@@ -89,9 +89,7 @@ const NotificationsBell: React.FC<Props> = observer(({ iconButtonClassName }) =>
     if (store.user?.role === 'teacher') {
       await closePanel();
       if (item.lessonId) {
-        const openComments =
-          item.message.includes('комментарий') ||
-          item.message.includes('комментарии');
+        const openComments = item.type === 'lesson_comment_student';
         navigate(`/teacher/lesson/${item.lessonId}`, {
           state: openComments ? { openComments: true } : undefined,
         });
