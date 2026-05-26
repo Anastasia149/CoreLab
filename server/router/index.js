@@ -12,6 +12,7 @@ const submissionController = require('../controllers/submission-controller');
 const courseReviewController = require('../controllers/course-review-controller');
 const scheduleEventController = require('../controllers/schedule-event-controller');
 const notificationController = require('../controllers/notification-controller');
+const lessonCommentController = require('../controllers/lesson-comment-controller');
 
 router.post('/registration', 
     body('name').isLength({min: 1, max: 20}),
@@ -98,6 +99,21 @@ router.get('/lessons/:lessonId/my-test-review', authMiddleware, submissionContro
 router.delete('/lessons/:lessonId/my-submission', authMiddleware, submissionController.deleteMySubmission);
 router.get('/submissions/:submissionId/test-review', authMiddleware, submissionController.getSubmissionTestReview);
 router.patch('/submissions/:submissionId/review', authMiddleware, submissionController.updateReviewStatus);
+
+router.get('/lessons/:lessonId/my-comment-thread', authMiddleware, lessonCommentController.getMyThread);
+router.post(
+    '/lessons/:lessonId/my-comment-thread',
+    authMiddleware,
+    body('body').isString().trim().isLength({ min: 1, max: 2000 }),
+    lessonCommentController.postMyMessage
+);
+router.get('/lessons/:lessonId/comment-threads', authMiddleware, lessonCommentController.getLessonThreads);
+router.post(
+    '/lessons/:lessonId/comment-threads/:studentId/reply',
+    authMiddleware,
+    body('body').isString().trim().isLength({ min: 1, max: 2000 }),
+    lessonCommentController.postTeacherReply
+);
 
 router.get('/schedule/events', authMiddleware, scheduleEventController.listMine);
 router.post('/schedule/events', authMiddleware, scheduleEventController.create);

@@ -5,6 +5,8 @@ function iconForType(type, message = '') {
         enrollment: 'mdi:account-school-outline',
         assignment_submitted: 'mdi:file-document-edit-outline',
         submission_review: 'mdi:clipboard-check-outline',
+        lesson_comment_student: 'mdi:comment-text-outline',
+        lesson_comment_teacher: 'mdi:comment-arrow-left-outline',
     };
     if (type === 'submission_review') {
         if (message.includes(': Сдал')) return 'mdi:check-circle-outline';

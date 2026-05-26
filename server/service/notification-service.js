@@ -45,6 +45,30 @@ class NotificationService {
         return result.rows[0];
     }
 
+    async createLessonCommentStudentNotification(teacherId, { studentName, lessonTitle, courseId, lessonId }) {
+        await ensureNotificationsTable();
+        const message = `Студент ${studentName} оставил комментарий к уроку «${lessonTitle}».`;
+        const result = await pool.query(
+            `INSERT INTO notifications (user_id, type, message, course_id, lesson_id)
+             VALUES ($1, 'lesson_comment_student', $2, $3, $4)
+             RETURNING *`,
+            [teacherId, message, courseId ?? null, lessonId]
+        );
+        return result.rows[0];
+    }
+
+    async createLessonCommentTeacherNotification(studentId, { lessonTitle, courseId, lessonId }) {
+        await ensureNotificationsTable();
+        const message = `Преподаватель ответил на ваш комментарий к уроку «${lessonTitle}».`;
+        const result = await pool.query(
+            `INSERT INTO notifications (user_id, type, message, course_id, lesson_id)
+             VALUES ($1, 'lesson_comment_teacher', $2, $3, $4)
+             RETURNING *`,
+            [studentId, message, courseId ?? null, lessonId]
+        );
+        return result.rows[0];
+    }
+
     async createSubmissionReviewNotification(studentId, { lessonId, lessonTitle, status, courseId }) {
         await ensureNotificationsTable();
         const label = reviewStatusLabel(status);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../../../index';
 import { Lesson } from '../../../models/ICourseDetail';
@@ -19,12 +19,17 @@ import { useAppModal } from '../../../context/AppModalContext';
 import { TestReviewModal } from '../../common/TestReviewPanel';
 import type { TestReview } from '../../../utils/testContent';
 import { isTestSubmissionType } from '../../../utils/testContent';
+import { TeacherLessonCommentsTab } from './TeacherLessonCommentsTab';
+import { TeacherSubmissionCommentBlock } from './TeacherSubmissionCommentBlock';
+import { LessonCommentThread as CommentThreadType } from '../../../models/ILessonComment';
 
 const LessonDetail: React.FC = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
   const { store } = useContext(Context);
   const navigate = useNavigate();
+  const location = useLocation();
   const { showModal, showConfirm } = useAppModal();
+  const navState = location.state as { openComments?: boolean; studentId?: number } | null;
 
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [submissions, setSubmissions] = useState<LessonSubmissionRow[]>([]);
@@ -33,6 +38,7 @@ const LessonDetail: React.FC = () => {
   const [testReview, setTestReview] = useState<TestReview | null>(null);
   const [testReviewTitle, setTestReviewTitle] = useState('');
   const [loadingTestReviewId, setLoadingTestReviewId] = useState<number | null>(null);
+  const [commentThreads, setCommentThreads] = useState<CommentThreadType[]>([]);
 
   useEffect(() => {
     if (!lessonId) return;
@@ -40,9 +46,11 @@ const LessonDetail: React.FC = () => {
       setLesson(data || null);
       if (data?.type === 'test') {
         setActiveTab((tab) => (tab === 'materials' ? 'students' : tab));
+      } else if (data?.type === 'lecture' && navState?.openComments) {
+        setActiveTab('comments');
       }
     });
-  }, [lessonId, store]);
+  }, [lessonId, store, navState?.openComments]);
 
   useEffect(() => {
     if (!lessonId || !lesson) return;
@@ -64,6 +72,16 @@ const LessonDetail: React.FC = () => {
       setCourseStudents(Array.isArray(list) ? list : []);
     });
   }, [lesson, store]);
+
+  useEffect(() => {
+    if (!lessonId || !lesson || lesson.type === 'lecture') {
+      setCommentThreads([]);
+      return;
+    }
+    store.getLessonCommentThreads(lessonId).then((data) => {
+      setCommentThreads(data?.threads ?? []);
+    });
+  }, [lessonId, lesson, store]);
 
   const handleDelete = async () => {
     const confirmed = await showConfirm('Вы уверены, что хотите удалить этот урок?', {
@@ -115,6 +133,7 @@ const LessonDetail: React.FC = () => {
   };
 
   const isTestLesson = lesson?.type === 'test';
+  const isLectureLesson = lesson?.type === 'lecture';
   const { pending: pendingSubmissions, reviewed: reviewedSubmissions } =
     partitionSubmissionsByReview(submissions);
 
@@ -123,6 +142,16 @@ const LessonDetail: React.FC = () => {
       .map((s) => Number(s.student_id))
       .filter((id) => !Number.isNaN(id) && id > 0)
   );
+
+  const commentOnlyThreads = commentThreads.filter(
+    (t) => !submittedStudentIds.has(t.studentId)
+  );
+
+  const refreshCommentThreads = async () => {
+    if (!lessonId) return;
+    const data = await store.getLessonCommentThreads(lessonId);
+    setCommentThreads(data?.threads ?? []);
+  };
 
   const testPassedSubmissions = isTestLesson ? submissions : [];
   const testNotPassedStudents = isTestLesson
@@ -166,6 +195,17 @@ const LessonDetail: React.FC = () => {
             submissionId={s.id}
             reviewStatus={s.review_status}
             onReview={handleReviewSubmission}
+          />
+        )}
+        {lessonId && s.student_id != null && (
+          <TeacherSubmissionCommentBlock
+            lessonId={lessonId}
+            studentId={Number(s.student_id)}
+            studentName={s.student_name || 'Ученик'}
+            initialMessages={
+              commentThreads.find((t) => t.studentId === Number(s.student_id))?.messages
+            }
+            onThreadUpdated={refreshCommentThreads}
           />
         )}
       </div>
@@ -259,13 +299,23 @@ const LessonDetail: React.FC = () => {
                     Материалы
                   </button>
                 )}
-                <button
-                  type="button"
-                  className={`tab-button ${activeTab === 'students' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('students')}
-                >
-                  {'Работы учеников'}
-                </button>
+                {isLectureLesson ? (
+                  <button
+                    type="button"
+                    className={`tab-button ${activeTab === 'comments' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('comments')}
+                  >
+                    Комментарии учеников
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className={`tab-button ${activeTab === 'students' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('students')}
+                  >
+                    Работы учеников
+                  </button>
+                )}
                 <button
                   type="button"
                   className={`tab-button ${activeTab === 'settings' ? 'active' : ''}`}
@@ -276,11 +326,17 @@ const LessonDetail: React.FC = () => {
               </div>
 
               <div className="tab-content">
-                {activeTab === 'students' && (
+                {activeTab === 'comments' && isLectureLesson && lessonId && (
                   <div className="students-tab">
-                    {lesson.type === 'lecture' ? (
-                      <p className="info-text">Для лекций не предусмотрена сдача работ.</p>
-                    ) : (
+                    <TeacherLessonCommentsTab
+                      lessonId={lessonId}
+                      initialStudentId={navState?.studentId ?? null}
+                    />
+                  </div>
+                )}
+
+                {activeTab === 'students' && !isLectureLesson && (
+                  <div className="students-tab">
                       <>
                         <p className="students-tab-intro">
                           {lesson.type === 'assignment'
@@ -320,8 +376,39 @@ const LessonDetail: React.FC = () => {
                             )}
                           </div>
                         )}
+                        {commentOnlyThreads.length > 0 && lessonId && (
+                          <section className="submissions-section submissions-section--comments-only">
+                            <h3 className="submissions-section-title">
+                              Комментарии без сданной работы
+                              <span className="submissions-section-count">
+                                {commentOnlyThreads.length}
+                              </span>
+                            </h3>
+                            <div className="submissions-list">
+                              {commentOnlyThreads.map((thread) => (
+                                <div
+                                  key={thread.studentId}
+                                  className="submission-item submission-item--card"
+                                >
+                                  <div className="submission-item-header">
+                                    <div className="submission-user">
+                                      <Icon icon="solar:user-circle-linear" />
+                                      <span>{thread.studentName}</span>
+                                    </div>
+                                  </div>
+                                  <TeacherSubmissionCommentBlock
+                                    lessonId={lessonId}
+                                    studentId={thread.studentId}
+                                    studentName={thread.studentName}
+                                    initialMessages={thread.messages}
+                                    onThreadUpdated={refreshCommentThreads}
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </section>
+                        )}
                       </>
-                    )}
                   </div>
                 )}
 

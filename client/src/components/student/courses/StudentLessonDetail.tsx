@@ -24,6 +24,7 @@ import {
 } from '../../../utils/submissionContent';
 import { SubmissionMaterialList } from '../../common/SubmissionMaterialList';
 import { SubmissionFilePreviewButton } from '../../common/SubmissionFilePreviewButton';
+import { StudentLessonComments } from './StudentLessonComments';
 import {
   getReviewStatusLabel,
   normalizeReviewStatus,
@@ -602,6 +603,8 @@ const StudentLessonDetail: React.FC = () => {
             </div>
           </>
         )}
+
+        {lessonId && <StudentLessonComments lessonId={lessonId} />}
       </div>
     </div>
   );

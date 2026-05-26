@@ -1,0 +1,98 @@
+.lesson-comments-panel {
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+}
+
+.lesson-comments-panel--student {
+  max-width: 100%;
+}
+
+.teacher-comments-tab-intro {
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.teacher-comment-threads {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.teacher-comment-thread-card {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-surface-muted);
+  overflow: hidden;
+}
+
+.teacher-comment-thread-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: var(--text-primary);
+}
+
+.teacher-comment-thread-toggle:hover {
+  background: var(--bg-hover, rgba(0, 0, 0, 0.03));
+}
+
+.teacher-comment-thread-toggle-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.teacher-comment-thread-student {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.teacher-comment-thread-preview {
+  font-size: 13px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.teacher-comment-thread-chevron {
+  flex-shrink: 0;
+  font-size: 20px;
+  color: var(--text-secondary);
+  transition: transform 0.2s;
+}
+
+.teacher-comment-thread-chevron--open {
+  transform: rotate(180deg);
+}
+
+.teacher-comment-thread-body {
+  padding: 0 16px 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.teacher-comment-thread-empty {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.submission-comment-block {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border-color);
+}

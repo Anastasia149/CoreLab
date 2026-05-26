@@ -16,6 +16,11 @@ import { NotificationDto, NotificationsResponse } from "../models/INotification"
 import { NotificationItem } from "../types/notification";
 import { formatTimeAgo } from "../utils/formatTimeAgo";
 import { TestReview } from "../utils/testContent";
+import {
+    LessonCommentMessage,
+    LessonCommentThreadsResponse,
+    MyLessonCommentThread,
+} from "../models/ILessonComment";
 
 export type AppTheme = 'light' | 'dark';
 
@@ -395,6 +400,65 @@ export default class Store {
             return response.data;
         } catch (e) {
             console.log("FULL ERROR:", e);
+        }
+    }
+
+    async getMyLessonCommentThread(lessonId: string): Promise<MyLessonCommentThread | null> {
+        try {
+            const response = await $api.get<MyLessonCommentThread>(
+                `/lessons/${lessonId}/my-comment-thread`
+            );
+            return response.data;
+        } catch (e) {
+            console.log("FULL ERROR:", e);
+            return null;
+        }
+    }
+
+    async postMyLessonComment(
+        lessonId: string,
+        body: string
+    ): Promise<LessonCommentMessage | null> {
+        try {
+            const response = await $api.post<LessonCommentMessage>(
+                `/lessons/${lessonId}/my-comment-thread`,
+                { body }
+            );
+            return response.data;
+        } catch (e) {
+            console.log("FULL ERROR:", e);
+            return null;
+        }
+    }
+
+    async getLessonCommentThreads(
+        lessonId: string
+    ): Promise<LessonCommentThreadsResponse | null> {
+        try {
+            const response = await $api.get<LessonCommentThreadsResponse>(
+                `/lessons/${lessonId}/comment-threads`
+            );
+            return response.data;
+        } catch (e) {
+            console.log("FULL ERROR:", e);
+            return null;
+        }
+    }
+
+    async postLessonCommentReply(
+        lessonId: string,
+        studentId: number,
+        body: string
+    ): Promise<LessonCommentMessage | null> {
+        try {
+            const response = await $api.post<LessonCommentMessage>(
+                `/lessons/${lessonId}/comment-threads/${studentId}/reply`,
+                { body }
+            );
+            return response.data;
+        } catch (e) {
+            console.log("FULL ERROR:", e);
+            return null;
         }
     }
 
