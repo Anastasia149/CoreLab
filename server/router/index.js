@@ -114,6 +114,11 @@ router.post(
     body('body').isString().trim().isLength({ min: 1, max: 2000 }),
     lessonCommentController.postTeacherReply
 );
+router.delete(
+    '/lessons/:lessonId/comment-messages/:messageId',
+    authMiddleware,
+    lessonCommentController.deleteMessage
+);
 
 router.get('/schedule/events', authMiddleware, scheduleEventController.listMine);
 router.post('/schedule/events', authMiddleware, scheduleEventController.create);

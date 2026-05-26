@@ -160,6 +160,31 @@ class LessonCommentService {
         return message;
     }
 
+    async deleteMessage(lessonId, messageId, userId, role) {
+        const msgResult = await pool.query(
+            `SELECT id, lesson_id, student_id, author_role
+             FROM lesson_comment_messages
+             WHERE id = $1 AND lesson_id = $2`,
+            [messageId, lessonId]
+        );
+        const msg = msgResult.rows[0];
+        if (!msg) {
+            throw new ApiError(404, 'Сообщение не найдено');
+        }
+
+        if (role === 'teacher') {
+            await this._getLessonForUser(lessonId, userId, 'teacher');
+        } else {
+            await this._getLessonForUser(lessonId, userId, 'student');
+            if (msg.author_role !== 'student' || Number(msg.student_id) !== Number(userId)) {
+                throw ApiError.BadRequest('Нельзя удалить это сообщение');
+            }
+        }
+
+        await pool.query(`DELETE FROM lesson_comment_messages WHERE id = $1`, [messageId]);
+        return true;
+    }
+
     async _notifyTeacherAboutStudentComment(lesson, studentId) {
         try {
             if (!lesson.author_id) return;

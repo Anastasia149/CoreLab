@@ -463,6 +463,16 @@ export default class Store {
         }
     }
 
+    async deleteLessonCommentMessage(lessonId: string, messageId: number): Promise<boolean> {
+        try {
+            await $api.delete(`/lessons/${lessonId}/comment-messages/${messageId}`);
+            return true;
+        } catch (e) {
+            console.log("FULL ERROR:", e);
+            return false;
+        }
+    }
+
     async getTeacherCourses() {
         try {
             const response = await $api.get<ICourse[]>('/teacher/courses');

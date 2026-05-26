@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { Context } from '../../../index';
 import { LessonCommentMessage } from '../../../models/ILessonComment';
 import { LessonCommentThread } from '../../common/LessonCommentThread';
+import { useAppModal } from '../../../context/AppModalContext';
 import '../../common/LessonCommentsPanel.css';
 
 type Props = {
@@ -16,6 +17,7 @@ type Props = {
 export const TeacherSubmissionCommentBlock: React.FC<Props> = observer(
   ({ lessonId, studentId, studentName, initialMessages, onThreadUpdated }) => {
     const { store } = useContext(Context);
+    const { showConfirm } = useAppModal();
     const [allMessages, setAllMessages] = useState<LessonCommentMessage[]>(
       initialMessages ?? []
     );
@@ -54,6 +56,22 @@ export const TeacherSubmissionCommentBlock: React.FC<Props> = observer(
       return true;
     };
 
+    const handleDelete = async (messageId: number) => {
+      const confirmed = await showConfirm('Удалить этот комментарий?', {
+        title: 'Удаление',
+        confirmText: 'Удалить',
+        danger: true,
+      });
+      if (!confirmed) return false;
+
+      const ok = await store.deleteLessonCommentMessage(lessonId, messageId);
+      if (ok) {
+        setAllMessages((prev) => prev.filter((m) => m.id !== messageId));
+        onThreadUpdated?.();
+      }
+      return ok;
+    };
+
     if (!loaded) {
       return (
         <div className="submission-comment-block">
@@ -71,6 +89,7 @@ export const TeacherSubmissionCommentBlock: React.FC<Props> = observer(
           viewerRole="teacher"
           studentName={studentName}
           onSend={handleReply}
+          onDelete={handleDelete}
           sendLabel="Ответить ученику"
           compact
           showTitle={true}

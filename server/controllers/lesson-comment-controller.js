@@ -55,6 +55,18 @@ class LessonCommentController {
             next(e);
         }
     }
+
+    async deleteMessage(req, res, next) {
+        try {
+            const { lessonId, messageId } = req.params;
+            const userId = req.user.id;
+            const role = req.user.role === 'teacher' ? 'teacher' : 'student';
+            await lessonCommentService.deleteMessage(lessonId, messageId, userId, role);
+            return res.status(204).send();
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 module.exports = new LessonCommentController();

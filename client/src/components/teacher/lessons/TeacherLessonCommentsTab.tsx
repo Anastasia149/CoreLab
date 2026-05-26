@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react';
 import { Context } from '../../../index';
 import { LessonCommentThread } from '../../common/LessonCommentThread';
 import { LessonCommentThread as ThreadType } from '../../../models/ILessonComment';
+import { useAppModal } from '../../../context/AppModalContext';
 import '../../common/LessonCommentsPanel.css';
 
 type Props = {
@@ -14,6 +15,7 @@ type Props = {
 export const TeacherLessonCommentsTab: React.FC<Props> = observer(
   ({ lessonId, initialStudentId }) => {
     const { store } = useContext(Context);
+    const { showConfirm } = useAppModal();
     const [threads, setThreads] = useState<ThreadType[]>([]);
     const [loading, setLoading] = useState(true);
     const [openStudentId, setOpenStudentId] = useState<number | null>(
@@ -51,6 +53,33 @@ export const TeacherLessonCommentsTab: React.FC<Props> = observer(
         )
       );
       void store.fetchNotifications();
+      return true;
+    };
+
+    const handleDelete = async (studentId: number, messageId: number) => {
+      const confirmed = await showConfirm('Удалить этот комментарий?', {
+        title: 'Удаление',
+        confirmText: 'Удалить',
+        danger: true,
+      });
+      if (!confirmed) return false;
+
+      const ok = await store.deleteLessonCommentMessage(lessonId, messageId);
+      if (!ok) return false;
+
+      setThreads((prev) => {
+        const next = prev
+          .map((thread) =>
+            thread.studentId === studentId
+              ? {
+                  ...thread,
+                  messages: thread.messages.filter((m) => m.id !== messageId),
+                }
+              : thread
+          )
+          .filter((thread) => thread.messages.length > 0);
+        return next;
+      });
       return true;
     };
 
@@ -112,9 +141,11 @@ export const TeacherLessonCommentsTab: React.FC<Props> = observer(
                       viewerRole="teacher"
                       studentName={thread.studentName}
                       onSend={(body) => handleReply(thread.studentId, body)}
+                      onDelete={(messageId) => handleDelete(thread.studentId, messageId)}
                       sendLabel="Ответить"
                       compact
                       showTitle={false}
+                      canSend={thread.messages.some((m) => m.authorRole === 'student')}
                     />
                   </div>
                 )}

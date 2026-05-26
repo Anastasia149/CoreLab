@@ -48,12 +48,47 @@
 
 .lesson-comment-message-meta {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
   margin-bottom: 6px;
   font-size: 12px;
   color: var(--text-secondary);
+}
+
+.lesson-comment-message-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.lesson-comment-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.lesson-comment-delete-btn:hover:not(:disabled) {
+  color: var(--danger, #dc2626);
+  background: var(--status-error-bg-soft, rgba(220, 38, 38, 0.08));
+}
+
+.lesson-comment-delete-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lesson-comment-delete-btn svg {
+  font-size: 18px;
 }
 
 .lesson-comment-message-author {
