@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react';
 import { Context } from '../../index';
 import { ICourseReview, ICourseReviewsResponse } from '../../models/ICourseReview';
 import Loader from './Loader';
+import { CourseSearchStars } from '../../utils/courseRatingStars';
 import '../student/courses/StudentCourseDetails.css';
 
 const RATING_OPTIONS = [1, 2, 3, 4, 5] as const;
@@ -80,8 +81,14 @@ export const CourseReviewsPanel: React.FC<CourseReviewsPanelProps> = observer(
 
     const summary = reviewsData?.summary;
     const reviewsCount = summary?.reviews_count ?? 0;
-    const displayAverage =
-      reviewsCount > 0 ? Number(summary?.average_rating ?? 0).toFixed(1) : '5.0';
+    const hasReviews = reviewsCount > 0;
+    const displayAverage = hasReviews
+      ? Number(summary?.average_rating ?? 0).toFixed(1)
+      : null;
+    const ratingSummaryCourse = {
+      reviews_count: reviewsCount,
+      average_rating: summary?.average_rating,
+    };
     const myStudentId = store.user?.id != null ? String(store.user.id) : null;
     const courseReviews = reviewsData?.reviews ?? [];
     const isMyReview = (review: ICourseReview) =>
@@ -89,31 +96,49 @@ export const CourseReviewsPanel: React.FC<CourseReviewsPanelProps> = observer(
 
     return (
       <div className="student-course-rating">
-        <div className="student-course-rating-summary">
-          <div className="student-course-rating-average">
-            <Icon icon="mdi:star" aria-hidden />
-            <span className="student-course-rating-average-value">{displayAverage}</span>
-            <span className="student-course-rating-average-label">из 5</span>
-          </div>
-          <p className="student-course-rating-count">
-            {reviewsCount > 0 ? (
-              <>
+        <div
+          className={`student-course-rating-summary ${
+            !hasReviews ? 'student-course-rating-summary--empty' : ''
+          }`}
+        >
+          {hasReviews ? (
+            <>
+              <div className="student-course-rating-average">
+                <Icon icon="mdi:star" aria-hidden />
+                <span className="student-course-rating-average-value">{displayAverage}</span>
+                <span className="student-course-rating-average-label">из 5</span>
+              </div>
+              <p className="student-course-rating-count">
                 {reviewsCount}{' '}
                 {reviewsCount === 1 ? 'отзыв' : reviewsCount < 5 ? 'отзыва' : 'отзывов'}
-              </>
-            ) : (
-              'Пока нет отзывов · отображается оценка 5 из 5'
-            )}
-          </p>
+              </p>
+            </>
+          ) : (
+            <div className="student-course-rating-summary-empty">
+              <CourseSearchStars
+                course={ratingSummaryCourse}
+                className="student-course-rating-summary-stars"
+              />
+              <div className="student-course-rating-summary-empty-text">
+                <p className="student-course-rating-count">Пока нет отзывов</p>
+              </div>
+            </div>
+          )}
         </div>
 
         {!readOnly && (
           <form className="student-course-rating-form" onSubmit={handleSaveReview}>
             <h3 className="student-course-rating-form-title">
-              {myReview ? 'Ваша оценка курса' : 'Оцените этот курс'}
+              {myReview
+                ? 'Ваша оценка курса'
+                : hasReviews
+                  ? 'Оцените этот курс'
+                  : 'Станьте первым — оцените курс'}
             </h3>
             <p className="student-course-rating-form-hint">
-              Поставьте оценку от 1 до 5 звёзд и при желании оставьте комментарий.
+              {hasReviews
+                ? 'Поставьте оценку от 1 до 5 звёзд и при желании оставьте комментарий.'
+                : 'Поставьте звёзды и при желании напишите отзыв.'}
             </p>
 
             <div className="student-course-rating-stars" role="group" aria-label="Оценка курса">

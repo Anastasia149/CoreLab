@@ -548,6 +548,10 @@
   line-height: 1;
 }
 
+.student-search-card-stars.course-stars--unrated {
+  color: #9ca3af;
+}
+
 .student-course-price {
   flex-shrink: 0;
   font-size: 1.25rem;

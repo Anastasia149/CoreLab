@@ -313,6 +313,52 @@
   text-align: right;
 }
 
+.student-course-rating-summary--empty {
+  align-items: flex-start;
+}
+
+.student-course-rating-summary-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.student-course-rating-summary-stars {
+  display: flex;
+  gap: 2px;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.student-course-rating-summary-empty-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.student-course-rating-summary--empty .student-course-rating-count {
+  margin: 0;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.student-course-rating-first-hint {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.course-stars--unrated {
+  color: #9ca3af;
+}
+
+.course-stars--unrated .course-star--muted {
+  color: inherit;
+}
+
 .student-course-rating-form {
   display: flex;
   flex-direction: column;
