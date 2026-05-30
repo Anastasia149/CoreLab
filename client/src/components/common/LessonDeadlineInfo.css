@@ -37,9 +37,9 @@
 }
 
 .lesson-deadline-info--teacher-page:not(.lesson-deadline-info--unset) {
-  background: #eef2ff;
-  border-color: #c7d2fe;
-  color: #312e81;
+  background: var(--accent-bg);
+  border-color: var(--hint-border);
+  color: var(--hint-text);
 }
 
 .lesson-deadline-info--teacher-page:not(.lesson-deadline-info--unset) .lesson-deadline-info-icon {
