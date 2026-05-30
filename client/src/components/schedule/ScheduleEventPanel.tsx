@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { ICourse } from '../../models/ICourse';
 import {
@@ -17,8 +17,10 @@ import './ScheduleEventPanel.css';
 type Props = {
   selectedDate: Date;
   courses: ICourse[];
+  editingEvent?: ScheduleEvent | null;
   onClose: () => void;
   onSave: (event: ScheduleEvent) => void;
+  onDelete?: (eventId: string) => void;
 };
 
 function formatDisplayDate(date: Date): string {
@@ -29,7 +31,22 @@ function formatDisplayDate(date: Date): string {
   }).format(date);
 }
 
-const ScheduleEventPanel: React.FC<Props> = ({ selectedDate, courses, onClose, onSave }) => {
+function parseDateKey(dateKey: string): Date {
+  const [y, m, d] = dateKey.split('-').map(Number);
+  return new Date(y, (m || 1) - 1, d || 1);
+}
+
+const ScheduleEventPanel: React.FC<Props> = ({
+  selectedDate,
+  courses,
+  editingEvent = null,
+  onClose,
+  onSave,
+  onDelete,
+}) => {
+  const isEditing = Boolean(editingEvent);
+  const eventDate = editingEvent ? parseDateKey(editingEvent.date) : selectedDate;
+
   const [eventType, setEventType] = useState<ScheduleEventType>('task');
   const [courseId, setCourseId] = useState<number | null>(courses[0]?.id ?? null);
   const [title, setTitle] = useState('');
@@ -37,6 +54,25 @@ const ScheduleEventPanel: React.FC<Props> = ({ selectedDate, courses, onClose, o
   const [endTime, setEndTime] = useState('10:00');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (editingEvent) {
+      setEventType(editingEvent.type);
+      setCourseId(editingEvent.courseId);
+      setTitle(editingEvent.title);
+      setStartTime(editingEvent.startTime);
+      setEndTime(editingEvent.endTime);
+      setDescription(editingEvent.description);
+    } else {
+      setEventType('task');
+      setCourseId(courses[0]?.id ?? null);
+      setTitle('');
+      setStartTime('09:00');
+      setEndTime('10:00');
+      setDescription('');
+    }
+    setError('');
+  }, [editingEvent, courses]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,17 +98,22 @@ const ScheduleEventPanel: React.FC<Props> = ({ selectedDate, courses, onClose, o
     }
 
     onSave({
-      id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+      id: editingEvent?.id ?? `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
       type: eventType,
       courseId: course.id,
       courseTitle: course.title,
       courseColor: getCourseColor(course.id),
       title: title.trim(),
-      date: toDateKey(selectedDate),
+      date: toDateKey(eventDate),
       startTime,
       endTime,
       description: description.trim(),
     });
+  };
+
+  const handleDelete = () => {
+    if (!editingEvent || !onDelete) return;
+    onDelete(editingEvent.id);
   };
 
   return (
@@ -85,13 +126,15 @@ const ScheduleEventPanel: React.FC<Props> = ({ selectedDate, courses, onClose, o
       />
       <aside className="schedule-event-panel" aria-labelledby="schedule-event-panel-title">
         <div className="schedule-event-panel-header">
-          <h3 id="schedule-event-panel-title">Новое событие</h3>
+          <h3 id="schedule-event-panel-title">
+            {isEditing ? 'Редактирование события' : 'Новое событие'}
+          </h3>
           <button type="button" className="schedule-event-panel-close" onClick={onClose} aria-label="Закрыть">
             <Icon icon="mdi:close" />
           </button>
         </div>
 
-        <p className="schedule-event-panel-date">{formatDisplayDate(selectedDate)}</p>
+        <p className="schedule-event-panel-date">{formatDisplayDate(eventDate)}</p>
 
         <form className="schedule-event-form" onSubmit={handleSubmit}>
           <fieldset className="schedule-event-field">
@@ -201,6 +244,11 @@ const ScheduleEventPanel: React.FC<Props> = ({ selectedDate, courses, onClose, o
           )}
 
           <div className="schedule-event-form-actions">
+            {isEditing && onDelete && (
+              <button type="button" className="schedule-event-delete" onClick={handleDelete}>
+                Удалить
+              </button>
+            )}
             <button type="button" className="schedule-event-cancel" onClick={onClose}>
               Отмена
             </button>

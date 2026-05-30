@@ -36,6 +36,32 @@ class ScheduleEventController {
             next(e);
         }
     }
+
+    async update(req, res, next) {
+        try {
+            const userId = req.user.id;
+            const role = req.user.role;
+            const event = await scheduleEventService.updateEvent(
+                userId,
+                role,
+                req.params.id,
+                req.body
+            );
+            return res.json(event);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async remove(req, res, next) {
+        try {
+            const userId = req.user.id;
+            await scheduleEventService.deleteEvent(userId, req.params.id);
+            return res.sendStatus(204);
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 module.exports = new ScheduleEventController();

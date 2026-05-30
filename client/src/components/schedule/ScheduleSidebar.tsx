@@ -9,6 +9,9 @@ type Props = {
   selectedDate: Date;
   onDateChange: (date: Date) => void;
   onAddEvent: () => void;
+  calendarSyncEnabled: boolean;
+  calendarSyncLoading: boolean;
+  onCalendarSyncToggle: () => void | Promise<void>;
   courses: ICourse[];
   events: ScheduleEvent[];
 };
@@ -17,6 +20,9 @@ const ScheduleSidebar: React.FC<Props> = ({
   selectedDate,
   onDateChange,
   onAddEvent,
+  calendarSyncEnabled,
+  calendarSyncLoading,
+  onCalendarSyncToggle,
   courses,
   events,
 }) => (
@@ -28,6 +34,19 @@ const ScheduleSidebar: React.FC<Props> = ({
     >
       <Icon icon="mdi:plus" />
       Добавить событие
+    </button>
+    <button
+      type="button"
+      className={`schedule-google-sync-btn${calendarSyncEnabled ? ' schedule-google-sync-btn--on' : ''}`}
+      disabled={calendarSyncLoading}
+      onClick={() => void onCalendarSyncToggle()}
+    >
+      <Icon icon="mdi:google" />
+      {calendarSyncLoading
+        ? 'Подключение…'
+        : calendarSyncEnabled
+          ? 'Отключить Google Календарь'
+          : 'Синхронизировать с Google'}
     </button>
     <ScheduleCalendar selectedDate={selectedDate} onDateChange={onDateChange} />
     <ScheduleCategoryList courses={courses} events={events} selectedDate={selectedDate} />

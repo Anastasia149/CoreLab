@@ -173,6 +173,75 @@ class ScheduleEventService {
         }
         return created.length ? await this.listForUser(userId) : [];
     }
+
+    async updateEvent(userId, role, eventId, payload) {
+        const safeId = Number(eventId);
+        if (!Number.isFinite(safeId)) {
+            throw ApiError.BadRequest('Некорректный id события');
+        }
+
+        const { rowCount } = await pool.query(
+            'SELECT 1 FROM schedule_events WHERE id = $1 AND user_id = $2',
+            [safeId, userId]
+        );
+        if (!rowCount) {
+            throw ApiError.NotFound('Событие не найдено');
+        }
+
+        const courseId = await this.assertUserCanUseCourse(userId, role, payload.courseId);
+        const { safeTitle, safeDescription } = this.validatePayload({
+            type: payload.type,
+            title: payload.title,
+            date: payload.date,
+            startTime: payload.startTime,
+            endTime: payload.endTime,
+            description: payload.description,
+        });
+
+        const { rows } = await pool.query(
+            `UPDATE schedule_events
+             SET course_id = $1, type = $2, title = $3, event_date = $4,
+                 start_time = $5, end_time = $6, description = $7
+             WHERE id = $8 AND user_id = $9
+             RETURNING id, user_id, course_id, type, title, event_date, start_time, end_time, description`,
+            [
+                courseId,
+                payload.type,
+                safeTitle,
+                payload.date,
+                payload.startTime,
+                payload.endTime,
+                safeDescription || null,
+                safeId,
+                userId,
+            ]
+        );
+
+        const courseTitleRow = await pool.query(
+            'SELECT title FROM courses WHERE id = $1',
+            [courseId]
+        );
+
+        return mapRow({
+            ...rows[0],
+            course_title: courseTitleRow.rows[0]?.title || '',
+        });
+    }
+
+    async deleteEvent(userId, eventId) {
+        const safeId = Number(eventId);
+        if (!Number.isFinite(safeId)) {
+            throw ApiError.BadRequest('Некорректный id события');
+        }
+
+        const { rowCount } = await pool.query(
+            'DELETE FROM schedule_events WHERE id = $1 AND user_id = $2',
+            [safeId, userId]
+        );
+        if (!rowCount) {
+            throw ApiError.NotFound('Событие не найдено');
+        }
+    }
 }
 
 module.exports = new ScheduleEventService();

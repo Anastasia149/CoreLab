@@ -259,3 +259,28 @@
 .schedule-event-submit:hover:not(:disabled) {
   filter: brightness(1.05);
 }
+
+.schedule-event-delete {
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 10px;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.schedule-event-delete:hover {
+  background: #fee2e2;
+}
+
+.schedule-event-form-actions:has(.schedule-event-delete) {
+  flex-wrap: wrap;
+}
+
+.schedule-event-form-actions:has(.schedule-event-delete) .schedule-event-cancel,
+.schedule-event-form-actions:has(.schedule-event-delete) .schedule-event-submit {
+  flex: 1 1 calc(50% - 5px);
+}

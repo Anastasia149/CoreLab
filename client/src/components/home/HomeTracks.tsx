@@ -34,12 +34,6 @@ const HomeTracks: React.FC = () => {
           </p>
         </div>
         <div className="home-feature-item">
-          <div className="home-feature-title-box">Тесты</div>
-          <p className="home-feature-description">
-            Проверьте себя с помощью бесплатных тестов. Узнайте, как хорошо вы разбираетесь в Data Science и сможете ли обмануть нейросеть
-          </p>
-        </div>
-        <div className="home-feature-item">
           <div className="home-feature-title-box">Интенсивы</div>
           <p className="home-feature-description">
             Примите участие в бесплатных интенсивах. Это отличная возможность попробовать себя в новой профессии и решить, подходит ли она вам
@@ -214,105 +208,6 @@ const HomeTracks: React.FC = () => {
               <div className="home-course-students">
                 <Icon icon="mdi:account-outline" />
                 <span>12K</span>
-              </div>
-            </div>
-            <div className="home-course-footer">
-              <div className="home-course-price">Бесплатно</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <h2 className="home-section-title" style={{ marginTop: '64px' }}>Бесплатные тесты</h2>
-      <div className="home-track-grid">
-        <div className="home-course-card" onClick={() => navigate('/register')}>
-          <div className="home-course-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=300&h=180&auto=format&fit=crop" alt="Data Science Test" className="home-course-image" />
-            <div className="home-test-badge">Тест</div>
-          </div>
-          <div className="home-course-content">
-            <h3 className="home-course-title">Насколько хорошо вы знаете Data Science?</h3>
-            <div className="home-course-author">15 вопросов • 20 мин</div>
-            <div className="home-course-stats">
-              <div className="home-course-rating">
-                <Icon icon="mdi:star" className="star-icon" />
-                <span>4.8</span>
-              </div>
-              <div className="home-course-students">
-                <Icon icon="mdi:account-outline" />
-                <span>1.2K</span>
-              </div>
-            </div>
-            <div className="home-course-footer">
-              <div className="home-course-price">Бесплатно</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="home-course-card" onClick={() => navigate('/register')}>
-          <div className="home-course-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=300&h=180&auto=format&fit=crop" alt="JavaScript Test" className="home-course-image" />
-            <div className="home-test-badge">Тест</div>
-          </div>
-          <div className="home-course-content">
-            <h3 className="home-course-title">JavaScript: от основ до Middle</h3>
-            <div className="home-course-author">20 вопросов • 30 мин</div>
-            <div className="home-course-stats">
-              <div className="home-course-rating">
-                <Icon icon="mdi:star" className="star-icon" />
-                <span>4.9</span>
-              </div>
-              <div className="home-course-students">
-                <Icon icon="mdi:account-outline" />
-                <span>2.5K</span>
-              </div>
-            </div>
-            <div className="home-course-footer">
-              <div className="home-course-price">Бесплатно</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="home-course-card" onClick={() => navigate('/register')}>
-          <div className="home-course-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1627398242454-45a1465c2479?q=80&w=300&h=180&auto=format&fit=crop" alt="Python Test" className="home-course-image" />
-            <div className="home-test-badge">Тест</div>
-          </div>
-          <div className="home-course-content">
-            <h3 className="home-course-title">Python для начинающих: проверка знаний</h3>
-            <div className="home-course-author">12 вопросов • 15 мин</div>
-            <div className="home-course-stats">
-              <div className="home-course-rating">
-                <Icon icon="mdi:star" className="star-icon" />
-                <span>4.7</span>
-              </div>
-              <div className="home-course-students">
-                <Icon icon="mdi:account-outline" />
-                <span>3.1K</span>
-              </div>
-            </div>
-            <div className="home-course-footer">
-              <div className="home-course-price">Бесплатно</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="home-course-card" onClick={() => navigate('/register')}>
-          <div className="home-course-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?q=80&w=300&h=180&auto=format&fit=crop" alt="Web Design Test" className="home-course-image" />
-            <div className="home-test-badge">Тест</div>
-          </div>
-          <div className="home-course-content">
-            <h3 className="home-course-title">Основы UI/UX дизайна</h3>
-            <div className="home-course-author">10 вопросов • 10 мин</div>
-            <div className="home-course-stats">
-              <div className="home-course-rating">
-                <Icon icon="mdi:star" className="star-icon" />
-                <span>4.6</span>
-              </div>
-              <div className="home-course-students">
-                <Icon icon="mdi:account-outline" />
-                <span>800</span>
               </div>
             </div>
             <div className="home-course-footer">

@@ -3,6 +3,15 @@
   z-index: 1;
 }
 
+.schedule-event-card--clickable {
+  cursor: pointer;
+}
+
+.schedule-event-card--clickable:focus-visible {
+  outline: 2px solid var(--accent-soft, #7b5cff);
+  outline-offset: 2px;
+}
+
 .schedule-event-card {
   position: absolute;
   left: 8px;

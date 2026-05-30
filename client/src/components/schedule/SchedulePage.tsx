@@ -164,11 +164,12 @@ const SchedulePage: React.FC = observer(() => {
 
     try {
       if (isUpdate && editingEvent) {
-        const updated = await updateScheduleEvent(editingEvent.id, event);
+        const payload = { ...event, id: editingEvent.id };
+        const updated = await updateScheduleEvent(editingEvent.id, payload);
         if (updated) {
           setEvents((prev) => prev.map((ev) => (ev.id === updated.id ? updated : ev)));
         } else {
-          const next = events.map((ev) => (ev.id === event.id ? event : ev));
+          const next = events.map((ev) => (ev.id === editingEvent.id ? payload : ev));
           persistEventsLocally(next);
         }
       } else {
@@ -181,8 +182,9 @@ const SchedulePage: React.FC = observer(() => {
       }
     } catch (e) {
       console.log(`FULL ERROR (${isUpdate ? 'update' : 'create'} schedule event):`, e);
-      if (isUpdate) {
-        const next = events.map((ev) => (ev.id === event.id ? event : ev));
+      if (isUpdate && editingEvent) {
+        const payload = { ...event, id: editingEvent.id };
+        const next = events.map((ev) => (ev.id === editingEvent.id ? payload : ev));
         persistEventsLocally(next);
       } else {
         persistEventsLocally([...events, event]);

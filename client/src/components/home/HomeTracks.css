@@ -48,19 +48,6 @@
   object-fit: cover;
 }
 
-.home-test-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: #111827;
-  color: #fff;
-  padding: 4px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
 .home-course-favorite {
   position: absolute;
   top: 12px;
@@ -159,7 +146,7 @@
 
 .home-features-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 24px;
   margin-bottom: 48px;
 }

@@ -123,6 +123,8 @@ router.delete(
 router.get('/schedule/events', authMiddleware, scheduleEventController.listMine);
 router.post('/schedule/events', authMiddleware, scheduleEventController.create);
 router.post('/schedule/events/import', authMiddleware, scheduleEventController.importLocal);
+router.put('/schedule/events/:id', authMiddleware, scheduleEventController.update);
+router.delete('/schedule/events/:id', authMiddleware, scheduleEventController.remove);
 
 router.get('/notifications', authMiddleware, notificationController.listMine);
 router.delete('/notifications', authMiddleware, notificationController.deleteAll);

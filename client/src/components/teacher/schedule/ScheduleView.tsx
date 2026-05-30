@@ -16,9 +16,10 @@ type Props = {
   selectedDate: Date;
   onDateChange: (date: Date) => void;
   events: ScheduleEvent[];
+  onEventClick?: (event: ScheduleEvent) => void;
 };
 
-const ScheduleView: React.FC<Props> = ({ selectedDate, onDateChange, events }) => {
+const ScheduleView: React.FC<Props> = ({ selectedDate, onDateChange, events, onEventClick }) => {
   const selectedKey = toDateKey(selectedDate);
 
   const formattedDate = new Intl.DateTimeFormat('ru-RU', {
@@ -87,6 +88,7 @@ const ScheduleView: React.FC<Props> = ({ selectedDate, onDateChange, events }) =
                 event={ev}
                 topPx={top}
                 heightPx={height}
+                onClick={onEventClick ? () => onEventClick(ev) : undefined}
               />
             );
           })}

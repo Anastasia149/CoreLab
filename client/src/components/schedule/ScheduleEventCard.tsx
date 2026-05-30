@@ -13,6 +13,7 @@ type Props = {
   compact?: boolean;
   variant?: 'default' | 'dashboard';
   layout?: 'overlay' | 'slot';
+  onClick?: () => void;
 };
 
 const ScheduleEventCard: React.FC<Props> = ({
@@ -24,6 +25,7 @@ const ScheduleEventCard: React.FC<Props> = ({
   compact,
   variant = 'default',
   layout = 'overlay',
+  onClick,
 }) => {
   const isDashboard = variant === 'dashboard';
 
@@ -50,6 +52,7 @@ const ScheduleEventCard: React.FC<Props> = ({
     compact && !isDashboard ? 'schedule-event-card--compact' : '',
     isDashboard ? 'schedule-event-card--dashboard' : '',
     layout === 'slot' ? 'schedule-event-card--slot' : '',
+    onClick ? 'schedule-event-card--clickable' : '',
   ]
     .filter(Boolean)
     .join(' ');
@@ -57,6 +60,19 @@ const ScheduleEventCard: React.FC<Props> = ({
   return (
     <article
       className={className}
+      onClick={onClick}
+      onKeyDown={
+        onClick
+          ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onClick();
+              }
+            }
+          : undefined
+      }
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
       style={{
         ...positionStyle,
         background: getCourseColorTint(event.courseColor, isDashboard ? 0.22 : 0.14),

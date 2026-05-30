@@ -149,3 +149,32 @@ export async function createScheduleEvent(
   });
   return normalizeEvent(response.data);
 }
+
+type ScheduleEventPayload = Pick<
+  ScheduleEvent,
+  'type' | 'courseId' | 'title' | 'date' | 'startTime' | 'endTime' | 'description'
+>;
+
+function toApiEventBody(event: ScheduleEventPayload) {
+  return {
+    type: event.type,
+    courseId: Number(event.courseId),
+    title: event.title,
+    date: event.date,
+    startTime: event.startTime,
+    endTime: event.endTime,
+    description: event.description,
+  };
+}
+
+export async function updateScheduleEvent(
+  eventId: string,
+  event: ScheduleEventPayload
+): Promise<ScheduleEvent | null> {
+  const response = await $api.put<unknown>(`/schedule/events/${eventId}`, toApiEventBody(event));
+  return normalizeEvent(response.data);
+}
+
+export async function deleteScheduleEvent(eventId: string): Promise<void> {
+  await $api.delete(`/schedule/events/${eventId}`);
+}
